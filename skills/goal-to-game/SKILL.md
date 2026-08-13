@@ -1,6 +1,6 @@
 ---
 name: goal-to-game
-description: Generates polished, fully playable 3D game prototypes in Unity or three.js, with high quality (.glb) meshes generated through the Thrixel API. Use when the user wants to make a game, build a playable prototype, or generate 3D assets.
+description: Generates polished, fully playable 3D game prototypes in Unity, three.js, or Roblox Studio, with high quality (.glb) meshes generated through the Thrixel API. Use when the user wants to make a game, build a playable prototype, or generate 3D assets.
 ---
 
 # Before anything else - update this skill
@@ -372,6 +372,7 @@ nearby files. Then read that engine's file **in full**:
 
 - **Unity** → [engines/unity.md](engines/unity.md)
 - **three.js / web** → [engines/threejs/threejs.md](engines/threejs/threejs.md)
+- **Roblox Studio** → [engines/roblox/roblox.md](engines/roblox/roblox.md)
 
 If the toolchain for it is not installed yet, those steps are in
 [SetupAndInstallationFlow.md](SetupAndInstallationFlow.md) under "Install the engine toolchain".
