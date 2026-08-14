@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "studsPerMeter": 3.5,
+  "assets": [
+    {
+      "id": "storm-lighthouse",
+      "source": {
+        "submissionId": "replace-with-thrixel-submission-id",
+        "file": "assets/storm-lighthouse.fbx"
+      },
+      "groups": [
+        {
+          "id": "Body",
+          "triangles": 18420,
+          "watertight": true,
+          "moving": false,
+          "appearance": {
+            "maps": {
+              "color": {
+                "file": "assets/storm-lighthouse-color.png",
+                "size": 2048
+              },
+              "normal": {
+                "file": "assets/storm-lighthouse-normal.png",
+                "size": 2048
+              },
+              "roughness": {
+                "file": "assets/storm-lighthouse-roughness.png",
+                "size": 2048
+              }
+            }
+          }
+        },
+        {
+          "id": "Beacon",
+          "triangles": 1320,
+          "watertight": true,
+          "moving": true,
+          "pivot": [0.0, 18.25, 0.0],
+          "appearance": {
+            "maps": {
+              "color": {
+                "file": "assets/storm-lighthouse-beacon-color.png",
+                "size": 1024
+              },
+              "emissive": {
+                "file": "assets/storm-lighthouse-beacon-emissive.png",
+                "size": 1024
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
