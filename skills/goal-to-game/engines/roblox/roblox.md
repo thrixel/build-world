@@ -87,11 +87,13 @@ prep happens before import, not after.**
    vertices before decimating, so UV seams do not crack open (see "Pitfall: decimating by hand").
    Target ≤ 20,000 triangles per resulting mesh. Never re-run the detailer at a lower target to
    lighten something.
-3. **Verify watertight + thickness.** After grouping/decimating, load the FBX in Blender and run
-   *Select → Select All by Trait → Non-Manifold*; anything selected is a hole. For thin parts,
-   add a solidify modifier (or model real thickness) before export. If Blender is not available,
-   import into Studio and watch for the importer's "Unable to import" or missing-part warnings —
-   but catching it in Blender is cheaper than a round-trip through Studio.
+3. **Verify watertight + thickness with `tools/validate_mesh.py`.** After grouping/decimating,
+   run `python tools/validate_mesh.py <asset>.obj` (or `.glb`). It reports the triangle count per
+   mesh, the minimum thickness, and — with `trimesh` installed — the watertight / manifold /
+   Euler-number checks. Anything it names must be fixed before import: decimate with
+   `thrixel_reduce_triangles`, and add a solidify modifier (or model real thickness) for thin
+   parts. This is the automated replacement for the manual Blender *Select → Select All by Trait →
+   Non-Manifold* pass — the "no manual mesh cleanup in between" requirement from the issue.
 4. **Fix the forward axis** (see rules above).
 
 ---
@@ -188,6 +190,32 @@ options, in order:
 
 For automation with Rojo, keep the plugin in the project and document the shot list (see
 `templates/ARCHITECTURE.md`).
+
+---
+
+## Tooling (shipped with this engine)
+
+Two executable tools live under `engines/roblox/tools/` and are part of the engine, not just
+prose. Run them so the import boundary and the in-Studio checks are enforced by code, not by an
+agent remembering to look.
+
+- **`tools/validate_mesh.py`** — pre-import validation. Run on every grouped/decimated Thrixel
+  asset *before* importing into Studio. Reports triangle count per mesh (against the 20,000 cap),
+  minimum thickness (thin-sheet check), and — with `trimesh` installed — watertightness, winding
+  consistency and the Euler number. Exit code 0 = safe to import; anything it names must be fixed
+  first (`thrixel_reduce_triangles`, solidify for thin parts). This is the automated "no manual
+  mesh cleanup in between" step.
+
+  ```
+  python tools/validate_mesh.py <asset>.obj <asset>.glb   # pip install trimesh for the full check
+  ```
+
+- **`tools/selftest.server.lua`** — in-Studio self-test. Drop into `ServerScriptService` (Rojo:
+  `ServerScriptService/selftest.server.lua`) and run. It walks every `MeshPart` in the Workspace
+  and flags: empty `MeshId`, near-zero thickness, missing `SurfaceAppearance`/`Texture` (default
+  grey), unanchored/unwelded parts (fall on play), and parts tilted off the world axis (likely a
+  forward-axis mistake). Prints one `[SELFTEST PASS]` line on a clean run, or a per-part
+  `[SELFTEST FAIL]` breakdown — the import-boundary violations a screenshot cannot always show.
 
 ---
 
