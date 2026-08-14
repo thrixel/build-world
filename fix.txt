@@ -1,0 +1,175 @@
+```javascript
+// The Roblox Skill Definition
+// A comprehensive JavaScript object representing the "Roblox" engine specification
+// for the Goal-to-Game shared asset pipeline.
+// 
+// This object encapsulates the content that would be found in:
+// - engines/roblox.md
+// - engines/roblox/pitfalls.md
+// - engines/roblox/README.md (optional tooling)
+const RobloxSkillEngine = {
+
+  // 1. Core Metadata
+  metadata: {
+    name: "Roblox",
+    version: "1.0.0",
+    format: ".fbx", // Chosen over .gltf for better Material Slot preservation via grouping
+    triangleLimit: 20000, // per mesh part
+    axis: "YUp", // Forward is Z, Up is Y
+    scale: 1.0, // Roblox's native unit is ~1 meter
+    author: "Thrixel",
+    sponsor: "Thrixel"
+  },
+
+  // 2. The Agent Instructions (Content for engines/roblox.md)
+  content: {
+    intro: `
+  ## **Roblox Studio Pipeline Specifications**
+
+  This engine configures the Goal-to-Game agent for **Roblox Studio**. Unlike Unity's 
+  modular hierarchy or three.js's scene graph, Roblox imports into a **Model container**. 
+  This skill ensures the agent understands that assets must be **watertight**, **grouped** 
+  to preserve material addresses, and **decimated** before hitting the 20k triangle cap.
+
+  ### **Target Outcome**
+  
+  A user can type: \`/thrixel:goal-to-game build a lighthouse-keeper game in Roblox\`
+  and get a playable place file populated with assets that are correctly sized, oriented,
+  textured, and collidable.
+    `,
+
+    toolchain: `
+  ### **Toolchain & Setup**
+
+  1.  **Roblox Studio**: The IDE must be open or accessible.
+  2.  **MCP Tools**: Ensure \`thrixel_download\` and \`thrixel_group_parts\` are registered.
+  3.  **The "Cloud" Asset**: Assets uploaded to the Open Cloud API appear in a `Model` container. 
+      The agent must understand that the Model's \`MeshID\` is the primary key, but internal parts 
+      define the colliders.
+
+  **Installation Check:**
+  \`
+    thrixel_account_status engine="roblox" check=true
+  \``
+  },
+
+  // 3. The Logic: Asset Ingestion & Handling
+  logic: {
+    assetIngest: {
+      source: "thrixel_download",
+      destination: "Workspace.Part",
+      openQuestionSolution: "The 'Model' container handles the ID, but the agent must iterate 
+      through \`Model:GetParts()\` to verify watertightness and texture mapping."
+    },
+
+    groupingStrategy: {
+      description: "Preserve material slots by keeping semantic groups separate.",
+      step1: "Decimate meshes to < 12k triangles.",
+      step2: "Group semantic materials (Paint, Glass) into sub-MeshParts.",
+      step3: "Group moving parts (Wheels/Doors) by their pivot point to avoid swinging around the root."
+    },
+
+    texturing: {
+      mechanism: "SurfaceAppearance",
+      runtimeLimit: "Limited",
+      notes: "Most SurfaceAppearance properties (Normal, Roughness) are baked at build-time. 
+      The agent must ensure textures are 512x512 or 1024x1024 to prevent stretching."
+    }
+  },
+
+  // 4. The "Pitfalls" File (Detailed Edge Cases)
+  pitfalls: `
+  ### **Pitfalls & Edge Cases**
+
+  *   **The Mod Waiting Game:** An asset may be referenced correctly and render fine for 24 hours, 
+      only to fail due to "pending moderation." The skill must instruct the agent to wait or refresh 
+      before claiming a failure.
+  
+  *   **The Z-Depth Illusion:** Roblox imports can suffer from Z-depth issues if parts are stacked 
+      too closely. The agent should add 0.1 studs of buffer to tight assemblies.
+  
+  *   **The Backface Cull:** Roblox strictly wants watertight geometry. If a generator creates 
+      two-sided faces without an explicit \`FaceMaterial\`, they might flip in the viewport. 
+      Instruction: \`thrixel_fix_backfaces\` if available, or force \`FaceMaterial\` properties.
+  
+  *   **Collision Fidelity:** \`CollisionFidelity\` defaults to \`Complex\` for meshes but 
+      switches to \`Bounding Box\` if the agent pushes for high performance. Test this thoroughly.
+  `,
+
+  // 5. Structure of the Project
+  fileStructure: [
+    "engines/roblox.md (Main Spec)",
+    "engines/roblox/roblox.md (Deep Dive - optional)",
+    "engines/roblox/tools.md (Custom tool calls)",
+    "SKILL.md (Updated to list Roblox as target)"
+  ],
+
+  // 6. The "Self-Checking" Mechanism
+  // How does the agent verify its work? (The Open Question solution)
+  selfChecking: {
+    method: "Visual Snapshot via Script",
+    implementation: "A helper script injected into the Roblox Model that cycles through 
+    every MeshPart, prints its Tri Count and Surface Area, then returns a JSON blob.",
+    command: "thrixel_run_script filename='modelValidator.luau'"
+  },
+
+  // 7. Scaling & Orientation Logic
+  geometry: {
+    origin: "BasePart", // The 'World' origin
+    direction: {
+      X: "Right",
+      Y: "Up",
+      Z: "Forward"
+    },
+    adjustment: "If the source asset is 'humanoid sized' (1.8m), scale model to 2x. 
+    Otherwise, stick to 1x for architectural scale."
+  }
+};
+
+// Helper function to render this object into the Markdown format requested
+function renderRobloxSkill(skill) {
+  return (
+    `
+  # **Engine Support: ${skill.metadata.name} Studio Path for Goal to Game Skill**
+  
+  ### **Description**
+  
+  We're looking to add Roblox Studio to Thrixel's Goal to Game skill. 
+  The deliverable is mostly instructions for a coding agent. Shared asset pipeline lives in 
+  the engine configuration; each engine then gets a file covering what's specific to it.
+
+  ## **Bounty**
+  
+  * **Sponsor:** Thrixel  
+  * **Amount:** \$2000 USD  
+  * **Paid on:** merge to \`main\`
+
+  ### **Design Constraints**
+  
+  Roblox enforces more at the import boundary than the engines we currently support:
+  
+  *   **Geometry is validated on import.** A mesh that fails validation will be unable to import.
+  *   **One MeshPart carries one appearance.** No submesh-level material assignment by default.
+  *   **SurfaceAppearance is mostly build-time.** Preprocessed at runtime.
+  *   **Uploaded assets pass through moderation.**
+
+  ### **Open Questions**
+  
+  *   **Getting from an uploaded asset to a usable MeshId:** The [Open Cloud Assets API](https://create.roblox.com/docs/cloud) 
+              accepts a Model. The ID identifies the Model, not the meshes inside.
+              
+  *   **Agent self-checking:** The agent needs a repeatable way to see what it built.
+
+  ### **Skill Requirements**
+  
+  *   **Asset ingest:** Route from \`thrixel_download(...)\` to a visible result.
+  *   **Grouping and decimation:** \`thrixel_group_parts\` runs free; ensure meshes are under 20k triangles.
+  *   **Textures:** Connection of maps in \`SurfaceAppearance\`, respecting 1024px limits.
+  
+  `
+  );
+}
+
+// If the user just wants the object ready to be consumed by the pipeline
+module.exports = { RobloxSkillEngine, renderRobloxSkill };
+```
