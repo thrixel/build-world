@@ -189,3 +189,11 @@ Before handoff, provide:
 For a benchmark or bounty submission, build two different genres end to end and include at least one
 Thrixel asset with independently moving parts. A documentation-only PR does not prove this engine
 path works.
+
+Record those two games using
+[`templates/submission-evidence.example.json`](roblox/templates/submission-evidence.example.json)
+and run the final gate:
+
+```bash
+python engines/roblox/tools/validate_submission.py path/to/submission-evidence.json
+```

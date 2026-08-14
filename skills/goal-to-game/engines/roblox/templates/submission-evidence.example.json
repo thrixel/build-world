@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "studioVersion": "replace-with-tested-version",
+  "games": [
+    {
+      "name": "Stormwatch",
+      "genre": "survival",
+      "publicUrl": "https://www.roblox.com/games/replace-with-place-id/stormwatch",
+      "thrixelAssetIds": ["storm-lighthouse"],
+      "movingPartVerified": true,
+      "screenshots": [
+        {"view": "front", "file": "evidence/stormwatch/front.png"},
+        {"view": "rear", "file": "evidence/stormwatch/rear.png"},
+        {"view": "left", "file": "evidence/stormwatch/left.png"},
+        {"view": "right", "file": "evidence/stormwatch/right.png"},
+        {"view": "top", "file": "evidence/stormwatch/top.png"},
+        {"view": "gameplay", "file": "evidence/stormwatch/gameplay.png"}
+      ],
+      "performance": [
+        {"profile": "desktop", "fps": 60},
+        {"profile": "mobile", "fps": 30}
+      ]
+    },
+    {
+      "name": "Courier Circuit",
+      "genre": "driving",
+      "publicUrl": "https://www.roblox.com/games/replace-with-place-id/courier-circuit",
+      "thrixelAssetIds": ["delivery-cart"],
+      "movingPartVerified": true,
+      "screenshots": [
+        {"view": "front", "file": "evidence/courier/front.png"},
+        {"view": "rear", "file": "evidence/courier/rear.png"},
+        {"view": "left", "file": "evidence/courier/left.png"},
+        {"view": "right", "file": "evidence/courier/right.png"},
+        {"view": "top", "file": "evidence/courier/top.png"},
+        {"view": "gameplay", "file": "evidence/courier/gameplay.png"}
+      ],
+      "performance": [
+        {"profile": "desktop", "fps": 60},
+        {"profile": "mobile", "fps": 30}
+      ]
+    }
+  ]
+}
