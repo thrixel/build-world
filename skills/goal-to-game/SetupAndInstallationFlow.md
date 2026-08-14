@@ -195,6 +195,47 @@ of the two would go stale, and the stale one would be quoting prices.
 
 SKILL.md decides WHICH engine. This section only installs it, once per machine.
 
+### Roblox Studio Installation
+
+Roblox Studio is supported on Windows and macOS. It does not run natively on Linux. A Linux or
+WSL agent must use Studio on a Windows or macOS host; do not install an unofficial compatibility
+layer and claim it is a supported toolchain.
+
+Check for Studio before asking the user to install anything:
+
+**Windows PowerShell**
+
+```powershell
+$studio = Get-ChildItem "$env:LOCALAPPDATA\Roblox\Versions" -Filter RobloxStudioBeta.exe -Recurse -ErrorAction SilentlyContinue |
+  Sort-Object LastWriteTime -Descending |
+  Select-Object -First 1
+if ($studio) { & $studio.FullName -version } else { Write-Output "ROBLOX_STUDIO_MISSING" }
+```
+
+**macOS**
+
+```bash
+test -x "/Applications/RobloxStudio.app/Contents/MacOS/RobloxStudio" \
+  && "/Applications/RobloxStudio.app/Contents/MacOS/RobloxStudio" -version \
+  || echo ROBLOX_STUDIO_MISSING
+```
+
+**WSL**
+
+```bash
+powershell.exe -NoProfile -Command \
+  '$s=Get-ChildItem "$env:LOCALAPPDATA\Roblox\Versions" -Filter RobloxStudioBeta.exe -Recurse -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1; if($s){$s.FullName}else{"ROBLOX_STUDIO_MISSING"}'
+```
+
+If Studio is missing, stop and ask the user to install it from the official Roblox Creator page.
+Account sign-in, accepting an Open Cloud permission, and publishing an experience are human
+authorization boundaries. Prepare everything up to the boundary, ask once, then continue after
+the user completes it.
+
+The project must also have Python 3 for the repository's manifest validator. Verify with
+`python --version`; on Windows, also try `py -3 --version`. No third-party Python packages are
+required.
+
 ### Unity Installation
 
 #### Install Unity CLI to allow agents to control Unity
