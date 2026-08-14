@@ -1,0 +1,191 @@
+```javascript
+/**
+ * Roblox Studio Engine Skill Package
+ * 
+ * A complete Javascript object structure representing the file system
+ * and logic payload required to fix the "Goal to Game" Roblox Skill.
+ * 
+ * Designed to be read by a Coding Agent (like the goal-to-game pipeline)
+ * and dropped directly into the repo root or a `files` variable.
+ */
+
+const RobloxFixture = {
+  name: "Roblox Studio Support",
+  version: "1.0.0",
+  files: {
+    "SKILL.md": `
+# Shared Asset Pipeline Guide
+## Target Engine: **Roblox Studio**
+**Bounty Sponsor:** Thrixel  
+**Goal:** Enable coding agents to drop 3D models into Roblox that are watertight, sized for the Roblox standard unit, and ready for `SurfaceAppearance` driven rendering.
+
+**Key Constraints:**
+*   **Geometry:** Max 20k triangles per `MeshPart`.
+*   **Materials:** One `SurfaceAppearance` per object (PBR maps: Color, Normal, Roughness, Metalness, Emissive).
+*   **Scale:** Standard Roblox Unit (1 Unit = 1 Meter).
+*   **Import:** `.fbx` (Preferred) via Open Cloud Assets API for best headless support.
+
+---
+`,
+    "engines/roblox.md": `
+# Engine: Roblox Studio
+## Overview
+This engine skill instructs a coding agent (Goal-to-Game) on how to transform raw Thrixel assets into a format Roblox Studio understands. Unlike Unity, Roblox is rigid; unlike Three.js, it's less flexible. This skill balances the two by grouping assets and baking materials.
+
+### 1. The Setup & Toolchain
+Before the agent begins `thrixel_download(...)`, it must verify the "Roblox Importer" is active in the target workspace.
+
+*   **The Tool:** `thrixel_start_project("roblox")`
+*   **The Check:** The agent must confirm `MeshPart` geometry is valid.
+*   **The Input:** A `.fbx` file containing a root `Model`.
+
+### 2. Asset Ingest (The "Headless" Flow)
+The biggest challenge is the Roblox Cloud Assets API returning the *Model* ID instead of the *Mesh* ID. The agent should handle this using the `RobloxImporter` helper script or by querying descendants.
+
+1.  **Grouping:** Run `thrixel_group_parts` logic.
+    *   *Why?* Roblox dislikes joined meshes. If a `MeshPart` has too many triangles, it gets culled.
+    *   *How?* Separate the generated mesh by material slot (Paint, Glass, Chrome) so each slot gets its own `MeshPart`.
+2.  **Decimation:** If a single slot needs to exceed 20k triangles, run the agent's mesh decimation step.
+3.  **Surface Mapping:** Apply a `SurfaceAppearance` to each grouped `MeshPart`.
+
+### 3. Scaling & Orientation
+Roblox is "Rough" by default. The `RobloxImporter` sets the scale to 1 unit per meter.
+*   **Orientation:** Ensure the Z-axis is forward (Roblox) or Y-up depending on the asset source.
+*   **Watertightness:** Ensure no "skinny" vertices.
+
+### 4. Runtime vs Build-Time
+*   **Build-Time:** `SurfaceAppearance` maps (Color, Normal, etc.).
+*   **Runtime:** Use `MeshQuality` properties for LOD switching, or simple `MeshPart` primitives if needed.
+
+### 5. Scale Targets
+*   **Part:** ~150 triangles max per slot.
+*   **Model:** The root container can be anything, but the children are what matter.
+*   **Fidelity:** `MeshQualityLow` for mobile, `High` for main.
+
+---
+`,
+    "engines/roblox/pitfalls.md": `
+# Pitfalls: Roblox Studio
+## The "20k Triangle" Trap
+Roblox validates mesh topology on import. If you join 5 meshes together, you get one massive blob.
+**Rule:** Every object in the root `Model` should ideally be its own `MeshPart`.
+**Fix:** Use `thrixel_group_parts` to split the mesh by semantic material (Paint, Glass) before export.
+
+## The "Floating Island" Issue
+Roblox can be forgiving with pivots, but if you rotate the whole model root, the parts might spin around the center.
+**Solution:** Set the pivot of every `MeshPart` to its local origin before grouping.
+
+## Texture Resolution
+Roblox textures are "rough." 2k maps are fine, but 4k maps on a small rock look like static.
+**Target:** 1024x1024 for standard assets, 512x512 for environment details.
+
+## The "Pending" Limbo
+Uploaded assets pass through moderation. They might show up in the catalog but look black in the game.
+**Agent Tip:** Always run a "Bake Textures" step or force a refresh in the UI script if the agent is in a headless loop.
+`,
+    "tools/RobloxImporter/InspectMesh.lua": `
+-- A self-checking Lua script for the agent to verify its work.
+-- Place this in Roblox Studio 'ReplicatedStorage' or Model root
+local function InspectMesh()
+	local model = script.Parent
+	local valid = true
+	local warnings = {}
+
+	-- Check every child MeshPart
+	for _, child in ipairs(model:GetDescendants()) do
+		if child:IsA("MeshPart") then
+			local mesh = child.Mesh
+			if mesh then
+				local polyCount = child:GetAttribute("PolygonCount", 20000) -- Fallback attr
+				-- Logic to handle the 'MeshQuality' property
+				if child.MeshQuality == "Low" then
+					table.insert(warnings, string.format("%s has %s triangles", child.Name, polyCount))
+				end
+			end
+		end
+	end
+
+	-- Log report for the coding agent
+	print("Roblox Import Inspect:")
+	for i, w in ipairs(warnings) do
+		print(w)
+	end
+end
+`,
+    "tools/RobloxImporter/TextureMapper.lua": `
+-- Helper to apply the 5 PBR maps that Roblox allows.
+local Map = {
+	Name = "SurfaceTexture",
+	Material = "SurfaceAppearance",
+	MappedVars = {
+		{"Color", 1},
+		{"Normal", 2},
+		{"Roughness", 3},
+		{"Metalness", 4},
+		{"Emissive", 5}
+	}
+}
+`,
+    "engines/threedjs/threejs.md": `
+# (Contextual Reference: ThreeJS)
+## Why is ThreeJS here?
+The agent should read this to compare:
+*   **Unity:** Submeshes on one mesh.
+*   **ThreeJS:** Instanced meshes with raw data.
+*   **Roblox:** The middle ground. One `MeshPart`, one `SurfaceAppearance`.
+`,
+    "SetupAndInstallationFlow.md": `
+# Setup: Installing the Roblox Engine
+## Tools Required
+1.  **Roblox Studio** (PC or Mac)
+2.  **Node.js** (for the headless importer script)
+
+## Installation Flow
+1.  Run `thrixel_start_project("roblox")`
+2.  The agent checks for the `engines/roblox/` folder.
+3.  If files exist, it executes the `RobloxImporter` logic.
+
+**macOS/Linux/WSL:**
+*   Install via `brew install roblox` or `flatpak`.
+4.  Ensure `Open Cloud Assets API` key is present in the env.
+
+---
+`
+  },
+  logic: {
+    // The Javascript logic that defines how the coding agent interprets this skill
+    agentFlow: [
+      "1. **Identify**: Does the target project contain `MeshPart` children?",
+      "2. **Group**: If a root `Model` is returned, ensure children are isolated. `thrixel_group_parts` handles this.",
+      "3. **Map**: Apply `SurfaceAppearance` to each child. Use attributes to store texture names.",
+      "4. **Scale**: Ensure the `Mesh` property exists; if not, default to 1 unit."
+    ]
+  }
+};
+
+// Helper function to export this object as a clean 'string' of files
+function exportRobloxFiles() {
+  let content = "";
+  for (const [filename, source] of Object.entries(RobloxFixture.files)) {
+    content += `// ${filename}\n`;
+    content += source + "\n";
+  }
+  return content;
+}
+
+// The "Fix" - A ready-to-use class structure
+class RobloxFixture {
+  static getMainEngineFile() {
+    // Returns the core instruction set
+    return RobloxFixture.files["engines/roblox.md"];
+  }
+  
+  static checkMeshCount(mesh) {
+    // The core logic to solve the "20k Triangle" issue
+    return mesh && mesh.PolygonCount < 20000; 
+  }
+}
+
+// Module export pattern
+module.exports = RobloxFixture;
+```
