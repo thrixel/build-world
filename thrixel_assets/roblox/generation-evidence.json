@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-08-15T00:46:21+08:00",
+  "account_status": {
+    "plan": "free",
+    "cubes_after_generation": 192
+  },
+  "games": [
+    {
+      "game": "stormwatch",
+      "project_id": "2258857b-a935-453c-beb3-8409ed0e8e45",
+      "rough_submission_id": "2c8bbf51-a424-43e9-a394-679fcf5933bf",
+      "grouped_submission_id": "f6c0ff1b-6f11-488a-b658-dc3c11936518",
+      "triangles": 2448,
+      "mesh_objects": 2,
+      "kept_groups": ["Lantern_Group"],
+      "pivots": {
+        "Lantern_Group": [0.0, 0.0, 1.7098],
+        "LighthouseStatic": [0.0, 0.0, 0.0]
+      },
+      "fbx": "stormwatch/lighthouse-grouped.fbx"
+    },
+    {
+      "game": "courier-circuit",
+      "project_id": "42b74727-6def-420b-a7d3-c80099142f57",
+      "rough_submission_id": "3e4d2bfa-e67c-46be-b228-65b7207d1c7b",
+      "grouped_submission_id": "b8b17d73-122f-4d83-99f7-68e864d86f80",
+      "triangles": 664,
+      "mesh_objects": 5,
+      "kept_groups": [
+        "WheelFrontLeft",
+        "WheelFrontRight",
+        "WheelRearLeft",
+        "WheelRearRight"
+      ],
+      "pivots": {
+        "WheelFrontLeft": [-0.5143, -0.6071, 0.2429],
+        "WheelFrontRight": [0.5143, -0.6071, 0.2429],
+        "WheelRearLeft": [-0.5143, 0.6071, 0.2429],
+        "WheelRearRight": [0.5143, 0.6071, 0.2429],
+        "CartBody": [0.0, 0.0, 0.0]
+      },
+      "fbx": "courier-circuit/delivery-cart-grouped.fbx"
+    }
+  ]
+}
