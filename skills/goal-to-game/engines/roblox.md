@@ -148,6 +148,18 @@ Start with these mobile-oriented budgets and tighten them if the game misses tar
 
 ## Repeatable self-check
 
+Copy [`tools/selftest.server.lua`](roblox/tools/selftest.server.lua) into
+`ServerScriptService` as `ThrixelSelftest.server.lua`. Tag each imported model root
+`ThrixelAsset` with `CollectionService`; tag independently moving `MeshPart` instances
+`ThrixelMovingPart`. After the motion test has exercised the intended mechanical axis, set that
+part's `ThrixelPivotVerified` attribute to `true`.
+
+Run Play in Studio and capture the Output line beginning `THRIXEL_SELFTEST_JSON=`. Save its JSON
+payload as `evidence/validation.json`. A script error or `passed: false` is a hard failure. Warnings
+must be reviewed and either corrected or justified in the report. This script validates the live
+scene hierarchy and resolved IDs; it does not replace pre-import geometry inspection or visual
+review.
+
 Build a deterministic verification scene or mode that:
 
 1. positions named cameras at front, rear, both sides, top, and gameplay distance;
