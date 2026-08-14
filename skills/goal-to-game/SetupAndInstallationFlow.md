@@ -298,3 +298,107 @@ powershell -c "irm https://community.chocolatey.org/install.ps1|iex"
 # Download and install Node.js:
 choco install nodejs
 ```
+
+### Roblox Studio Installation
+
+#### 1. Install Roblox Studio
+
+Download and install Roblox Studio from https://create.roblox.com/docs/studio/setting-up-roblox-studio.
+You must have a Roblox account to use it.
+
+Verify the installation by opening Studio from your Applications / Start Menu.
+
+#### 2. Install Rojo (file sync)
+
+Rojo syncs your local `.lua`/`.luau` files into a live Roblox Studio session.
+
+**macOS or Linux (using Aftman, the Roblox toolchain manager):**
+```bash
+# Install Aftman
+curl -LO https://github.com/LPGhatguy/aftman/releases/latest/download/aftman-linux.zip
+unzip aftman-linux.zip -d ~/.local/bin && chmod +x ~/.local/bin/aftman
+aftman self-install
+# Install Rojo via Aftman
+aftman add rojo-rbx/rojo
+aftman install
+```
+
+**macOS (Homebrew):**
+```bash
+brew install rojo-rbx/rojo/rojo
+```
+
+**Windows PowerShell:**
+```powershell
+# Install Aftman
+Invoke-WebRequest -Uri "https://github.com/LPGhatguy/aftman/releases/latest/download/aftman-windows-x86_64.zip" -OutFile aftman.zip
+Expand-Archive aftman.zip -DestinationPath "$env:USERPROFILE\.aftman\bin"
+# Add to PATH, then:
+aftman add rojo-rbx/rojo
+aftman install
+```
+
+Verify:
+```bash
+rojo --version
+# Expected: rojo 7.x or later
+```
+
+Install the Rojo Studio Plugin (run once in any project folder):
+```bash
+rojo plugin install
+```
+This installs the Rojo plugin into Roblox Studio so it can receive synced files.
+
+#### 3. Install rbxcloud (Open Cloud CLI for asset upload)
+
+```bash
+# macOS or Linux:
+curl -L https://github.com/rojo-rbx/rbxcloud/releases/latest/download/rbxcloud-linux-x86_64.tar.gz | tar xz -C ~/.local/bin
+# OR via cargo (if you have Rust):
+cargo install rbxcloud
+
+# Windows (via cargo):
+cargo install rbxcloud
+```
+
+Verify:
+```bash
+rbxcloud --version
+```
+
+#### 4. Get a Roblox Open Cloud API Key
+
+1. Go to https://create.roblox.com/credentials
+2. Click **Create API Key**
+3. Name it `goal-to-game`
+4. Under **API System**, enable **Assets** with `Asset:read` and `Asset:write` permissions
+5. Set your Universe (Experience) ID in the access list, or leave open for all experiences
+6. Copy the key and export it:
+
+```bash
+# macOS / Linux — add to ~/.bashrc or ~/.zshrc for persistence:
+export RBXCLOUD_API_KEY="<your_key>"
+export ROBLOX_UNIVERSE_ID="<your_universe_id>"
+export ROBLOX_PLACE_ID="<your_place_id>"
+```
+
+```powershell
+# Windows PowerShell:
+$env:RBXCLOUD_API_KEY = "<your_key>"
+$env:ROBLOX_UNIVERSE_ID = "<your_universe_id>"
+$env:ROBLOX_PLACE_ID = "<your_place_id>"
+```
+
+Find your Universe ID and Place ID in the Roblox Creator Hub → your experience → **Settings**.
+
+#### 5. Verify the full toolchain
+
+```bash
+rojo --version       # 7.x or later
+rbxcloud --version   # any version
+python3 --version    # 3.8 or later (for wait_for_asset.py)
+echo $RBXCLOUD_API_KEY | head -c 10  # should print the start of your key
+```
+
+All four must succeed before starting a Roblox game build.
