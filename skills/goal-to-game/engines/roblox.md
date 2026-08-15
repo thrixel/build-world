@@ -169,6 +169,11 @@ Build a deterministic verification scene or mode that:
 5. records frame time, instance count, mesh-part count, and visible moderation failures;
 6. emits machine-readable `evidence/validation.json` and `evidence/performance.json`.
 
+For the required stills, copy [`tools/camera-tour.client.lua`](roblox/tools/camera-tour.client.lua)
+into `StarterPlayerScripts`. It frames the first model tagged `ThrixelAsset` and selects the six
+required views deterministically. Use `[` and `]` to move between views and match each capture to
+the emitted `THRIXEL_CAMERA_VIEW=` marker.
+
 Review the captures for scale, sideways orientation, floating pieces, missing faces, black or blank
 textures, incorrect pivots, collision gaps, and mobile UI obstruction. A green script result does
 not override a visibly broken frame.

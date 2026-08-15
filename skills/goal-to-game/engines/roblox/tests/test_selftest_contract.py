@@ -27,6 +27,21 @@ class SelftestContractTests(unittest.TestCase):
         self.assertIn("evidence/validation.json", guide)
         self.assertIn("passed: false", guide)
 
+    def test_camera_tour_covers_required_submission_views(self):
+        script = (ROOT / "tools" / "camera-tour.client.lua").read_text(encoding="utf-8")
+
+        for token in (
+            'name = "front"',
+            'name = "rear"',
+            'name = "left"',
+            'name = "right"',
+            'name = "top"',
+            'name = "gameplay"',
+            "THRIXEL_CAMERA_VIEW=",
+            'GetTagged("ThrixelAsset")',
+        ):
+            self.assertIn(token, script)
+
 
 if __name__ == "__main__":
     unittest.main()
