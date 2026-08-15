@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
 <roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
 	<External>null</External>
 	<External>nil</External>
@@ -81,8 +82,8 @@
 			<Ref name="PrimaryPart">null</Ref>
 			<float name="ScaleFactor">1</float>
 			<SharedString name="SlimHash">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-			<OptionalCoordinateFrame name="WorldPivotData"></OptionalCoordinateFrame>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<OptionalCoordinateFrame name="WorldPivotData"/>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -128,7 +129,7 @@
 				<bool name="HeadLocked">true</bool>
 				<float name="HeadScale">1</float>
 				<bool name="VRTiltAndRollEnabled">false</bool>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize"/>
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -204,7 +205,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 				<bool name="Locked">true</bool>
 				<bool name="Massless">false</bool>
 				<token name="Material">256</token>
-				<string name="MaterialVariantSerialized"></string>
+				<string name="MaterialVariantSerialized"/>
 				<CoordinateFrame name="PivotOffset">
 					<X>0</X>
 					<Y>0</Y>
@@ -245,7 +246,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<Y>252</Y>
 					<Z>2044</Z>
 				</Vector3>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize"/>
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -325,7 +326,7 @@ NzY1ODk2YjU5]]></BinaryString>
 						<Z>0</Z>
 					</Vector3>
 					<Content name="MeshId"><url>rbxassetid://80693217565086</url></Content>
-					<BinaryString name="PhysicsData"></BinaryString>
+					<BinaryString name="PhysicsData"/>
 					<token name="RenderFidelity">0</token>
 					<Content name="TextureID"><url>rbxassetid://118332008901185</url></Content>
 					<int name="VertexCount">0</int>
@@ -395,7 +396,7 @@ NzY1ODk2YjU5]]></BinaryString>
 					<bool name="Locked">false</bool>
 					<bool name="Massless">false</bool>
 					<token name="Material">256</token>
-					<string name="MaterialVariantSerialized"></string>
+					<string name="MaterialVariantSerialized"/>
 					<CoordinateFrame name="PivotOffset">
 						<X>-1.90734863e-06</X>
 						<Y>-85.1785736</Y>
@@ -436,7 +437,7 @@ NzY1ODk2YjU5]]></BinaryString>
 						<Y>110.357147</Y>
 						<Z>200</Z>
 					</Vector3>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize"/>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -462,7 +463,7 @@ NzY1ODk2YjU5]]></BinaryString>
 						<Z>0</Z>
 					</Vector3>
 					<Content name="MeshId"><url>rbxassetid://140103302536398</url></Content>
-					<BinaryString name="PhysicsData"></BinaryString>
+					<BinaryString name="PhysicsData"/>
 					<token name="RenderFidelity">0</token>
 					<Content name="TextureID"><url>rbxassetid://85534667493962</url></Content>
 					<int name="VertexCount">0</int>
@@ -532,7 +533,7 @@ NzY1ODk2YjU5]]></BinaryString>
 					<bool name="Locked">false</bool>
 					<bool name="Massless">false</bool>
 					<token name="Material">256</token>
-					<string name="MaterialVariantSerialized"></string>
+					<string name="MaterialVariantSerialized"/>
 					<CoordinateFrame name="PivotOffset">
 						<X>0</X>
 						<Y>1.90734863e-06</Y>
@@ -573,7 +574,7 @@ NzY1ODk2YjU5]]></BinaryString>
 						<Y>48.571434</Y>
 						<Z>48.5714302</Z>
 					</Vector3>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize"/>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -599,7 +600,7 @@ NzY1ODk2YjU5]]></BinaryString>
 						<Z>0</Z>
 					</Vector3>
 					<Content name="MeshId"><url>rbxassetid://71239932053271</url></Content>
-					<BinaryString name="PhysicsData"></BinaryString>
+					<BinaryString name="PhysicsData"/>
 					<token name="RenderFidelity">0</token>
 					<Content name="TextureID"><url>rbxassetid://85534667493962</url></Content>
 					<int name="VertexCount">0</int>
@@ -669,7 +670,7 @@ NzY1ODk2YjU5]]></BinaryString>
 					<bool name="Locked">false</bool>
 					<bool name="Massless">false</bool>
 					<token name="Material">256</token>
-					<string name="MaterialVariantSerialized"></string>
+					<string name="MaterialVariantSerialized"/>
 					<CoordinateFrame name="PivotOffset">
 						<X>0</X>
 						<Y>1.90734863e-06</Y>
@@ -710,7 +711,7 @@ NzY1ODk2YjU5]]></BinaryString>
 						<Y>48.571434</Y>
 						<Z>48.5714302</Z>
 					</Vector3>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize"/>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -736,7 +737,7 @@ NzY1ODk2YjU5]]></BinaryString>
 						<Z>0</Z>
 					</Vector3>
 					<Content name="MeshId"><url>rbxassetid://95333169587891</url></Content>
-					<BinaryString name="PhysicsData"></BinaryString>
+					<BinaryString name="PhysicsData"/>
 					<token name="RenderFidelity">0</token>
 					<Content name="TextureID"><url>rbxassetid://85534667493962</url></Content>
 					<int name="VertexCount">0</int>
@@ -806,7 +807,7 @@ NzY1ODk2YjU5]]></BinaryString>
 					<bool name="Locked">false</bool>
 					<bool name="Massless">false</bool>
 					<token name="Material">256</token>
-					<string name="MaterialVariantSerialized"></string>
+					<string name="MaterialVariantSerialized"/>
 					<CoordinateFrame name="PivotOffset">
 						<X>0</X>
 						<Y>1.90734863e-06</Y>
@@ -847,7 +848,7 @@ NzY1ODk2YjU5]]></BinaryString>
 						<Y>48.571434</Y>
 						<Z>48.5714302</Z>
 					</Vector3>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize"/>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -873,7 +874,7 @@ NzY1ODk2YjU5]]></BinaryString>
 						<Z>0</Z>
 					</Vector3>
 					<Content name="MeshId"><url>rbxassetid://132409096927911</url></Content>
-					<BinaryString name="PhysicsData"></BinaryString>
+					<BinaryString name="PhysicsData"/>
 					<token name="RenderFidelity">0</token>
 					<Content name="TextureID"><url>rbxassetid://85534667493962</url></Content>
 					<int name="VertexCount">0</int>
@@ -943,7 +944,7 @@ NzY1ODk2YjU5]]></BinaryString>
 					<bool name="Locked">false</bool>
 					<bool name="Massless">false</bool>
 					<token name="Material">256</token>
-					<string name="MaterialVariantSerialized"></string>
+					<string name="MaterialVariantSerialized"/>
 					<CoordinateFrame name="PivotOffset">
 						<X>0</X>
 						<Y>1.90734863e-06</Y>
@@ -984,7 +985,7 @@ NzY1ODk2YjU5]]></BinaryString>
 						<Y>48.571434</Y>
 						<Z>48.5714302</Z>
 					</Vector3>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize"/>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -998,7 +999,7 @@ NzY1ODk2YjU5]]></BinaryString>
 	</Item>
 	<Item class="TimerService" referent="RBX428D12768B69443D87B985920A8B5018">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1010,7 +1011,7 @@ NzY1ODk2YjU5]]></BinaryString>
 	</Item>
 	<Item class="CollectionService" referent="RBXB3B01F38D4614932B1C27789C71F4491">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1052,7 +1053,7 @@ NzY1ODk2YjU5]]></BinaryString>
 			<bool name="ReverbEnabled">true</bool>
 			<float name="RolloffScale">1</float>
 			<token name="VolumetricAudio">1</token>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1064,7 +1065,7 @@ NzY1ODk2YjU5]]></BinaryString>
 	</Item>
 	<Item class="VideoCaptureService" referent="RBX4A347DE1BC1C4247BBC87BCE7CE1FDA7">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1076,7 +1077,7 @@ NzY1ODk2YjU5]]></BinaryString>
 	</Item>
 	<Item class="NonReplicatedCSGDictionaryService" referent="RBXB28CBE0CBEE34772B7D43CFAE9D6B23F">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1088,7 +1089,7 @@ NzY1ODk2YjU5]]></BinaryString>
 	</Item>
 	<Item class="CSGDictionaryService" referent="RBX97A953EEE24B41D9937B511D2ACE3368">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1103,7 +1104,7 @@ NzY1ODk2YjU5]]></BinaryString>
 			<bool name="BubbleChatEnabled">false</bool>
 			<bool name="IsAutoMigrated">false</bool>
 			<bool name="LoadDefaultChat">true</bool>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1121,7 +1122,7 @@ NzY1ODk2YjU5]]></BinaryString>
 			<int name="PreferredPlayersInternal">0</int>
 			<float name="RespawnTime">5</float>
 			<bool name="UseStrafingAnimations">false</bool>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1133,7 +1134,7 @@ NzY1ODk2YjU5]]></BinaryString>
 	</Item>
 	<Item class="ReplicatedFirst" referent="RBX1490C2B2F1E348F4B517424520A24783">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1145,7 +1146,7 @@ NzY1ODk2YjU5]]></BinaryString>
 	</Item>
 	<Item class="TweenService" referent="RBXB5389E623DE949BEB78D0A307B885744">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1198,7 +1199,7 @@ NzY1ODk2YjU5]]></BinaryString>
 			<bool name="Use2022MaterialsXml">false</bool>
 			<string name="WoodName">Wood</string>
 			<string name="WoodPlanksName">WoodPlanks</string>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1218,7 +1219,7 @@ NzY1ODk2YjU5]]></BinaryString>
 			<bool name="HasSeenDeprecationDialog">false</bool>
 			<bool name="IsLegacyChatDisabled">false</bool>
 			<token name="PlatformIntegratedChat">0</token>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1258,7 +1259,7 @@ NzY1ODk2YjU5]]></BinaryString>
 				<double name="TextStrokeTransparency">0.5</double>
 				<token name="VerticalAlignment">1</token>
 				<float name="WidthScale">1</float>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize"/>
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1303,7 +1304,7 @@ NzY1ODk2YjU5]]></BinaryString>
 					<B>0</B>
 				</Color3>
 				<double name="TextStrokeTransparency">0.5</double>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize"/>
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1348,7 +1349,7 @@ NzY1ODk2YjU5]]></BinaryString>
 				</Color3>
 				<int64 name="TextSize">16</int64>
 				<float name="VerticalStudsOffset">0</float>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize"/>
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1395,7 +1396,7 @@ NzY1ODk2YjU5]]></BinaryString>
 					<B>0</B>
 				</Color3>
 				<double name="TextStrokeTransparency">1</double>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize"/>
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1408,7 +1409,7 @@ NzY1ODk2YjU5]]></BinaryString>
 	</Item>
 	<Item class="PermissionsService" referent="RBX4BD0498B24F64CDCBD2C11422BD19675">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1421,13 +1422,13 @@ NzY1ODk2YjU5]]></BinaryString>
 	<Item class="PlayerEmulatorService" referent="RBX597EDD93D5544620AAB3A0C26F18603F">
 		<Properties>
 			<bool name="CustomPoliciesEnabled">false</bool>
-			<string name="EmulatedCountryCode"></string>
-			<string name="EmulatedGameLocale"></string>
+			<string name="EmulatedCountryCode"/>
+			<string name="EmulatedGameLocale"/>
 			<bool name="PlayerEmulationEnabled">false</bool>
 			<bool name="PseudolocalizationEnabled">false</bool>
-			<BinaryString name="SerializedEmulatedPolicyInfo"></BinaryString>
+			<BinaryString name="SerializedEmulatedPolicyInfo"/>
 			<int name="TextElongationFactor">0</int>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1440,7 +1441,7 @@ NzY1ODk2YjU5]]></BinaryString>
 	<Item class="StudioData" referent="RBX82B8E71B4B2E4C47AF3035C1E64D4F0E">
 		<Properties>
 			<bool name="EnableScriptCollabByDefaultOnLoad">false</bool>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1497,7 +1498,7 @@ NzY1ODk2YjU5]]></BinaryString>
 			<float name="NameDisplayDistance">100</float>
 			<int name="PlayerModuleStatus">0</int>
 			<bool name="UserEmotesEnabled">true</bool>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1508,7 +1509,7 @@ NzY1ODk2YjU5]]></BinaryString>
 		</Properties>
 		<Item class="StarterPlayerScripts" referent="4">
 			<Properties>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize"/>
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1517,9 +1518,10 @@ NzY1ODk2YjU5]]></BinaryString>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">28fdfac4bf5da1a10a90e24c000003c5</UniqueId>
 			</Properties>
-			<Item class="LocalScript" referent="5">
-				<Properties>
-					<ProtectedString name="Source"><![CDATA[local Players = game:GetService("Players")
+			<Item class="LocalScript" referent="RBXBA86958431E54E86AE83E40683DA8C0B">
+        <Properties>
+          <string name="Name">HUD</string>
+          <string name="Source"><![CDATA[local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local deliveries = ReplicatedStorage:WaitForChild("CourierState"):WaitForChild("Deliveries")
@@ -1544,25 +1546,159 @@ local function update()
 end
 deliveries.Changed:Connect(update)
 update()
-]]></ProtectedString>
-					<bool name="Disabled">false</bool>
-					<Content name="LinkedSource"><null></null></Content>
-					<token name="RunContext">0</token>
-					<string name="ScriptGuid">{22E0202F-356D-4F05-AF91-3BCAFABD337F}</string>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-					<bool name="DefinesCapabilities">false</bool>
-					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-					<string name="Name">HUD</string>
-					<int64 name="SourceAssetId">-1</int64>
-					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-					<UniqueId name="UniqueId">28fdfac4bf5da1a10a90e24c000003c6</UniqueId>
-				</Properties>
-			</Item>
-		</Item>
+]]></string>
+        </Properties>
+      </Item>
+      <Item class="LocalScript" referent="RBXB80691D12C7040BCBF79FD645BBA81D3">
+        <Properties>
+          <string name="Name">ThrixelCameraTour</string>
+          <string name="Source"><![CDATA[local CollectionService = game:GetService("CollectionService")
+local ContextActionService = game:GetService("ContextActionService")
+local RunService = game:GetService("RunService")
+local Workspace = game:GetService("Workspace")
+
+local expectedName = Workspace:FindFirstChild("delivery-cart-grouped")
+    and "ThrixelDeliveryCart"
+    or "ThrixelLighthouse"
+local preferredTarget = Workspace:WaitForChild(expectedName, 5)
+local targets = preferredTarget and {preferredTarget} or CollectionService:GetTagged("ThrixelAsset")
+if #targets == 0 then
+    for _, instance in Workspace:GetDescendants() do
+        if instance:IsA("Model") then
+            local normalizedName = string.lower(instance.Name)
+            if normalizedName == "lighthouse-grouped"
+                or normalizedName == "delivery-cart-grouped" then
+                table.insert(targets, instance)
+            end
+        end
+    end
+end
+table.sort(targets, function(a, b)
+    return a:GetFullName() < b:GetFullName()
+end)
+
+assert(#targets > 0, "Camera tour requires a model tagged ThrixelAsset")
+
+local target = targets[1]
+assert(target:IsA("Model"), "ThrixelAsset camera target must be a Model")
+
+local center, size = target:GetBoundingBox()
+local radius = math.max(size.X, size.Y, size.Z) * 1.8
+local focus = center.Position
+
+local views = {
+    {name = "front", offset = Vector3.new(0, size.Y * 0.15, radius)},
+    {name = "rear", offset = Vector3.new(0, size.Y * 0.15, -radius)},
+    {name = "left", offset = Vector3.new(-radius, size.Y * 0.15, 0)},
+    {name = "right", offset = Vector3.new(radius, size.Y * 0.15, 0)},
+    {name = "top", offset = Vector3.new(0, radius, 0.01)},
+    {name = "gameplay", offset = Vector3.new(radius * 0.8, radius * 0.55, radius * 0.8)},
+}
+
+local index = 1
+local desiredCFrame
+
+local function showView()
+    local view = views[index]
+    desiredCFrame = CFrame.lookAt(focus + view.offset, focus)
+    print(string.format("THRIXEL_CAMERA_VIEW=%s", view.name))
+end
+
+showView()
+
+RunService:BindToRenderStep("ThrixelCameraTour", Enum.RenderPriority.Last.Value, function()
+    local activeCamera = Workspace.CurrentCamera
+    activeCamera.CameraType = Enum.CameraType.Scriptable
+    activeCamera.CFrame = desiredCFrame
+end)
+
+local function cycle(_, state, input)
+    if state ~= Enum.UserInputState.Begin then
+        return Enum.ContextActionResult.Pass
+    end
+
+    local direction = input.KeyCode == Enum.KeyCode.LeftBracket and -1 or 1
+    index = ((index - 1 + direction) % #views) + 1
+    showView()
+    return Enum.ContextActionResult.Sink
+end
+
+ContextActionService:BindAction(
+    "ThrixelCameraTour",
+    cycle,
+    false,
+    Enum.KeyCode.LeftBracket,
+    Enum.KeyCode.RightBracket
+)
+]]></string>
+        </Properties>
+      </Item>
+      <Item class="LocalScript" referent="RBX72A2C08531314D1CB31A14A7125110E8">
+        <Properties>
+          <string name="Name">ThrixelPerformance</string>
+          <string name="Source"><![CDATA[local HttpService = game:GetService("HttpService")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
+
+local SAMPLE_SECONDS = 10
+local frameTimes = {}
+local startedAt = os.clock()
+
+local function percentile(values, ratio)
+    local sorted = table.clone(values)
+    table.sort(sorted)
+    local index = math.clamp(math.ceil(#sorted * ratio), 1, #sorted)
+    return sorted[index]
+end
+
+while os.clock() - startedAt < SAMPLE_SECONDS do
+    local delta = RunService.RenderStepped:Wait()
+    table.insert(frameTimes, delta)
+end
+
+local total = 0
+for _, delta in frameTimes do
+    total += delta
+end
+
+local averageDelta = total / #frameTimes
+local profile = Workspace:GetAttribute("ThrixelPerformanceProfile")
+if profile ~= "desktop" and profile ~= "mobile" then
+    profile = UserInputService.TouchEnabled and "mobile" or "desktop"
+end
+
+local instances = Workspace:GetDescendants()
+local meshPartCount = 0
+for _, instance in instances do
+    if instance:IsA("MeshPart") then
+        meshPartCount += 1
+    end
+end
+
+local result = {
+    profile = profile,
+    durationSeconds = SAMPLE_SECONDS,
+    sampleCount = #frameTimes,
+    averageFps = math.round((1 / averageDelta) * 10) / 10,
+    minimumFps = math.round((1 / math.max(table.unpack(frameTimes))) * 10) / 10,
+    p95FrameTimeMs = math.round(percentile(frameTimes, 0.95) * 10000) / 10,
+    viewport = {
+        width = Workspace.CurrentCamera.ViewportSize.X,
+        height = Workspace.CurrentCamera.ViewportSize.Y,
+    },
+    instanceCount = #instances,
+    meshPartCount = meshPartCount,
+}
+
+print("THRIXEL_PERFORMANCE_JSON=" .. HttpService:JSONEncode(result))
+]]></string>
+        </Properties>
+      </Item>
+    </Item>
 		<Item class="StarterCharacterScripts" referent="RBXD799C03D002344538E01A7A0FD0346AA">
 			<Properties>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize"/>
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1575,7 +1711,7 @@ update()
 	</Item>
 	<Item class="StarterPack" referent="RBXB9FAD48F34894900AB8AD48DD0D72B27">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1595,7 +1731,7 @@ update()
 			<Ref name="StudioDefaultStyleSheet">null</Ref>
 			<Ref name="StudioInsertWidgetLayerCollectorAutoLinkStyleSheet">null</Ref>
 			<token name="VirtualCursorMode">0</token>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1607,7 +1743,7 @@ update()
 	</Item>
 	<Item class="LocalizationService" referent="RBX0223163935BE4D788F09CBAA981BFB69">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1619,7 +1755,7 @@ update()
 	</Item>
 	<Item class="TeleportService" referent="RBXF2BA5F7D11344A76A38296D456ADFD59">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1631,7 +1767,7 @@ update()
 	</Item>
 	<Item class="PhysicsService" referent="RBXBC4F57A6EEFF477C90E46558051DD35E">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1644,7 +1780,7 @@ update()
 	<Item class="InsertService" referent="RBXB0A94646A4DD4F3B90D182D14B867401">
 		<Properties>
 			<bool name="AllowInsertFreeModels">false</bool>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1656,7 +1792,7 @@ update()
 		<Item class="StringValue" referent="RBX8412827664FE43C4A74CA28290D17285">
 			<Properties>
 				<string name="Value">{C312E377-CDA9-468B-94F3-230E225079A3}</string>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize"/>
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1669,7 +1805,7 @@ update()
 	</Item>
 	<Item class="GamePassService" referent="RBX0CD0A5CEDAE14D4896F4B9EB276645D2">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1682,7 +1818,7 @@ update()
 	<Item class="Debris" referent="RBXC11E65BC5B4C412BB1AD4693D1DF77C5">
 		<Properties>
 			<int name="MaxItems">1000</int>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1694,7 +1830,7 @@ update()
 	</Item>
 	<Item class="CookiesService" referent="RBX47574A07E5EE459D8F9EB6179FE0E222">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1706,7 +1842,7 @@ update()
 	</Item>
 	<Item class="Selection" referent="RBX94392A5C9DCD45FF95F2652D637BD4BD">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1723,7 +1859,7 @@ update()
 			<token name="ControllerModels">1</token>
 			<bool name="FadeOutViewOnCollision">true</bool>
 			<token name="LaserPointer">1</token>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1735,7 +1871,7 @@ update()
 	</Item>
 	<Item class="ContextActionService" referent="RBX4D6F4F33D00841ADA4068900FFB42CC1">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1747,7 +1883,7 @@ update()
 	</Item>
 	<Item class="ScriptService" referent="RBX233876E6997F433DBE0825862A23F332">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1760,7 +1896,7 @@ update()
 	<Item class="AssetService" referent="RBXEF6A846516B043C48B6F249674B1ADBA">
 		<Properties>
 			<bool name="AllowInsertFreeAssets">false</bool>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1772,7 +1908,7 @@ update()
 	</Item>
 	<Item class="TouchInputService" referent="RBX46DD4E5558FF4F72B39F6C65D916E863">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1784,7 +1920,7 @@ update()
 	</Item>
 	<Item class="AvatarSettings" referent="RBX7C214A26BB70453595464B7C9724CF9E">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1799,7 +1935,7 @@ update()
 			<bool name="IsDehydrated">false</bool>
 			<int name="ShellPackagesCount">0</int>
 			<int name="SkippedInstancesCount">0</int>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1811,7 +1947,7 @@ update()
 	</Item>
 	<Item class="GuidRegistryService" referent="RBX0EDADB7D262541079E0915118147A822">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1821,9 +1957,23 @@ update()
 			<UniqueId name="UniqueId">28fdfac4bf5da1a10a90e24c00000396</UniqueId>
 		</Properties>
 	</Item>
+	<Item class="ServiceVisibilityService" referent="RBX8B9BED19FE734D2392A95DC76E540691">
+		<Properties>
+			<BinaryString name="HiddenServices">AAAAAA==</BinaryString>
+			<BinaryString name="VisibleServices">AAAAAA==</BinaryString>
+			<BinaryString name="AttributesSerialize"/>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">ServiceVisibilityService</string>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">28fdfac4bf5da1a10a90e24c000003aa</UniqueId>
+		</Properties>
+	</Item>
 	<Item class="LuaWebService" referent="RBXE9499105BD88446E8FB2F164FB4950F1">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1835,7 +1985,7 @@ update()
 	</Item>
 	<Item class="ProcessInstancePhysicsService" referent="RBX7CBED24FBCA2488187B1D410833B22C8">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1847,7 +1997,7 @@ update()
 	</Item>
 	<Item class="ReplicatedStorage" referent="0">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1860,7 +2010,7 @@ update()
 	<Item class="ServerScriptService" referent="1">
 		<Properties>
 			<bool name="LoadStringEnabled">false</bool>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -1869,9 +2019,12 @@ update()
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">28fdfac4bf5da1a10a90e24c000003a0</UniqueId>
 		</Properties>
-		<Item class="Script" referent="2">
-			<Properties>
-				<ProtectedString name="Source"><![CDATA[local Players = game:GetService("Players")
+		<Item class="Script" referent="RBXCFF8B1904F9C412BA34F9A13078C5257">
+      <Properties>
+        <string name="Name">Main</string>
+        <token name="RunContext">0</token>
+        <string name="Source"><![CDATA[local CollectionService = game:GetService("CollectionService")
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
@@ -1893,6 +2046,15 @@ local function part(name, size, cf, color, material)
     value.Material = material or Enum.Material.SmoothPlastic
     value.Parent = workspace
     return value
+end
+
+local importedCart = workspace:FindFirstChild("delivery-cart-grouped")
+if importedCart then
+    for _, instance in importedCart:GetDescendants() do
+        if instance:IsA("BasePart") then
+            instance.Anchored = true
+        end
+    end
 end
 
 part("Road", Vector3.new(220, 2, 220), CFrame.new(0, -1, 0), Color3.fromRGB(34, 38, 45), Enum.Material.Asphalt)
@@ -1918,6 +2080,7 @@ local cart = Instance.new("Model")
 cart.Name = "ThrixelDeliveryCart"
 cart:SetAttribute("ThrixelAsset", true)
 cart.Parent = workspace
+CollectionService:AddTag(cart, "ThrixelAsset")
 
 local body = part("CartBody", Vector3.new(8, 2, 12), CFrame.new(0, 4, 14), Color3.fromRGB(240, 177, 54), Enum.Material.Metal)
 body.Anchored = false
@@ -1954,6 +2117,7 @@ for _, spec in wheelSpecs do
     wheel:SetAttribute("ThrixelMovingPart", true)
     wheel:SetAttribute("ThrixelPivotVerified", false)
     wheel.Parent = cart
+    CollectionService:AddTag(wheel, "ThrixelMovingPart")
     table.insert(visualWheels, {part = wheel, offset = CFrame.new(spec[2], -1.2, spec[3])})
 end
 cart.PrimaryPart = body
@@ -2005,25 +2169,142 @@ Players.PlayerAdded:Connect(function(player)
         cart:PivotTo(CFrame.new(0, 4, 14))
     end)
 end)
-]]></ProtectedString>
-				<bool name="Disabled">false</bool>
-				<Content name="LinkedSource"><null></null></Content>
-				<token name="RunContext">0</token>
-				<string name="ScriptGuid">{51AE8E8A-F4F7-406C-BC7B-E424E117F9C5}</string>
-				<BinaryString name="AttributesSerialize"></BinaryString>
-				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-				<bool name="DefinesCapabilities">false</bool>
-				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-				<string name="Name">Main</string>
-				<int64 name="SourceAssetId">-1</int64>
-				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				<UniqueId name="UniqueId">28fdfac4bf5da1a10a90e24c000003c1</UniqueId>
-			</Properties>
-		</Item>
-	</Item>
+]]></string>
+      </Properties>
+    </Item>
+    <Item class="Script" referent="RBX5F4CD0E512AF4036BB16B494E40DEF27">
+      <Properties>
+        <string name="Name">ThrixelSelftest</string>
+        <token name="RunContext">0</token>
+        <string name="Source"><![CDATA[-- Deterministic Studio-side validation for imported Thrixel assets.
+-- Tag imported roots with "ThrixelAsset" and moving parts with "ThrixelMovingPart".
+
+local CollectionService = game:GetService("CollectionService")
+local HttpService = game:GetService("HttpService")
+local Workspace = game:GetService("Workspace")
+
+task.wait(1)
+
+local failures = {}
+local warnings = {}
+local stats = {
+	assets = 0,
+	instances = 0,
+	meshParts = 0,
+	movingParts = 0,
+	surfaceAppearances = 0,
+}
+
+local function add(list, code, instance, message)
+	table.insert(list, {
+		code = code,
+		path = instance and instance:GetFullName() or "Workspace",
+		message = message,
+	})
+end
+
+local function hasAssetAncestor(instance, roots)
+	local current = instance
+	while current and current ~= Workspace do
+		if roots[current] then
+			return true
+		end
+		current = current.Parent
+	end
+	return false
+end
+
+local roots = {}
+local function addRoot(root)
+	if root:IsA("Model") and root:IsDescendantOf(Workspace) and not roots[root] then
+		roots[root] = true
+		stats.assets += 1
+	end
+end
+
+for _, root in CollectionService:GetTagged("ThrixelAsset") do
+	addRoot(root)
+end
+
+for _, instance in Workspace:GetDescendants() do
+	if instance:IsA("Model") then
+		local normalizedName = string.lower(instance.Name)
+		if instance:GetAttribute("ThrixelAsset") == true
+			or normalizedName == "lighthouse-grouped"
+			or normalizedName == "delivery-cart-grouped" then
+			addRoot(instance)
+		end
+	end
+end
+
+if stats.assets == 0 then
+	add(failures, "NO_TAGGED_ASSETS", Workspace,
+		"Tag every imported Thrixel model root with CollectionService tag ThrixelAsset")
+end
+
+for _, instance in Workspace:GetDescendants() do
+	stats.instances += 1
+	if instance:IsA("MeshPart") and hasAssetAncestor(instance, roots) then
+		stats.meshParts += 1
+
+		if instance.MeshId == "" then
+			add(failures, "EMPTY_MESH_ID", instance, "MeshId is empty")
+		end
+		if instance.Size.X <= 0.01 or instance.Size.Y <= 0.01 or instance.Size.Z <= 0.01 then
+			add(failures, "ZERO_THICKNESS", instance, "One or more dimensions are at or below 0.01 studs")
+		end
+		if not instance.Anchored and not CollectionService:HasTag(instance, "ThrixelMovingPart") then
+			add(warnings, "UNANCHORED_STATIC", instance,
+				"Static imported parts should be anchored or intentionally constrained")
+		end
+
+		local appearance = instance:FindFirstChildOfClass("SurfaceAppearance")
+		if appearance then
+			stats.surfaceAppearances += 1
+			if appearance.ColorMap == "" then
+				add(warnings, "EMPTY_COLOR_MAP", appearance, "SurfaceAppearance has no ColorMap")
+			end
+		end
+
+		if CollectionService:HasTag(instance, "ThrixelMovingPart") then
+			stats.movingParts += 1
+			if instance:GetAttribute("ThrixelPivotVerified") ~= true then
+				add(failures, "PIVOT_NOT_VERIFIED", instance,
+					"Set ThrixelPivotVerified=true only after exercising the part around its intended axis")
+			end
+			if instance.CollisionFidelity == Enum.CollisionFidelity.PreciseConvexDecomposition then
+				add(warnings, "EXPENSIVE_MOVING_COLLISION", instance,
+					"Use Box or Hull collision for moving gameplay pieces unless precise collision is required")
+			end
+		end
+	end
+end
+
+if stats.meshParts == 0 then
+	add(failures, "NO_MESH_PARTS", Workspace, "No MeshParts were found below tagged Thrixel assets")
+end
+
+local result = {
+	schemaVersion = 1,
+	passed = #failures == 0,
+	placeId = game.PlaceId,
+	jobId = game.JobId,
+	stats = stats,
+	failures = failures,
+	warnings = warnings,
+}
+
+print("THRIXEL_SELFTEST_JSON=" .. HttpService:JSONEncode(result))
+if not result.passed then
+	error(string.format("Thrixel self-test failed with %d error(s)", #failures))
+end
+]]></string>
+      </Properties>
+    </Item>
+  </Item>
 	<Item class="ServerStorage" referent="RBX4C6BFABF60884EA2B092B8E82E7FD4FF">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -2033,24 +2314,10 @@ end)
 			<UniqueId name="UniqueId">28fdfac4bf5da1a10a90e24c000003a1</UniqueId>
 		</Properties>
 	</Item>
-	<Item class="ServiceVisibilityService" referent="RBX8B9BED19FE734D2392A95DC76E540691">
-		<Properties>
-			<BinaryString name="HiddenServices">AAAAAA==</BinaryString>
-			<BinaryString name="VisibleServices">AAAAAA==</BinaryString>
-			<BinaryString name="AttributesSerialize"></BinaryString>
-			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-			<bool name="DefinesCapabilities">false</bool>
-			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-			<string name="Name">ServiceVisibilityService</string>
-			<int64 name="SourceAssetId">-1</int64>
-			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-			<UniqueId name="UniqueId">28fdfac4bf5da1a10a90e24c000003aa</UniqueId>
-		</Properties>
-	</Item>
 	<Item class="HttpService" referent="RBX124D73CDBD4141CE9740A8080790091F">
 		<Properties>
 			<bool name="HttpEnabled">false</bool>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -2067,7 +2334,7 @@ end)
 				<G>0.5</G>
 				<B>0.5</B>
 			</Color3>
-			<float name="Brightness">1</float>
+			<float name="Brightness">1.98124921</float>
 			<Color3 name="ColorShift_Bottom">
 				<R>0</R>
 				<G>0</G>
@@ -2100,9 +2367,12 @@ end)
 			<bool name="Outlines">true</bool>
 			<bool name="PrioritizeLightingQuality">false</bool>
 			<float name="ShadowSoftness">0.5</float>
-			<token name="Technology">2</token>
+			<token name="Technology">1</token>
 			<string name="TimeOfDay">14:00:00</string>
-			<BinaryString name="AttributesSerialize">AQAAACYAAABSQlhfTGlnaHRpbmdUZWNobm9sb2d5VW5pZmllZE1pZ3JhdGlvbgMB</BinaryString>
+			<BinaryString name="AttributesSerialize"><![CDATA[BQAAABQAAABSQlhfQmFja3VwQnJpZ2h0bmVzcwUAAIA/HgAAAFJCWF9CYWNrdXBFeHBvc3Vy
+ZUNvbXBlbnNhdGlvbgUAAAAAIQAAAFJCWF9MaWdodGluZ0NvbXBhdGliaWxpdHlNaWdyYXRl
+ZAMBJgAAAFJCWF9MaWdodGluZ1RlY2hub2xvZ3lVbmlmaWVkTWlncmF0aW9uAwEgAAAAUkJY
+X09yaWdpbmFsVGVjaG5vbG9neU9uRmlsZUxvYWQEAgAAAA==]]></BinaryString>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -2111,10 +2381,40 @@ end)
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">28fdfac4bf5da1a10a90e24c000003d7</UniqueId>
 		</Properties>
+		<Item class="ColorGradingEffect" referent="RBX6AC0A02503AA4F48A829CB35739F869F">
+			<Properties>
+				<token name="TonemapperPreset">1</token>
+				<bool name="Enabled">true</bool>
+				<BinaryString name="AttributesSerialize"/>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">ColorGrading</string>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">1ad0f3a224a92cd80a923158000003c9</UniqueId>
+			</Properties>
+		</Item>
+		<Item class="BloomEffect" referent="RBX76A0EF10CBFD447FB72BEE4F39172CE4">
+			<Properties>
+				<float name="Intensity">0</float>
+				<float name="Size">24</float>
+				<float name="Threshold">0.949999988</float>
+				<bool name="Enabled">true</bool>
+				<BinaryString name="AttributesSerialize"/>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">Bloom</string>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">1ad0f3a224a92cd80a923158000003ca</UniqueId>
+			</Properties>
+		</Item>
 	</Item>
 	<Item class="VideoService" referent="RBXF9B0644200004BA9AA399985FE22B755">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -2126,7 +2426,7 @@ end)
 	</Item>
 	<Item class="LodDataService" referent="RBX7D1AD8C4BBA64B1FA7D2DA56FDD9D1EB">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -2139,7 +2439,7 @@ end)
 	<Item class="TestService" referent="RBX79DD01F045334B2490D9BD11299C154E">
 		<Properties>
 			<bool name="AutoRuns">true</bool>
-			<string name="Description"></string>
+			<string name="Description"/>
 			<bool name="ExecuteWithStudioRun">false</bool>
 			<bool name="IsPhysicsEnvironmentalThrottled">true</bool>
 			<bool name="IsSleepAllowed">true</bool>
@@ -2147,7 +2447,7 @@ end)
 			<double name="SimulateSecondsLag">0</double>
 			<bool name="ThrottlePhysicsToRealtime">true</bool>
 			<double name="Timeout">10</double>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize"/>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -2354,6 +2654,6 @@ lhkD+vabTiSXfrn6haO79kjwBbM/1Jz7sP1fhxSyOTg3zV/CvfQ8kzz/b2a507yctv5yBByf
 8VmvdbSDwbVl9sOC6akwa15S/fPI9KK/i8rhdujm6aCfV5/78Dhh2GXqbiHlv2reyLog2Jts
 Dvt/GcHNQvvqHZzTozmODPSPgAKXlq/llMNa9vn03/ErmCY5xOt9fpd35KolXDHLxn5hfVGw
 HRc657bu0RHgMx0iZ/J5xWv1Fx9ZrQHhjvNGBnOh5G/jldnMeaLgBi/LPjOkDQ==</SharedString>
-		<SharedString md5="yuZpQdnvvUBOTYh1jqZ2cA=="></SharedString>
+		<SharedString md5="yuZpQdnvvUBOTYh1jqZ2cA=="/>
 	</SharedStrings>
 </roblox>

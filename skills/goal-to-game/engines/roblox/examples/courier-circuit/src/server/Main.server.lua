@@ -1,3 +1,4 @@
+local CollectionService = game:GetService("CollectionService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
@@ -20,6 +21,15 @@ local function part(name, size, cf, color, material)
     value.Material = material or Enum.Material.SmoothPlastic
     value.Parent = workspace
     return value
+end
+
+local importedCart = workspace:FindFirstChild("delivery-cart-grouped")
+if importedCart then
+    for _, instance in importedCart:GetDescendants() do
+        if instance:IsA("BasePart") then
+            instance.Anchored = true
+        end
+    end
 end
 
 part("Road", Vector3.new(220, 2, 220), CFrame.new(0, -1, 0), Color3.fromRGB(34, 38, 45), Enum.Material.Asphalt)
@@ -45,6 +55,7 @@ local cart = Instance.new("Model")
 cart.Name = "ThrixelDeliveryCart"
 cart:SetAttribute("ThrixelAsset", true)
 cart.Parent = workspace
+CollectionService:AddTag(cart, "ThrixelAsset")
 
 local body = part("CartBody", Vector3.new(8, 2, 12), CFrame.new(0, 4, 14), Color3.fromRGB(240, 177, 54), Enum.Material.Metal)
 body.Anchored = false
@@ -81,6 +92,7 @@ for _, spec in wheelSpecs do
     wheel:SetAttribute("ThrixelMovingPart", true)
     wheel:SetAttribute("ThrixelPivotVerified", false)
     wheel.Parent = cart
+    CollectionService:AddTag(wheel, "ThrixelMovingPart")
     table.insert(visualWheels, {part = wheel, offset = CFrame.new(spec[2], -1.2, spec[3])})
 end
 cart.PrimaryPart = body

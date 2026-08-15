@@ -5,6 +5,8 @@ local CollectionService = game:GetService("CollectionService")
 local HttpService = game:GetService("HttpService")
 local Workspace = game:GetService("Workspace")
 
+task.wait(1)
+
 local failures = {}
 local warnings = {}
 local stats = {
@@ -35,10 +37,25 @@ local function hasAssetAncestor(instance, roots)
 end
 
 local roots = {}
-for _, root in CollectionService:GetTagged("ThrixelAsset") do
-	if root:IsDescendantOf(Workspace) then
+local function addRoot(root)
+	if root:IsA("Model") and root:IsDescendantOf(Workspace) and not roots[root] then
 		roots[root] = true
 		stats.assets += 1
+	end
+end
+
+for _, root in CollectionService:GetTagged("ThrixelAsset") do
+	addRoot(root)
+end
+
+for _, instance in Workspace:GetDescendants() do
+	if instance:IsA("Model") then
+		local normalizedName = string.lower(instance.Name)
+		if instance:GetAttribute("ThrixelAsset") == true
+			or normalizedName == "lighthouse-grouped"
+			or normalizedName == "delivery-cart-grouped" then
+			addRoot(instance)
+		end
 	end
 end
 

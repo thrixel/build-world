@@ -7,13 +7,22 @@
     },
     "ServerScriptService": {
       "$className": "ServerScriptService",
-      "$path": "src/server"
+      "$path": "src/server",
+      "ThrixelSelftest": {
+        "$path": "../../tools/selftest.server.lua"
+      }
     },
     "StarterPlayer": {
       "$className": "StarterPlayer",
       "StarterPlayerScripts": {
         "$className": "StarterPlayerScripts",
-        "$path": "src/client"
+        "$path": "src/client",
+        "ThrixelCameraTour": {
+          "$path": "../../tools/camera-tour.client.lua"
+        },
+        "ThrixelPerformance": {
+          "$path": "../../tools/performance.client.lua"
+        }
       }
     },
     "Workspace": {

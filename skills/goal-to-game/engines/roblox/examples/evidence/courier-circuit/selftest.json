@@ -1,0 +1,15 @@
+{
+  "stats": {
+    "assets": 2,
+    "meshParts": 5,
+    "surfaceAppearances": 0,
+    "movingParts": 0,
+    "instances": 363
+  },
+  "failures": [],
+  "warnings": [],
+  "jobId": "",
+  "placeId": 0,
+  "schemaVersion": 1,
+  "passed": true
+}

@@ -56,13 +56,13 @@ resolved asset IDs, textures, collision, and moving-group structure.
 
 ## Tested versions
 
-See [`TESTED_VERSIONS.md`](TESTED_VERSIONS.md). Automated tests and both Rojo builds are verified on
-Windows. macOS, WSL host bridging, final desktop/mobile runs, and account-bound publishing are not
-claimed as complete until their evidence is attached.
+See [`TESTED_VERSIONS.md`](TESTED_VERSIONS.md). Automated tests, both Rojo builds, account-bound
+Studio self-tests, six-view captures, and desktop/mobile performance runs are verified on Windows.
+macOS and WSL host bridging are documented but are not claimed as tested.
 
 ## Completion status
 
-The code, generated assets, imported scenes, and automated evidence tooling are complete. Before
-the draft PR is marked ready, attach both public Roblox game links, one public gameplay video per
-game, the required screenshots, Studio self-test JSON, desktop/mobile performance JSON, and the
-final import/moderation log.
+The code, generated assets, imported scenes, evidence tooling, screenshots, gameplay recordings,
+Studio self-test JSON, and desktop/mobile performance JSON are complete. Account-bound publishing
+is the remaining external step before the draft PR is marked ready; the public Roblox links are
+then recorded in `submission-evidence.json` and validated with `validate_submission.py`.

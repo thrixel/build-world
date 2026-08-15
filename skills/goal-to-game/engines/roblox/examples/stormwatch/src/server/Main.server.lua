@@ -1,4 +1,5 @@
 local Lighting = game:GetService("Lighting")
+local CollectionService = game:GetService("CollectionService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
@@ -29,6 +30,15 @@ local function part(name, size, position, color, material)
     return value
 end
 
+local importedLighthouse = workspace:FindFirstChild("lighthouse-grouped")
+if importedLighthouse then
+    for _, instance in importedLighthouse:GetDescendants() do
+        if instance:IsA("BasePart") then
+            instance.Anchored = true
+        end
+    end
+end
+
 part("Island", Vector3.new(180, 4, 180), Vector3.new(0, -2, 0), Color3.fromRGB(50, 67, 54), Enum.Material.Grass)
 part("Cliff", Vector3.new(54, 14, 54), Vector3.new(0, 5, 0), Color3.fromRGB(72, 75, 78), Enum.Material.Slate)
 
@@ -44,6 +54,7 @@ local lighthouse = Instance.new("Model")
 lighthouse.Name = "ThrixelLighthouse"
 lighthouse:SetAttribute("ThrixelAsset", true)
 lighthouse.Parent = workspace
+CollectionService:AddTag(lighthouse, "ThrixelAsset")
 
 for level = 0, 5 do
     local tower = part("TowerSegment", Vector3.new(18 - level * 1.4, 8, 18 - level * 1.4), Vector3.new(0, 13 + level * 8, 0), level % 2 == 0 and Color3.fromRGB(236, 230, 214) or Color3.fromRGB(173, 57, 48), Enum.Material.Concrete)
@@ -63,6 +74,7 @@ beacon.CanCollide = false
 beacon:SetAttribute("ThrixelMovingPart", true)
 beacon:SetAttribute("ThrixelPivotVerified", true)
 beacon.Parent = lighthouse
+CollectionService:AddTag(beacon, "ThrixelMovingPart")
 lighthouse.PrimaryPart = lanternRoom
 
 local safeRadius = 48

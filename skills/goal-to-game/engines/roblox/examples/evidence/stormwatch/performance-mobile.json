@@ -1,0 +1,14 @@
+{
+  "p95FrameTimeMs": 20.5,
+  "instanceCount": 332,
+  "profile": "mobile",
+  "meshPartCount": 18,
+  "averageFps": 58.3,
+  "viewport": {
+    "height": 392,
+    "width": 801
+  },
+  "sampleCount": 476,
+  "minimumFps": 11.8,
+  "durationSeconds": 10
+}

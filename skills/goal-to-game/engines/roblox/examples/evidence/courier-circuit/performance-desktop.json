@@ -1,0 +1,14 @@
+{
+  "p95FrameTimeMs": 18.6,
+  "instanceCount": 371,
+  "profile": "desktop",
+  "meshPartCount": 21,
+  "averageFps": 58.2,
+  "viewport": {
+    "height": 673,
+    "width": 788
+  },
+  "sampleCount": 457,
+  "minimumFps": 11.4,
+  "durationSeconds": 10
+}

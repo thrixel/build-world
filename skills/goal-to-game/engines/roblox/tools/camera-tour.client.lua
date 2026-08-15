@@ -1,9 +1,24 @@
 local CollectionService = game:GetService("CollectionService")
 local ContextActionService = game:GetService("ContextActionService")
+local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 
-local camera = Workspace.CurrentCamera
-local targets = CollectionService:GetTagged("ThrixelAsset")
+local expectedName = Workspace:FindFirstChild("delivery-cart-grouped")
+    and "ThrixelDeliveryCart"
+    or "ThrixelLighthouse"
+local preferredTarget = Workspace:WaitForChild(expectedName, 5)
+local targets = preferredTarget and {preferredTarget} or CollectionService:GetTagged("ThrixelAsset")
+if #targets == 0 then
+    for _, instance in Workspace:GetDescendants() do
+        if instance:IsA("Model") then
+            local normalizedName = string.lower(instance.Name)
+            if normalizedName == "lighthouse-grouped"
+                or normalizedName == "delivery-cart-grouped" then
+                table.insert(targets, instance)
+            end
+        end
+    end
+end
 table.sort(targets, function(a, b)
     return a:GetFullName() < b:GetFullName()
 end)
@@ -27,13 +42,21 @@ local views = {
 }
 
 local index = 1
+local desiredCFrame
 
 local function showView()
     local view = views[index]
-    camera.CameraType = Enum.CameraType.Scriptable
-    camera.CFrame = CFrame.lookAt(focus + view.offset, focus)
+    desiredCFrame = CFrame.lookAt(focus + view.offset, focus)
     print(string.format("THRIXEL_CAMERA_VIEW=%s", view.name))
 end
+
+showView()
+
+RunService:BindToRenderStep("ThrixelCameraTour", Enum.RenderPriority.Last.Value, function()
+    local activeCamera = Workspace.CurrentCamera
+    activeCamera.CameraType = Enum.CameraType.Scriptable
+    activeCamera.CFrame = desiredCFrame
+end)
 
 local function cycle(_, state, input)
     if state ~= Enum.UserInputState.Begin then
@@ -53,5 +76,3 @@ ContextActionService:BindAction(
     Enum.KeyCode.LeftBracket,
     Enum.KeyCode.RightBracket
 )
-
-showView()
