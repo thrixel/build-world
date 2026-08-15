@@ -203,6 +203,7 @@ Before handoff, provide:
 - editable source and project configuration;
 - validated asset manifest;
 - public playable link after authorization;
+- public gameplay video for each finished benchmark;
 - deterministic screenshots from all required cameras;
 - desktop and mobile performance results;
 - tested version matrix;

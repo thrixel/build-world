@@ -51,6 +51,8 @@ def validate_submission(data: Any) -> list[str]:
 
         if not _public_url(game.get("publicUrl")):
             errors.append(f"{prefix}.publicUrl must be a public https URL")
+        if not _public_url(game.get("videoUrl")):
+            errors.append(f"{prefix}.videoUrl must be a public https URL")
 
         asset_ids = game.get("thrixelAssetIds")
         if not isinstance(asset_ids, list) or not asset_ids or not all(

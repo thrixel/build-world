@@ -31,6 +31,11 @@ class ValidateSubmissionTests(unittest.TestCase):
         errors = MODULE.validate_submission(self.evidence)
         self.assertTrue(any("public https URL" in error for error in errors))
 
+    def test_requires_public_video_url(self):
+        self.evidence["games"][0]["videoUrl"] = ""
+        errors = MODULE.validate_submission(self.evidence)
+        self.assertTrue(any("videoUrl must be a public https URL" in error for error in errors))
+
     def test_requires_all_camera_views(self):
         self.evidence["games"][0]["screenshots"].pop()
         errors = MODULE.validate_submission(self.evidence)
