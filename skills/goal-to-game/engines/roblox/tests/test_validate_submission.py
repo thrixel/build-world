@@ -17,6 +17,19 @@ class ValidateSubmissionTests(unittest.TestCase):
     def setUp(self):
         path = ROOT / "templates" / "submission-evidence.example.json"
         self.evidence = json.loads(path.read_text(encoding="utf-8"))
+        self.evidence["studioVersion"] = "0.734.0.7340915"
+        self.evidence["games"][0]["publicUrl"] = (
+            "https://www.roblox.com/games/1234567890/stormwatch"
+        )
+        self.evidence["games"][0]["videoUrl"] = (
+            "https://www.youtube.com/watch?v=stormwatch-demo"
+        )
+        self.evidence["games"][1]["publicUrl"] = (
+            "https://www.roblox.com/games/2345678901/courier-circuit"
+        )
+        self.evidence["games"][1]["videoUrl"] = (
+            "https://www.youtube.com/watch?v=courier-demo"
+        )
 
     def test_example_is_valid(self):
         self.assertEqual(MODULE.validate_submission(self.evidence), [])
@@ -35,6 +48,15 @@ class ValidateSubmissionTests(unittest.TestCase):
         self.evidence["games"][0]["videoUrl"] = ""
         errors = MODULE.validate_submission(self.evidence)
         self.assertTrue(any("videoUrl must be a public https URL" in error for error in errors))
+
+    def test_rejects_template_placeholders(self):
+        self.evidence["studioVersion"] = "replace-with-tested-version"
+        self.evidence["games"][0]["publicUrl"] = (
+            "https://www.roblox.com/games/replace-with-place-id/stormwatch"
+        )
+        errors = MODULE.validate_submission(self.evidence)
+        self.assertIn("studioVersion must be recorded", errors)
+        self.assertIn("games[0].publicUrl must be a public https URL", errors)
 
     def test_requires_all_camera_views(self):
         self.evidence["games"][0]["screenshots"].pop()

@@ -216,7 +216,7 @@ path works.
 
 Record those two games using
 [`templates/submission-evidence.example.json`](roblox/templates/submission-evidence.example.json)
-and run the final gate:
+as a scaffold, replace every `replace-with-*` value with captured evidence, and run the final gate:
 
 ```bash
 python engines/roblox/tools/validate_submission.py path/to/submission-evidence.json

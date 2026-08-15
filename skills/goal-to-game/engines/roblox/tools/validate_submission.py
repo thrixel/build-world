@@ -18,8 +18,18 @@ REQUIRED_PROFILES = {"desktop", "mobile"}
 def _public_url(value: Any) -> bool:
     if not isinstance(value, str):
         return False
+    if "replace-with" in value.casefold():
+        return False
     parsed = urlparse(value)
     return parsed.scheme == "https" and bool(parsed.netloc)
+
+
+def _recorded_value(value: Any) -> bool:
+    return (
+        isinstance(value, str)
+        and bool(value.strip())
+        and "replace-with" not in value.casefold()
+    )
 
 
 def validate_submission(data: Any) -> list[str]:
@@ -28,7 +38,7 @@ def validate_submission(data: Any) -> list[str]:
         return ["submission must be a JSON object"]
     if data.get("schemaVersion") != 1:
         errors.append("schemaVersion must be 1")
-    if not isinstance(data.get("studioVersion"), str) or not data["studioVersion"].strip():
+    if not _recorded_value(data.get("studioVersion")):
         errors.append("studioVersion must be recorded")
 
     games = data.get("games")
