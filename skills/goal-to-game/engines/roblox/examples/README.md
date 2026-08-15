@@ -14,6 +14,8 @@ assets.
 
 Generation IDs, triangle counts, kept moving groups, and pivots are recorded in
 `../../../../../thrixel_assets/roblox/generation-evidence.json`.
+The verified toolchain versions and remaining account-bound checks are recorded in
+[`TESTED_VERSIONS.md`](TESTED_VERSIONS.md).
 
 Build locally with:
 
