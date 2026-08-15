@@ -1,0 +1,28 @@
+name: Roblox engine checks
+
+on:
+  pull_request:
+    paths:
+      - "skills/goal-to-game/engines/roblox/**"
+      - "skills/goal-to-game/engines/roblox.md"
+      - ".github/workflows/roblox-engine.yml"
+  push:
+    branches: [main]
+    paths:
+      - "skills/goal-to-game/engines/roblox/**"
+      - "skills/goal-to-game/engines/roblox.md"
+      - ".github/workflows/roblox-engine.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Run Roblox engine tests
+        run: python -m unittest discover -s skills/goal-to-game/engines/roblox/tests -v
