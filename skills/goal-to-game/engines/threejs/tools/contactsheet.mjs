@@ -17,11 +17,17 @@ import { PNG } from 'pngjs';
 import { parseArgs } from './lib/harness.mjs';
 
 const args = parseArgs(process.argv.slice(3));
-const dir = resolve(process.argv[2] ?? 'shots/latest');
-const vs = args.vs ? resolve(args.vs) : null;
+const _cwd = process.cwd();
+function _guard(p) {
+  const r = resolve(p);
+  if (r !== _cwd && !r.startsWith(_cwd + '/')) { console.error(`path outside cwd: ${p}`); process.exit(1); }
+  return r;
+}
+const dir = _guard(process.argv[2] ?? 'shots/latest');
+const vs = args.vs ? _guard(args.vs) : null;
 const CELL = Number(args.cell ?? 640);
 const COLS = Number(args.cols ?? (vs ? 2 : 4));
-const OUT = resolve(args.out ?? join(dir, 'sheet.png'));
+const OUT = _guard(args.out ?? join(dir, 'sheet.png'));
 const GAP = 8;
 const LABEL = 14; // rows of pixels reserved for the label bar
 
