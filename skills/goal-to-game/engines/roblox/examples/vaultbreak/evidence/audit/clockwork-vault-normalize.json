@@ -1,0 +1,114 @@
+{
+  "ok": true,
+  "input": "thrixel_assets/ready/vaultbreak-v2/an-upright-vertical-wall-mounted-clockwork-bank-edited.glb",
+  "output": "skills/goal-to-game/engines/roblox/examples/vaultbreak/thrixel_assets/ready/clockwork-vault.glb",
+  "targetTrianglesPerMesh": 18000,
+  "orientationDegrees": {
+    "x": 90.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "errors": [],
+  "objects": [
+    {
+      "name": "VaultDoor__DarkSteel",
+      "sourceGroup": "VaultDoor",
+      "trianglesBefore": 60,
+      "trianglesAfter": 60,
+      "materials": [
+        "DarkSteel"
+      ],
+      "nonManifoldEdges": 0
+    },
+    {
+      "name": "VaultBody__IvoryIndicator",
+      "sourceGroup": "VaultBody",
+      "trianglesBefore": 180,
+      "trianglesAfter": 180,
+      "materials": [
+        "IvoryIndicator"
+      ],
+      "nonManifoldEdges": 0
+    },
+    {
+      "name": "VaultDoor__TealSteelDark",
+      "sourceGroup": "VaultDoor",
+      "trianglesBefore": 124,
+      "trianglesAfter": 124,
+      "materials": [
+        "TealSteelDark"
+      ],
+      "nonManifoldEdges": 0
+    },
+    {
+      "name": "VaultDoor__TealSteel",
+      "sourceGroup": "VaultDoor",
+      "trianglesBefore": 368,
+      "trianglesAfter": 368,
+      "materials": [
+        "TealSteel"
+      ],
+      "nonManifoldEdges": 0
+    },
+    {
+      "name": "VaultDoor__AgedBrass",
+      "sourceGroup": "VaultDoor",
+      "trianglesBefore": 1120,
+      "trianglesAfter": 1120,
+      "materials": [
+        "AgedBrass"
+      ],
+      "nonManifoldEdges": 0
+    },
+    {
+      "name": "VaultDoor__AgedBrassDark",
+      "sourceGroup": "VaultDoor",
+      "trianglesBefore": 728,
+      "trianglesAfter": 728,
+      "materials": [
+        "AgedBrassDark"
+      ],
+      "nonManifoldEdges": 0
+    },
+    {
+      "name": "VaultBody__AgedBrass",
+      "sourceGroup": "VaultBody",
+      "trianglesBefore": 1188,
+      "trianglesAfter": 1188,
+      "materials": [
+        "AgedBrass"
+      ],
+      "nonManifoldEdges": 0
+    },
+    {
+      "name": "VaultBody__AgedBrassDark",
+      "sourceGroup": "VaultBody",
+      "trianglesBefore": 456,
+      "trianglesAfter": 456,
+      "materials": [
+        "AgedBrassDark"
+      ],
+      "nonManifoldEdges": 0
+    },
+    {
+      "name": "VaultBody__TealSteelDark",
+      "sourceGroup": "VaultBody",
+      "trianglesBefore": 232,
+      "trianglesAfter": 232,
+      "materials": [
+        "TealSteelDark"
+      ],
+      "nonManifoldEdges": 0
+    },
+    {
+      "name": "VaultBody__DarkSteel",
+      "sourceGroup": "VaultBody",
+      "trianglesBefore": 76,
+      "trianglesAfter": 76,
+      "materials": [
+        "DarkSteel"
+      ],
+      "nonManifoldEdges": 0
+    }
+  ]
+}

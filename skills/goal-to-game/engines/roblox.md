@@ -120,6 +120,11 @@ target. It fails when a result is non-manifold. It does not patch holes or add t
 those operations can destroy UVs and silhouette. On failure, use the free
 `thrixel_reduce_triangles`, edit/regenerate the source, group again, and rerun preflight.
 
+If a source arrives on the wrong authored axis, pass `--rotate-x-degrees`,
+`--rotate-y-degrees`, or `--rotate-z-degrees` once during normalization. The applied correction is
+recorded in the report. Material splits are named `<source-group>__<material>` so every visual
+piece of a moving group can be found and animated together after Studio import.
+
 `inspect_glb.py` independently checks primitive counts, triangle counts, material cardinality,
 missing names, and obvious hierarchy mistakes without Blender. Both reports must say `ok: true`.
 

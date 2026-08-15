@@ -7,8 +7,9 @@ Prompt used with the skill:
 > vault. Generate the vault with Architect, keep `VaultDoor` independently movable, group it,
 > prepare it for Roblox, and use primitive collision hitboxes.
 
-Generate and group `ClockworkVault` through the Thrixel MCP, replace the manifest submission ID,
-run the normalize/inspect tools, and import the GLB in Studio. Put the Model at
+The prepared `thrixel_assets/ready/clockwork-vault.glb`, manifest, and passing preflight reports
+are included. Import the GLB in Studio with **Import as a Model** enabled and **Merge Meshes**
+disabled. Put the Model at
 `Workspace/ThrixelAssets/ClockworkVault` and set:
 
 - `ThrixelExpectedMovingGroups = "VaultDoor"`

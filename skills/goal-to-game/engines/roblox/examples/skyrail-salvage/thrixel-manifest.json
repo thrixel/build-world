@@ -1,8 +1,10 @@
 {
   "schemaVersion": 1,
   "assetId": "ClockworkGlider",
-  "submissionId": "replace-after-thrixel-generation",
+  "projectId": "54592748-f81c-4a74-848f-fd6554be5767",
+  "submissionId": "f38b6e30-d64d-4d30-be30-817ec5390466",
   "sourceFile": "thrixel_assets/ready/clockwork-glider.glb",
+  "contentSha256": "f596dc5d61daa23c2a7eeed65b6b2a113cbf1f4fbd6d5f5399d308fc1272023d",
   "format": "glb",
   "purpose": "hero",
   "targetBoundsStuds": {"x": 12, "y": 6, "z": 18},

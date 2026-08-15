@@ -1,8 +1,10 @@
 {
   "schemaVersion": 1,
   "assetId": "ClockworkVault",
-  "submissionId": "replace-after-thrixel-generation",
+  "projectId": "27408b38-3b83-4c2d-9492-bd12b48c901a",
+  "submissionId": "ea665f1e-e88f-4619-8e61-ba29827238a4",
   "sourceFile": "thrixel_assets/ready/clockwork-vault.glb",
+  "contentSha256": "3a9e5f4b3c5809650bac48742d26e89feb472fe09c29f095cb4cf74a42a56ebd",
   "format": "glb",
   "purpose": "hero",
   "targetBoundsStuds": {"x": 18, "y": 14, "z": 6},

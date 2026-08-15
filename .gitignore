@@ -1,3 +1,4 @@
 # never commit the API key
 thrixel_key.txt
+/thrixel_assets/
 __pycache__/

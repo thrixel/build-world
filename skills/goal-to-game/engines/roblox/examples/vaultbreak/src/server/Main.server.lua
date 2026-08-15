@@ -59,6 +59,7 @@ local vaultMarker = part("VaultHitbox", Vector3.new(20, 14, 5), CFrame.new(35, 7
 vaultMarker.Transparency = 0.55
 local door = part("VaultDoorBlockout", Vector3.new(10, 11, 1), CFrame.new(35, 5.5, -24.8), Color3.fromRGB(205, 155, 65))
 door:SetAttribute("BlockoutOnly", true)
+local doorParts = {door}
 local importedRoot = Workspace:FindFirstChild("ThrixelAssets")
 local importedVault = importedRoot and importedRoot:FindFirstChild("ClockworkVault")
 if importedVault and importedVault:IsA("Model") then
@@ -69,19 +70,51 @@ if importedVault and importedVault:IsA("Model") then
 		importedVault:ScaleTo(importedVault:GetScale() * scale)
 		importedVault:SetAttribute("ThrixelScale", scale)
 	end
+	local importedDoorParts = {}
 	for _, instance in importedVault:GetDescendants() do
 		if instance:IsA("BasePart") then
 			instance.Anchored = true
 		end
 		if instance:IsA("BasePart") and string.find(string.lower(instance.Name), "vaultdoor", 1, true) then
-			door = instance
+			instance.CanCollide = false
+			table.insert(importedDoorParts, instance)
 		end
 	end
 	importedVault:PivotTo(CFrame.new(35, 7, -28))
-	world.VaultDoorBlockout.Transparency = 1
-	world.VaultDoorBlockout.CanCollide = false
+	if #importedDoorParts > 0 then
+		table.sort(importedDoorParts, function(a, b)
+			return a.Name < b.Name
+		end)
+		doorParts = importedDoorParts
+		world.VaultDoorBlockout.Transparency = 1
+		world.VaultDoorBlockout.CanCollide = false
+	end
 end
-local doorClosedCFrame = door.CFrame
+
+local function worldBounds(parts)
+	local low = Vector3.new(math.huge, math.huge, math.huge)
+	local high = Vector3.new(-math.huge, -math.huge, -math.huge)
+	for _, value in parts do
+		for x = -1, 1, 2 do
+			for y = -1, 1, 2 do
+				for z = -1, 1, 2 do
+					local corner = value.CFrame:PointToWorldSpace(value.Size * Vector3.new(x, y, z) * 0.5)
+					low = Vector3.new(math.min(low.X, corner.X), math.min(low.Y, corner.Y), math.min(low.Z, corner.Z))
+					high = Vector3.new(math.max(high.X, corner.X), math.max(high.Y, corner.Y), math.max(high.Z, corner.Z))
+				end
+			end
+		end
+	end
+	return low, high
+end
+
+local doorLow, doorHigh = worldBounds(doorParts)
+local doorCenter = (doorLow + doorHigh) * 0.5
+local doorClosedHinge = CFrame.new(doorHigh.X, doorCenter.Y, doorCenter.Z)
+local doorOffsets = {}
+for _, doorPart in doorParts do
+	doorOffsets[doorPart] = doorClosedHinge:ToObjectSpace(doorPart.CFrame)
+end
 local exit = part("VaultExit", Vector3.new(8, 8, 1), CFrame.new(35, 4, -29), Color3.fromRGB(70, 210, 145))
 exit.Transparency = 0.65
 exit.CanCollide = false
@@ -168,12 +201,12 @@ for index, fuse in fuseParts do
 		send(player, state.fuses == Config.RequiredFuses and "Vault unlocked — reach the green door" or "Fuse key secured")
 		if state.fuses == Config.RequiredFuses and not doorOpen then
 			doorOpen = true
-			local closed = door.CFrame
-			local hinge = closed * CFrame.new(-door.Size.X * 0.5, 0, 0)
-			local opened = hinge * CFrame.Angles(0, math.rad(-95), 0) * CFrame.new(door.Size.X * 0.5, 0, 0)
-			TweenService:Create(door, TweenInfo.new(1.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-				CFrame = opened,
-			}):Play()
+			local openedHinge = doorClosedHinge * CFrame.Angles(0, math.rad(95), 0)
+			for _, doorPart in doorParts do
+				TweenService:Create(doorPart, TweenInfo.new(1.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+					CFrame = openedHinge * doorOffsets[doorPart],
+				}):Play()
+			end
 		end
 	end)
 end
@@ -241,7 +274,9 @@ RunService.Heartbeat:Connect(function(delta)
 	if now >= roundEndsAt then
 		roundEndsAt = now + Config.RoundSeconds
 		doorOpen = false
-		door.CFrame = doorClosedCFrame
+		for _, doorPart in doorParts do
+			doorPart.CFrame = doorClosedHinge * doorOffsets[doorPart]
+		end
 		for index, fuse in fuseParts do
 			fuse.Transparency = 0
 			fuse.CanTouch = true

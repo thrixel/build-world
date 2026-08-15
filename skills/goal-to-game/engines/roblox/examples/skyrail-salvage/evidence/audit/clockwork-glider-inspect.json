@@ -1,0 +1,104 @@
+{
+  "errors": [],
+  "meshParts": [
+    {
+      "materialCount": 1,
+      "mesh": "GliderBody__IvoryFabric",
+      "nodes": [
+        "GliderBody__IvoryFabric"
+      ],
+      "primitiveCount": 1,
+      "triangles": 204
+    },
+    {
+      "materialCount": 1,
+      "mesh": "Propeller__DarkBrass",
+      "nodes": [
+        "Propeller__DarkBrass"
+      ],
+      "primitiveCount": 1,
+      "triangles": 36
+    },
+    {
+      "materialCount": 1,
+      "mesh": "GliderBody__AgedBrass",
+      "nodes": [
+        "GliderBody__AgedBrass"
+      ],
+      "primitiveCount": 1,
+      "triangles": 4768
+    },
+    {
+      "materialCount": 1,
+      "mesh": "GliderBody__DarkBrass",
+      "nodes": [
+        "GliderBody__DarkBrass"
+      ],
+      "primitiveCount": 1,
+      "triangles": 10098
+    },
+    {
+      "materialCount": 1,
+      "mesh": "GliderBody__TealDark",
+      "nodes": [
+        "GliderBody__TealDark"
+      ],
+      "primitiveCount": 1,
+      "triangles": 296
+    },
+    {
+      "materialCount": 1,
+      "mesh": "GliderBody__DarkInner",
+      "nodes": [
+        "GliderBody__DarkInner"
+      ],
+      "primitiveCount": 1,
+      "triangles": 92
+    },
+    {
+      "materialCount": 1,
+      "mesh": "GliderBody__TealSteel",
+      "nodes": [
+        "GliderBody__TealSteel"
+      ],
+      "primitiveCount": 1,
+      "triangles": 2530
+    },
+    {
+      "materialCount": 1,
+      "mesh": "GliderBody__Windscreen",
+      "nodes": [
+        "GliderBody__Windscreen"
+      ],
+      "primitiveCount": 1,
+      "triangles": 12
+    },
+    {
+      "materialCount": 1,
+      "mesh": "Propeller__AgedBrass",
+      "nodes": [
+        "Propeller__AgedBrass"
+      ],
+      "primitiveCount": 1,
+      "triangles": 212
+    },
+    {
+      "materialCount": 1,
+      "mesh": "Propeller__IvoryFabric",
+      "nodes": [
+        "Propeller__IvoryFabric"
+      ],
+      "primitiveCount": 1,
+      "triangles": 36
+    }
+  ],
+  "ok": true,
+  "summary": {
+    "materials": 7,
+    "maxTrianglesPerMesh": 18000,
+    "meshes": 10,
+    "nodes": 10,
+    "triangles": 18284
+  },
+  "warnings": []
+}

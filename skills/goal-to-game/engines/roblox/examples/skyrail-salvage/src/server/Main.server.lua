@@ -101,19 +101,30 @@ local function gliderFor(player)
 		if longest > 0 then
 			model:ScaleTo(model:GetScale() * 18 / longest)
 		end
-		local propeller
+		local propellerParts = {}
+		local bodyPrimary
 		for _, instance in model:GetDescendants() do
 			if instance:IsA("BasePart") then
 				instance.Anchored = true
-				model.PrimaryPart = model.PrimaryPart or instance
 				if string.find(string.lower(instance.Name), "propeller", 1, true) then
-					propeller = instance
+					table.insert(propellerParts, instance)
+				else
+					bodyPrimary = bodyPrimary or instance
 				end
 			end
 		end
-		if propeller and model.PrimaryPart then
+		model.PrimaryPart = bodyPrimary or model.PrimaryPart or propellerParts[1]
+		if #propellerParts > 0 and model.PrimaryPart then
+			table.sort(propellerParts, function(a, b)
+				return a.Name < b.Name
+			end)
 			model:PivotTo(CFrame.new(0, 2, 15))
-			return model, propeller, model:GetPivot():ToObjectSpace(propeller.CFrame)
+			local propellerPivot = propellerParts[1].CFrame
+			local propellerOffsets = {}
+			for _, propellerPart in propellerParts do
+				propellerOffsets[propellerPart] = propellerPivot:ToObjectSpace(propellerPart.CFrame)
+			end
+			return model, propellerParts, model:GetPivot():ToObjectSpace(propellerPivot), propellerOffsets
 		end
 		model:Destroy()
 	end
@@ -125,7 +136,7 @@ local function gliderFor(player)
 	local propeller = part("Propeller", Vector3.new(7, 0.5, 0.7), hull.CFrame * CFrame.new(0, 0, 6.4), Color3.fromRGB(245, 213, 125), model)
 	model.PrimaryPart = hull
 	model.Parent = carts
-	return model, propeller, model:GetPivot():ToObjectSpace(propeller.CFrame)
+	return model, {propeller}, model:GetPivot():ToObjectSpace(propeller.CFrame), {[propeller] = CFrame.identity}
 end
 
 local function send(player, message)
@@ -148,7 +159,7 @@ local function reset(player)
 	if old and old.model then
 		old.model:Destroy()
 	end
-	local model, propeller, propellerLocal = gliderFor(player)
+	local model, propellerParts, propellerLocal, propellerOffsets = gliderFor(player)
 	playerState[player] = {
 		lane = 2,
 		z = 15,
@@ -158,8 +169,9 @@ local function reset(player)
 		collected = {},
 		hit = {},
 		model = model,
-		propeller = propeller,
+		propellerParts = propellerParts,
 		propellerLocal = propellerLocal,
+		propellerOffsets = propellerOffsets,
 		lastLaneAt = 0,
 	}
 	local character = player.Character or player.CharacterAdded:Wait()
@@ -211,7 +223,10 @@ RunService.Heartbeat:Connect(function(delta)
 			local x = Config.Lanes[state.lane]
 			local target = CFrame.new(x, 2, state.z)
 			state.model:PivotTo(state.model:GetPivot():Lerp(target, math.clamp(delta * 10, 0, 1)))
-			state.propeller.CFrame = state.model:GetPivot() * state.propellerLocal * CFrame.Angles(0, 0, now * 12)
+			local spinningPivot = state.model:GetPivot() * state.propellerLocal * CFrame.Angles(0, 0, now * 12)
+			for _, propellerPart in state.propellerParts do
+				propellerPart.CFrame = spinningPivot * state.propellerOffsets[propellerPart]
+			end
 			local character = player.Character
 			local root = character and character:FindFirstChild("HumanoidRootPart")
 			if root then

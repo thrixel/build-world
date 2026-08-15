@@ -7,8 +7,9 @@ Prompt used with the skill:
 > the rescue beacon with enough charge. Generate the glider with Architect, keep `Propeller`
 > independently movable, and optimize it for mobile.
 
-Generate and group `ClockworkGlider` through the Thrixel MCP, replace the manifest submission ID,
-run both GLB gates, then import in Studio. Put the Model at
+The prepared `thrixel_assets/ready/clockwork-glider.glb`, manifest, and passing preflight reports
+are included. Import the GLB in Studio with **Import as a Model** enabled and **Merge Meshes**
+disabled. Put the Model at
 `Workspace/ThrixelAssets/ClockworkGlider` and set:
 
 - `ThrixelExpectedMovingGroups = "Propeller"`

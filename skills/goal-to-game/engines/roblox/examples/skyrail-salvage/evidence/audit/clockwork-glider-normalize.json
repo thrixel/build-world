@@ -1,0 +1,114 @@
+{
+  "ok": true,
+  "input": "thrixel_assets/ready/skyrail-salvage/a-compact-one-seat-clockwork-salvage-glider-for-edited.glb",
+  "output": "skills/goal-to-game/engines/roblox/examples/skyrail-salvage/thrixel_assets/ready/clockwork-glider.glb",
+  "targetTrianglesPerMesh": 18000,
+  "orientationDegrees": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "errors": [],
+  "objects": [
+    {
+      "name": "GliderBody__IvoryFabric",
+      "sourceGroup": "GliderBody",
+      "trianglesBefore": 204,
+      "trianglesAfter": 204,
+      "materials": [
+        "IvoryFabric"
+      ],
+      "nonManifoldEdges": 0
+    },
+    {
+      "name": "Propeller__DarkBrass",
+      "sourceGroup": "Propeller",
+      "trianglesBefore": 36,
+      "trianglesAfter": 36,
+      "materials": [
+        "DarkBrass"
+      ],
+      "nonManifoldEdges": 0
+    },
+    {
+      "name": "GliderBody__AgedBrass",
+      "sourceGroup": "GliderBody",
+      "trianglesBefore": 4768,
+      "trianglesAfter": 4768,
+      "materials": [
+        "AgedBrass"
+      ],
+      "nonManifoldEdges": 0
+    },
+    {
+      "name": "GliderBody__DarkBrass",
+      "sourceGroup": "GliderBody",
+      "trianglesBefore": 10098,
+      "trianglesAfter": 10098,
+      "materials": [
+        "DarkBrass"
+      ],
+      "nonManifoldEdges": 0
+    },
+    {
+      "name": "GliderBody__TealDark",
+      "sourceGroup": "GliderBody",
+      "trianglesBefore": 296,
+      "trianglesAfter": 296,
+      "materials": [
+        "TealDark"
+      ],
+      "nonManifoldEdges": 0
+    },
+    {
+      "name": "GliderBody__DarkInner",
+      "sourceGroup": "GliderBody",
+      "trianglesBefore": 92,
+      "trianglesAfter": 92,
+      "materials": [
+        "DarkInner"
+      ],
+      "nonManifoldEdges": 0
+    },
+    {
+      "name": "GliderBody__TealSteel",
+      "sourceGroup": "GliderBody",
+      "trianglesBefore": 2530,
+      "trianglesAfter": 2530,
+      "materials": [
+        "TealSteel"
+      ],
+      "nonManifoldEdges": 0
+    },
+    {
+      "name": "GliderBody__Windscreen",
+      "sourceGroup": "GliderBody",
+      "trianglesBefore": 12,
+      "trianglesAfter": 12,
+      "materials": [
+        "Windscreen"
+      ],
+      "nonManifoldEdges": 0
+    },
+    {
+      "name": "Propeller__AgedBrass",
+      "sourceGroup": "Propeller",
+      "trianglesBefore": 212,
+      "trianglesAfter": 212,
+      "materials": [
+        "AgedBrass"
+      ],
+      "nonManifoldEdges": 0
+    },
+    {
+      "name": "Propeller__IvoryFabric",
+      "sourceGroup": "Propeller",
+      "trianglesBefore": 36,
+      "trianglesAfter": 36,
+      "materials": [
+        "IvoryFabric"
+      ],
+      "nonManifoldEdges": 0
+    }
+  ]
+}

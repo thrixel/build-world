@@ -9,11 +9,14 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
+import re
 import sys
 from pathlib import Path
 
 import bmesh  # type: ignore
 import bpy  # type: ignore
+from mathutils import Matrix  # type: ignore
 
 
 def cli() -> argparse.Namespace:
@@ -23,6 +26,9 @@ def cli() -> argparse.Namespace:
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--report", type=Path)
     parser.add_argument("--target-triangles", type=int, default=18_000)
+    parser.add_argument("--rotate-x-degrees", type=float, default=0.0)
+    parser.add_argument("--rotate-y-degrees", type=float, default=0.0)
+    parser.add_argument("--rotate-z-degrees", type=float, default=0.0)
     return parser.parse_args(values)
 
 
@@ -69,9 +75,16 @@ def non_manifold_edges(obj: bpy.types.Object) -> int:
     return count
 
 
+def safe_label(value: str) -> str:
+    label = re.sub(r"[^A-Za-z0-9_-]+", "_", value).strip("_")
+    return label or "Material"
+
+
 def split_materials() -> None:
     originals = [obj for obj in bpy.context.scene.objects if obj.type == "MESH"]
     for obj in originals:
+        source_group = obj.name
+        obj["thrixelSourceGroup"] = source_group
         if len(used_materials(obj)) <= 1:
             continue
         activate(obj)
@@ -79,6 +92,26 @@ def split_materials() -> None:
         bpy.ops.mesh.select_all(action="SELECT")
         bpy.ops.mesh.separate(type="MATERIAL")
         bpy.ops.object.mode_set(mode="OBJECT")
+        pieces = [candidate for candidate in bpy.context.selected_objects if candidate.type == "MESH"]
+        for piece in pieces:
+            piece["thrixelSourceGroup"] = source_group
+            material = used_materials(piece)[0]
+            piece.name = f"{source_group}__{safe_label(material)}"
+
+
+def apply_orientation(args: argparse.Namespace) -> None:
+    rotation = Matrix.Identity(4)
+    for degrees, axis in (
+        (args.rotate_x_degrees, "X"),
+        (args.rotate_y_degrees, "Y"),
+        (args.rotate_z_degrees, "Z"),
+    ):
+        if degrees:
+            rotation = Matrix.Rotation(math.radians(degrees), 4, axis) @ rotation
+    if rotation != Matrix.Identity(4):
+        for obj in bpy.context.scene.objects:
+            if obj.type == "MESH":
+                obj.matrix_world = rotation @ obj.matrix_world
 
 
 def main() -> int:
@@ -86,6 +119,7 @@ def main() -> int:
     args.output.parent.mkdir(parents=True, exist_ok=True)
     bpy.ops.wm.read_factory_settings(use_empty=True)
     bpy.ops.import_scene.gltf(filepath=str(args.input.resolve()))
+    apply_orientation(args)
     split_materials()
 
     rows: list[dict[str, object]] = []
@@ -115,6 +149,7 @@ def main() -> int:
         rows.append(
             {
                 "name": obj.name,
+                "sourceGroup": str(obj.get("thrixelSourceGroup", obj.name)),
                 "trianglesBefore": before,
                 "trianglesAfter": after,
                 "materials": materials,
@@ -129,6 +164,11 @@ def main() -> int:
         "input": str(args.input),
         "output": str(args.output),
         "targetTrianglesPerMesh": args.target_triangles,
+        "orientationDegrees": {
+            "x": args.rotate_x_degrees,
+            "y": args.rotate_y_degrees,
+            "z": args.rotate_z_degrees,
+        },
         "errors": errors,
         "objects": rows,
     }

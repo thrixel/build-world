@@ -1,0 +1,104 @@
+{
+  "errors": [],
+  "meshParts": [
+    {
+      "materialCount": 1,
+      "mesh": "VaultDoor__DarkSteel",
+      "nodes": [
+        "VaultDoor__DarkSteel"
+      ],
+      "primitiveCount": 1,
+      "triangles": 60
+    },
+    {
+      "materialCount": 1,
+      "mesh": "VaultBody__IvoryIndicator",
+      "nodes": [
+        "VaultBody__IvoryIndicator"
+      ],
+      "primitiveCount": 1,
+      "triangles": 180
+    },
+    {
+      "materialCount": 1,
+      "mesh": "VaultDoor__TealSteelDark",
+      "nodes": [
+        "VaultDoor__TealSteelDark"
+      ],
+      "primitiveCount": 1,
+      "triangles": 124
+    },
+    {
+      "materialCount": 1,
+      "mesh": "VaultDoor__TealSteel",
+      "nodes": [
+        "VaultDoor__TealSteel"
+      ],
+      "primitiveCount": 1,
+      "triangles": 368
+    },
+    {
+      "materialCount": 1,
+      "mesh": "VaultDoor__AgedBrass",
+      "nodes": [
+        "VaultDoor__AgedBrass"
+      ],
+      "primitiveCount": 1,
+      "triangles": 1120
+    },
+    {
+      "materialCount": 1,
+      "mesh": "VaultDoor__AgedBrassDark",
+      "nodes": [
+        "VaultDoor__AgedBrassDark"
+      ],
+      "primitiveCount": 1,
+      "triangles": 728
+    },
+    {
+      "materialCount": 1,
+      "mesh": "VaultBody__AgedBrass",
+      "nodes": [
+        "VaultBody__AgedBrass"
+      ],
+      "primitiveCount": 1,
+      "triangles": 1188
+    },
+    {
+      "materialCount": 1,
+      "mesh": "VaultBody__AgedBrassDark",
+      "nodes": [
+        "VaultBody__AgedBrassDark"
+      ],
+      "primitiveCount": 1,
+      "triangles": 456
+    },
+    {
+      "materialCount": 1,
+      "mesh": "VaultBody__TealSteelDark",
+      "nodes": [
+        "VaultBody__TealSteelDark"
+      ],
+      "primitiveCount": 1,
+      "triangles": 232
+    },
+    {
+      "materialCount": 1,
+      "mesh": "VaultBody__DarkSteel",
+      "nodes": [
+        "VaultBody__DarkSteel"
+      ],
+      "primitiveCount": 1,
+      "triangles": 76
+    }
+  ],
+  "ok": true,
+  "summary": {
+    "materials": 6,
+    "maxTrianglesPerMesh": 18000,
+    "meshes": 10,
+    "nodes": 10,
+    "triangles": 4532
+  },
+  "warnings": []
+}
