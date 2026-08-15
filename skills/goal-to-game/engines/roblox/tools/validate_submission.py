@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 from pathlib import Path
 from typing import Any
@@ -53,6 +54,9 @@ def validate_submission(data: Any) -> list[str]:
             errors.append(f"{prefix} must be an object")
             continue
 
+        if not _recorded_value(game.get("name")):
+            errors.append(f"{prefix}.name must be recorded")
+
         genre = game.get("genre")
         if not isinstance(genre, str) or not genre.strip():
             errors.append(f"{prefix}.genre must be recorded")
@@ -77,11 +81,26 @@ def validate_submission(data: Any) -> list[str]:
         if not isinstance(screenshots, list):
             errors.append(f"{prefix}.screenshots must be an array")
         else:
-            views = {
-                item.get("view")
-                for item in screenshots
-                if isinstance(item, dict) and isinstance(item.get("file"), str)
-            }
+            views: set[str] = set()
+            duplicate_views: set[str] = set()
+            for screenshot in screenshots:
+                if not isinstance(screenshot, dict):
+                    continue
+                view = screenshot.get("view")
+                file = screenshot.get("file")
+                if not isinstance(view, str) or view not in REQUIRED_VIEWS:
+                    continue
+                if not _recorded_value(file):
+                    errors.append(f"{prefix}.screenshots[{view}].file must be recorded")
+                    continue
+                if view in views:
+                    duplicate_views.add(view)
+                views.add(view)
+            if duplicate_views:
+                errors.append(
+                    f"{prefix}.screenshots duplicate views: "
+                    f"{', '.join(sorted(duplicate_views))}"
+                )
             missing = sorted(REQUIRED_VIEWS - views)
             if missing:
                 errors.append(f"{prefix}.screenshots missing views: {', '.join(missing)}")
@@ -91,17 +110,30 @@ def validate_submission(data: Any) -> list[str]:
             errors.append(f"{prefix}.performance must be an array")
         else:
             profiles: set[str] = set()
+            duplicate_profiles: set[str] = set()
             for measurement in performance:
                 if not isinstance(measurement, dict):
                     continue
                 profile = measurement.get("profile")
                 fps = measurement.get("fps")
-                if isinstance(profile, str):
+                if isinstance(profile, str) and profile in REQUIRED_PROFILES:
+                    if profile in profiles:
+                        duplicate_profiles.add(profile)
                     profiles.add(profile)
-                if not isinstance(fps, (int, float)) or isinstance(fps, bool) or fps < 30:
+                if (
+                    not isinstance(fps, (int, float))
+                    or isinstance(fps, bool)
+                    or not math.isfinite(fps)
+                    or fps < 30
+                ):
                     errors.append(
                         f"{prefix}.performance requires at least 30 FPS for every profile"
                     )
+            if duplicate_profiles:
+                errors.append(
+                    f"{prefix}.performance duplicate profiles: "
+                    f"{', '.join(sorted(duplicate_profiles))}"
+                )
             missing_profiles = sorted(REQUIRED_PROFILES - profiles)
             if missing_profiles:
                 errors.append(

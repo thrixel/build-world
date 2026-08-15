@@ -63,10 +63,33 @@ class ValidateSubmissionTests(unittest.TestCase):
         errors = MODULE.validate_submission(self.evidence)
         self.assertTrue(any("missing views: gameplay" in error for error in errors))
 
+    def test_rejects_empty_screenshot_file(self):
+        self.evidence["games"][0]["screenshots"][0]["file"] = ""
+        errors = MODULE.validate_submission(self.evidence)
+        self.assertTrue(any("screenshots[front].file must be recorded" in error for error in errors))
+        self.assertTrue(any("missing views: front" in error for error in errors))
+
+    def test_rejects_duplicate_camera_views(self):
+        duplicate = dict(self.evidence["games"][0]["screenshots"][0])
+        self.evidence["games"][0]["screenshots"].append(duplicate)
+        errors = MODULE.validate_submission(self.evidence)
+        self.assertTrue(any("duplicate views: front" in error for error in errors))
+
     def test_rejects_mobile_under_30_fps(self):
         self.evidence["games"][0]["performance"][1]["fps"] = 29.9
         errors = MODULE.validate_submission(self.evidence)
         self.assertTrue(any("at least 30 FPS" in error for error in errors))
+
+    def test_rejects_non_finite_fps(self):
+        self.evidence["games"][0]["performance"][1]["fps"] = float("nan")
+        errors = MODULE.validate_submission(self.evidence)
+        self.assertTrue(any("at least 30 FPS" in error for error in errors))
+
+    def test_rejects_duplicate_performance_profiles(self):
+        duplicate = dict(self.evidence["games"][0]["performance"][0])
+        self.evidence["games"][0]["performance"].append(duplicate)
+        errors = MODULE.validate_submission(self.evidence)
+        self.assertTrue(any("duplicate profiles: desktop" in error for error in errors))
 
 
 if __name__ == "__main__":
