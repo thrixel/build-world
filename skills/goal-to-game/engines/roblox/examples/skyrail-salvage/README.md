@@ -18,4 +18,3 @@ The round lasts about 65 seconds. A/D, arrow keys, touch buttons, and gamepad sh
 change lanes. The server owns lane/score/damage state; the client owns presentation. The glider
 propeller spins independently, 20 cogs and 12 barriers make a deterministic course, 12 collected
 cogs are required at the finish, and every round ends in a win/lose/reset state.
-

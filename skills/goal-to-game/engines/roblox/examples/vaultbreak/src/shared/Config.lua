@@ -5,4 +5,3 @@ return {
 	AlarmSeconds = 2.4,
 	MuseumOrigin = Vector3.new(0, 0, 0),
 }
-

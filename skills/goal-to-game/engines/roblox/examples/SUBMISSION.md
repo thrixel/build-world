@@ -50,4 +50,3 @@ and any point at which the written engine path was ambiguous. A workaround belon
   not provide a dependable child MeshId mapping.
 - Performance and moderation results cannot be inferred from local source or GLB preflight; both
   must be observed after Studio import on the intended creator account.
-

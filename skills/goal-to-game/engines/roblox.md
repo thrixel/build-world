@@ -232,4 +232,3 @@ Publishing is account-bound and representational. Ask the user to approve it at 
 needed. In Studio use **File → Publish to Roblox As…**, choose the intended owner/group, make the
 experience public in Creator Dashboard, then test the public URL while signed out. Do not mark a
 game complete until that public link loads and a new player can finish the core loop.
-

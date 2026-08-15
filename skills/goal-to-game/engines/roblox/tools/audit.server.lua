@@ -122,4 +122,3 @@ for _, player in Players:GetPlayers() do
 	task.spawn(show, player)
 end
 Players.PlayerAdded:Connect(show)
-

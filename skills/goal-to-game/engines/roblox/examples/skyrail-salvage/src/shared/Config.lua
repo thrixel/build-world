@@ -5,4 +5,3 @@ return {
 	RequiredCogs = 12,
 	MaxHull = 3,
 }
-

@@ -17,4 +17,3 @@ run the normalize/inspect tools, and import the GLB in Studio. Put the Model at
 The game has a 150-second round, three required fuse keys, sentinel line-of-sight alarms, a vault
 opening sequence, win/lose/reset states, keyboard/gamepad default movement, a top-down follow
 camera, seven review shots, and visible HUD feedback.
-

@@ -19,4 +19,3 @@ rojo build default.project.json -o build.rbxlx
 Open `build.rbxlx`, import the manifest asset through Studio's 3D Importer, put it under
 `Workspace/ThrixelAssets`, set the manifest attributes listed in the game README, and press Play.
 F8 runs the camera review. F9 prints the accumulated performance sample.
-

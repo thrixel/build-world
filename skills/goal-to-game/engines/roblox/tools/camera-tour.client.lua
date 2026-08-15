@@ -113,4 +113,3 @@ UserInputService.InputBegan:Connect(function(input, processed)
 end)
 
 task.delay(60, printPerformance)
-
