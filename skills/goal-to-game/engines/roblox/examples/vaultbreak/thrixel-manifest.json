@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "assetId": "ClockworkVault",
+  "submissionId": "replace-after-thrixel-generation",
+  "sourceFile": "thrixel_assets/ready/clockwork-vault.glb",
+  "format": "glb",
+  "purpose": "hero",
+  "targetBoundsStuds": {"x": 18, "y": 14, "z": 6},
+  "forwardAxis": "-Z",
+  "movingGroups": [
+    {"name": "VaultDoor", "pivot": "explicit-mount"}
+  ],
+  "budgets": {"maxTrianglesPerMesh": 18000, "maxVisibleInstances": 1},
+  "collision": "primitive-hitboxes",
+  "renderFidelity": "Automatic",
+  "moderation": "not-uploaded"
+}
+

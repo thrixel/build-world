@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "assetId": "clockwork-airship",
+  "submissionId": "replace-with-thrixel-submission-id",
+  "sourceFile": "thrixel_assets/ready/clockwork-airship.glb",
+  "format": "glb",
+  "purpose": "hero",
+  "targetBoundsStuds": {"x": 18, "y": 8, "z": 30},
+  "forwardAxis": "-Z",
+  "movingGroups": [
+    {"name": "Propeller", "pivot": "geometric-center"},
+    {"name": "CargoDoor", "pivot": "explicit-mount"}
+  ],
+  "budgets": {
+    "maxTrianglesPerMesh": 18000,
+    "maxVisibleInstances": 1
+  },
+  "collision": "primitive-hitboxes",
+  "renderFidelity": "Automatic",
+  "moderation": "not-uploaded"
+}
+

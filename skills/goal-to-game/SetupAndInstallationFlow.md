@@ -195,6 +195,71 @@ of the two would go stale, and the stale one would be quoting prices.
 
 SKILL.md decides WHICH engine. This section only installs it, once per machine.
 
+### Roblox Studio Installation
+
+Roblox Studio is the source of truth for import, playtesting, screenshots, and publishing. Rojo
+is the reproducible bridge from files to Studio. Blender is a required headless preflight tool:
+it splits multi-material meshes and verifies geometry before Studio sees it.
+
+#### Windows PowerShell
+
+Download Roblox Studio from `https://create.roblox.com/` and run the installer once. Then install
+Blender and the current Rojo toolchain manager:
+
+```powershell
+winget install --id BlenderFoundation.Blender --exact
+Invoke-RestMethod https://raw.githubusercontent.com/rojo-rbx/rokit/main/scripts/install.ps1 | Invoke-Expression
+rokit add rojo-rbx/rojo
+rokit install
+```
+
+#### macOS
+
+Download Roblox Studio from `https://create.roblox.com/`, then:
+
+```bash
+brew install --cask blender
+curl -sSf https://raw.githubusercontent.com/rojo-rbx/rokit/main/scripts/install.sh | bash
+rokit add rojo-rbx/rojo
+rokit install
+```
+
+#### Linux or WSL
+
+Roblox Studio is not supported on Linux/WSL. Install only the preparation tools there, and use
+Studio on the Windows host for the import and verification gate:
+
+```bash
+sudo apt-get update && sudo apt-get install -y blender
+curl -sSf https://raw.githubusercontent.com/rojo-rbx/rokit/main/scripts/install.sh | bash
+rokit add rojo-rbx/rojo
+rokit install
+```
+
+Do not try Wine or cookie-based upload automation. Continue preparing source and GLB files in
+WSL, but stop at the Studio gate in `engines/roblox.md` and ask the user to open the project from
+Windows.
+
+#### Verify, then create the project
+
+```bash
+rojo --version
+blender --version
+```
+
+Studio itself has no dependable cross-platform version CLI. Open it once, sign in, and read the
+version from **File → About Roblox Studio**. Record that exact version in the build report.
+
+For a new project, create `default.project.json` plus `src/server`, `src/client`, and
+`src/shared`, then run:
+
+```bash
+rojo build default.project.json -o build.rbxlx
+```
+
+Open `build.rbxlx` in Studio. Install the official Rojo Studio plugin only if live sync is useful;
+the build-file path is sufficient and is easier to reproduce on a clean machine.
+
 ### Unity Installation
 
 #### Install Unity CLI to allow agents to control Unity

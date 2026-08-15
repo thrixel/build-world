@@ -4,7 +4,7 @@ Build beautiful games with high-quality 3D assets using [Thrixel](https://thrixe
 
 Claude Code handles the game logic and scene setup. Thrixel generates, organizes, and manages the 3D assets. Thrixel processes 3D creation in parallel so you can build your scene faster.
 
-Goal to Game currently supports **Unity** and **Three.js**. This page covers **Claude Code**, where every step below is tested.
+Goal to Game currently supports **Unity**, **Three.js**, and **Roblox Studio**. This page covers **Claude Code**, where every step below is tested.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/ThatCharlieK/READMEAssets/main/Thrixel-1prompt-to-game-readme.gif" width="600"/>
@@ -114,7 +114,7 @@ claude --permission-mode auto
 ```
 
 **Into Claude Code** (not the terminal), start the line with **`/thrixel:goal-to-game`**, then
-describe the game and name the engine (three.js or Unity):
+describe the game and name the engine (three.js, Unity, or Roblox Studio):
 
 ```text
 /thrixel:goal-to-game build a submarine exploration game in three.js set in a bright, vibrant tropical sea with coral and fish
