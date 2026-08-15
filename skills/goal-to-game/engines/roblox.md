@@ -174,6 +174,12 @@ into `StarterPlayerScripts`. It frames the first model tagged `ThrixelAsset` and
 required views deterministically. Use `[` and `]` to move between views and match each capture to
 the emitted `THRIXEL_CAMERA_VIEW=` marker.
 
+Copy [`tools/performance.client.lua`](roblox/tools/performance.client.lua) into
+`StarterPlayerScripts` for each desktop and mobile-emulation run. Set the optional Workspace
+attribute `ThrixelPerformanceProfile` to `desktop` or `mobile`; otherwise the script infers the
+profile from touch input. Save the `THRIXEL_PERFORMANCE_JSON=` payload for each run in
+`evidence/performance.json` and reject mobile results below 30 FPS.
+
 Review the captures for scale, sideways orientation, floating pieces, missing faces, black or blank
 textures, incorrect pivots, collision gaps, and mobile UI obstruction. A green script result does
 not override a visibly broken frame.

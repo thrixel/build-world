@@ -42,6 +42,21 @@ class SelftestContractTests(unittest.TestCase):
         ):
             self.assertIn(token, script)
 
+    def test_performance_sampler_emits_required_metrics(self):
+        script = (ROOT / "tools" / "performance.client.lua").read_text(encoding="utf-8")
+
+        for token in (
+            "THRIXEL_PERFORMANCE_JSON=",
+            "averageFps",
+            "minimumFps",
+            "p95FrameTimeMs",
+            "instanceCount",
+            "meshPartCount",
+            "ThrixelPerformanceProfile",
+            "RenderStepped",
+        ):
+            self.assertIn(token, script)
+
 
 if __name__ == "__main__":
     unittest.main()
