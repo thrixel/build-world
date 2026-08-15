@@ -5,11 +5,12 @@ These two Rojo projects are the editable source for the bounty's end-to-end evid
 - `stormwatch`: survival loop with timed storms and a rotating lighthouse beacon.
 - `courier-circuit`: vehicle delivery loop with sequential city checkpoints.
 
-Both scenes currently use deterministic primitive stand-ins so the gameplay source can be built and
-tested without account access. The corresponding Thrixel models have been generated, grouped, and
-downloaded under `../../../../../thrixel_assets/roblox/`. Import those FBX files through Studio's 3D
-Importer and replace the stand-ins before recording final evidence. The stand-ins are not presented
-as generated Thrixel assets.
+The base `.rbxlx` scenes use deterministic primitive stand-ins so the gameplay source can be built
+and tested without account access. The matching `*-Imported.rbxlx` variants contain the grouped
+Thrixel meshes placed in each scene. Their source FBX files and companion `.fbm` material textures
+live under `../../../../../thrixel_assets/roblox/`. Open the imported variants in Studio when
+publishing and recording final evidence; the stand-ins are not presented as generated Thrixel
+assets.
 
 Generation IDs, triangle counts, kept moving groups, and pivots are recorded in
 `../../../../../thrixel_assets/roblox/generation-evidence.json`.
