@@ -1,0 +1,98 @@
+{
+  "bytes": 284888,
+  "errors": [],
+  "maxTrianglesPerMesh": 20000,
+  "meshCount": 6,
+  "meshes": [
+    {
+      "errors": [],
+      "extents": [
+        1.3043477535247803,
+        1.6281489729881287,
+        1.009072184562683
+      ],
+      "isVolume": true,
+      "name": "Cylinder",
+      "triangles": 476,
+      "volume": 0.2552003341594905,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.3206521272659302,
+        2.0,
+        1.3884168863296509
+      ],
+      "isVolume": true,
+      "name": "Cylinder_1",
+      "triangles": 8498,
+      "volume": 0.11644056248984103,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.0173912048339844,
+        1.0173911452293396,
+        0.054348111152648926
+      ],
+      "isVolume": true,
+      "name": "Cylinder_2",
+      "triangles": 188,
+      "volume": 0.04405620008348196,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.863043487071991,
+        0.8630434274673462,
+        0.05434805154800415
+      ],
+      "isVolume": true,
+      "name": "Cylinder_3",
+      "triangles": 1536,
+      "volume": 0.00561904801455879,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.7336956858634949,
+        0.7336957454681396,
+        0.7336957454681396
+      ],
+      "isVolume": true,
+      "name": "Icosphere",
+      "triangles": 320,
+      "volume": 0.1997982376722116,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.31400418281555176,
+        0.33016300201416016,
+        0.33016300201416016
+      ],
+      "isVolume": true,
+      "name": "Icosphere_1",
+      "triangles": 80,
+      "volume": 0.01645976974912462,
+      "watertight": true,
+      "windingConsistent": true
+    }
+  ],
+  "passed": true,
+  "schemaVersion": 1,
+  "sha256": "768653a75145dd38706adc1757afb30eb2727d2e4895bf4ac0dbfa0cc555e240",
+  "source": "thrixel_assets/roblox/orrery-lock/a-compact-wall-mounted-observatory-lamp-for-a.glb",
+  "triangleTotal": 11098,
+  "warnings": []
+}

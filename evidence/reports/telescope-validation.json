@@ -1,0 +1,84 @@
+{
+  "bytes": 1545084,
+  "errors": [],
+  "maxTrianglesPerMesh": 20000,
+  "meshCount": 5,
+  "meshes": [
+    {
+      "errors": [],
+      "extents": [
+        0.174760103225708,
+        0.06168007850646973,
+        0.06168004125356674
+      ],
+      "isVolume": true,
+      "name": "Cylinder.021",
+      "triangles": 60,
+      "volume": 0.0005088634354164639,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.11308206245303154,
+        0.3477930575609207,
+        0.3477931171655655
+      ],
+      "isVolume": true,
+      "name": "Cylinder.022",
+      "triangles": 18000,
+      "volume": 0.0035894694984964213,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.13158409297466278,
+        0.3796952962875366,
+        0.6105569303035736
+      ],
+      "isVolume": true,
+      "name": "Cylinder.031",
+      "triangles": 1016,
+      "volume": 0.005084737664768301,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.35980024933815,
+        1.195406198501587,
+        1.9702789783477783
+      ],
+      "isVolume": true,
+      "name": "Cylinder.006",
+      "triangles": 1268,
+      "volume": 0.14567621752305768,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.436195731163025,
+        1.2747207880020142,
+        1.2644407749176025
+      ],
+      "isVolume": true,
+      "name": "Cylinder.014",
+      "triangles": 1248,
+      "volume": 0.05006043073143371,
+      "watertight": true,
+      "windingConsistent": true
+    }
+  ],
+  "passed": true,
+  "schemaVersion": 1,
+  "sha256": "f1f04b37edcf88504cfd2942f7d5a667a41badb0b480afb53460c9e1ffce9a31",
+  "source": "/Users/maddiedreese/Documents/ChatGPT/Roblox/thrixel_assets/final-telescope/a-large-floor-standing-brass-observatory-roblox-final.glb",
+  "triangleTotal": 21592,
+  "warnings": []
+}

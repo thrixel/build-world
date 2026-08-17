@@ -1,0 +1,56 @@
+{
+  "bytes": 617424,
+  "errors": [],
+  "maxTrianglesPerMesh": 20000,
+  "meshCount": 3,
+  "meshes": [
+    {
+      "errors": [],
+      "extents": [
+        0.3792877495288849,
+        0.5294269323348999,
+        0.1615634709596634
+      ],
+      "isVolume": true,
+      "name": "brass_stem_curve",
+      "triangles": 1436,
+      "volume": 0.00750109117423262,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.9960869550704956,
+        1.6109257936477661,
+        0.7460148930549622
+      ],
+      "isVolume": true,
+      "name": "fruit_body_curve",
+      "triangles": 4476,
+      "volume": 0.5006594155870142,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.0175650119781494,
+        1.6773266792297363,
+        0.6967577338218689
+      ],
+      "isVolume": true,
+      "name": "ridge_0_curve",
+      "triangles": 13428,
+      "volume": 0.15254502187943572,
+      "watertight": true,
+      "windingConsistent": true
+    }
+  ],
+  "passed": true,
+  "schemaVersion": 1,
+  "sha256": "3531778394624538bc1c79cad2c6f13fa33b006fd27dc847e50a39b9defbe637",
+  "source": "thrixel_assets/roblox/moonmarket-mix-up/one-collectible-moonfruit-for-a-whimsical-moon.glb",
+  "triangleTotal": 19340,
+  "warnings": []
+}

@@ -1,0 +1,84 @@
+{
+  "bytes": 11113008,
+  "errors": [],
+  "maxTrianglesPerMesh": 20000,
+  "meshCount": 5,
+  "meshes": [
+    {
+      "errors": [],
+      "extents": [
+        0.37706583738327026,
+        1.1634385585784912,
+        1.1591066122055054
+      ],
+      "isVolume": true,
+      "name": "Cylinder.001",
+      "triangles": 2338,
+      "volume": 0.3611644332977448,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.37607526779174805,
+        1.1632473468780518,
+        1.1594222784042358
+      ],
+      "isVolume": true,
+      "name": "Cylinder",
+      "triangles": 2310,
+      "volume": 0.36496152369145124,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.135624647140503,
+        0.7108301520347595,
+        0.7402070760726929
+      ],
+      "isVolume": true,
+      "name": "Icosphere",
+      "triangles": 1610,
+      "volume": 0.25398123627959796,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.807701826095581,
+        0.7668464183807373,
+        0.07917442917823792
+      ],
+      "isVolume": true,
+      "name": "carry_handle_curve",
+      "triangles": 716,
+      "volume": 0.021380680674719262,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.5726674795150757,
+        1.1194047927856445,
+        1.1221716403961182
+      ],
+      "isVolume": true,
+      "name": "cage_rib_0_curve",
+      "triangles": 4784,
+      "volume": 0.2285865743473451,
+      "watertight": true,
+      "windingConsistent": true
+    }
+  ],
+  "passed": true,
+  "schemaVersion": 1,
+  "sha256": "85f6f923ad7d20fe79f58498fd77152035c0ac37e0bd87c8b18117a2ba15dbe9",
+  "source": "/Users/maddiedreese/Documents/ChatGPT/Roblox/thrixel_assets/orrery-final-star_cell/a-handheld-magical-star-cell-collectible-for-a-repaired.glb",
+  "triangleTotal": 11758,
+  "warnings": []
+}

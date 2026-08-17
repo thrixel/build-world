@@ -1,0 +1,70 @@
+{
+  "bytes": 430904,
+  "errors": [],
+  "maxTrianglesPerMesh": 20000,
+  "meshCount": 4,
+  "meshes": [
+    {
+      "errors": [],
+      "extents": [
+        0.7420464754104614,
+        0.742046594619751,
+        0.15314221382141113
+      ],
+      "isVolume": true,
+      "name": "Torus.003",
+      "triangles": 6692,
+      "volume": 0.009070633238308739,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.7376982569694519,
+        0.8204110860824585,
+        0.03842934966087341
+      ],
+      "isVolume": true,
+      "name": "Cube",
+      "triangles": 1732,
+      "volume": 0.00020762670388572722,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.07523416727781296,
+        0.07910585403442383,
+        0.07910576462745667
+      ],
+      "isVolume": true,
+      "name": "Icosphere",
+      "triangles": 80,
+      "volume": 0.0002263930255190028,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.7360275387763977,
+        1.348921537399292,
+        0.7360275387763977
+      ],
+      "isVolume": true,
+      "name": "Cylinder",
+      "triangles": 5768,
+      "volume": 0.13857932863202257,
+      "watertight": true,
+      "windingConsistent": true
+    }
+  ],
+  "passed": true,
+  "schemaVersion": 1,
+  "sha256": "37c0a72613398b8c38985d09542338d47028d4fc92809728dea54dc0b7e805ee",
+  "source": "/Users/maddiedreese/Documents/ChatGPT/Roblox/thrixel_assets/final-astrolabe/a-tall-magical-observatory-astrolabe-pillar-roblox-remeshed.glb",
+  "triangleTotal": 14272,
+  "warnings": []
+}

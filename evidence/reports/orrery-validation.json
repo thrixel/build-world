@@ -1,0 +1,98 @@
+{
+  "bytes": 607136,
+  "errors": [],
+  "maxTrianglesPerMesh": 20000,
+  "meshCount": 6,
+  "meshes": [
+    {
+      "errors": [],
+      "extents": [
+        1.6226195693016052,
+        1.6182507276535034,
+        1.586903691291809
+      ],
+      "isVolume": true,
+      "name": "OrreryBody",
+      "triangles": 15096,
+      "volume": 0.8098366305502477,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.10989637672901154,
+        0.2769387513399124,
+        0.5736590027809143
+      ],
+      "isVolume": true,
+      "name": "crank",
+      "triangles": 1168,
+      "volume": 0.0028340863805250225,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.8220248818397522,
+        0.3053557872772217,
+        0.7847732901573181
+      ],
+      "isVolume": true,
+      "name": "orbit_ring_inner",
+      "triangles": 1912,
+      "volume": 0.01058907570153489,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.9078124761581421,
+        0.8644489049911499,
+        1.1513869762420654
+      ],
+      "isVolume": true,
+      "name": "orbit_ring_middle",
+      "triangles": 1912,
+      "volume": 0.02140011875258056,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.2994580268859863,
+        1.5178275108337402,
+        0.9689911007881165
+      ],
+      "isVolume": true,
+      "name": "orbit_ring_outer",
+      "triangles": 1912,
+      "volume": 0.03700563041153313,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.1541940569877625,
+        0.13737046718597412,
+        0.8262917995452881
+      ],
+      "isVolume": true,
+      "name": "pointer_arm",
+      "triangles": 2874,
+      "volume": 0.011519201127758978,
+      "watertight": true,
+      "windingConsistent": true
+    }
+  ],
+  "passed": true,
+  "schemaVersion": 1,
+  "sha256": "d0f77591f4476c647a0792bb4d8c3678d77a70a10288552d634c5b9f8a4339ae",
+  "source": "thrixel_assets/roblox/orrery-lock/a-monumental-tabletop-astronomical-orrery-for-a.glb",
+  "triangleTotal": 24874,
+  "warnings": []
+}

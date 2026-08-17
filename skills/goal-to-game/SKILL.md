@@ -1,6 +1,6 @@
 ---
 name: goal-to-game
-description: Generates polished, fully playable 3D game prototypes in Unity or three.js, with high quality (.glb) meshes generated through the Thrixel API. Use when the user wants to make a game, build a playable prototype, or generate 3D assets.
+description: Generates polished, fully playable 3D game prototypes in Unity, three.js, or Roblox Studio, with high quality (.glb) meshes generated through the Thrixel API. Use when the user wants to make a game, build a playable prototype, or generate 3D assets.
 ---
 
 # Before anything else - update this skill
@@ -245,6 +245,7 @@ it runs, and show it.
 - **three.js**: run the capture tooling and show the frames, and give them the dev-server URL
   so they can play it themselves.
 - **Unity**: make sure the scene opens and plays, and say exactly what to press.
+- **Roblox Studio**: build the place with Rojo, open it in Studio, and show the playable viewport.
 
 Then say what is there in one line: "here is the course with the clubhouse, four holes and the
 windmill - it runs and you can play it now."
@@ -372,6 +373,7 @@ nearby files. Then read that engine's file **in full**:
 
 - **Unity** → [engines/unity.md](engines/unity.md)
 - **three.js / web** → [engines/threejs/threejs.md](engines/threejs/threejs.md)
+- **Roblox Studio** → [engines/roblox.md](engines/roblox.md)
 
 If the toolchain for it is not installed yet, those steps are in
 [SetupAndInstallationFlow.md](SetupAndInstallationFlow.md) under "Install the engine toolchain".

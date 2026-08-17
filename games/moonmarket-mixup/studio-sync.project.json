@@ -1,0 +1,60 @@
+{
+  "name": "Moonmarket Mix-Up Studio Sync",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "$className": "ReplicatedStorage",
+      "GameConfig": {
+        "$path": "src/shared/GameConfig.luau"
+      }
+    },
+    "ServerScriptService": {
+      "$className": "ServerScriptService",
+      "Main": {
+        "$path": "src/server/Main.server.luau"
+      }
+    },
+    "StarterPlayer": {
+      "$className": "StarterPlayer",
+      "$properties": {
+        "CameraMode": "Classic"
+      },
+      "StarterPlayerScripts": {
+        "$className": "StarterPlayerScripts",
+        "Main": {
+          "$path": "src/client/Main.client.luau"
+        }
+      }
+    },
+    "Workspace": {
+      "$className": "Workspace",
+      "$properties": {
+        "StreamingEnabled": false,
+        "Gravity": 196.2
+      }
+    },
+    "Lighting": {
+      "$className": "Lighting",
+      "$properties": {
+        "Ambient": [0.300, 0.220, 0.380],
+        "OutdoorAmbient": [0.300, 0.230, 0.380],
+        "Brightness": 2.0,
+        "ClockTime": 22.5,
+        "EnvironmentDiffuseScale": 0.5,
+        "EnvironmentSpecularScale": 0.45,
+        "ExposureCompensation": 0.08,
+        "GlobalShadows": true,
+        "Technology": "Future"
+      },
+      "Grade": {
+        "$className": "ColorCorrectionEffect",
+        "$properties": {
+          "Brightness": 0.06,
+          "Contrast": 0.06,
+          "Saturation": -0.04,
+          "TintColor": [0.960, 0.910, 1.0]
+        }
+      }
+    }
+  }
+}

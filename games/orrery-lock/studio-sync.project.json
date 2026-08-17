@@ -1,0 +1,57 @@
+{
+  "name": "Orrery Lock Studio Sync",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "$className": "ReplicatedStorage",
+      "GameConfig": {
+        "$path": "src/shared/GameConfig.luau"
+      }
+    },
+    "ServerScriptService": {
+      "$className": "ServerScriptService",
+      "Main": {
+        "$path": "src/server/Main.server.luau"
+      }
+    },
+    "StarterPlayer": {
+      "$className": "StarterPlayer",
+      "StarterPlayerScripts": {
+        "$className": "StarterPlayerScripts",
+        "Main": {
+          "$path": "src/client/Main.client.luau"
+        }
+      }
+    },
+    "Workspace": {
+      "$className": "Workspace",
+      "$properties": {
+        "StreamingEnabled": false,
+        "Gravity": 196.2
+      }
+    },
+    "Lighting": {
+      "$className": "Lighting",
+      "$properties": {
+        "Ambient": [0.320, 0.360, 0.480],
+        "OutdoorAmbient": [0.200, 0.240, 0.340],
+        "Brightness": 2.3,
+        "ClockTime": 1.2,
+        "EnvironmentDiffuseScale": 0.42,
+        "EnvironmentSpecularScale": 0.55,
+        "ExposureCompensation": 0.25,
+        "GlobalShadows": true,
+        "Technology": "Future"
+      },
+      "Grade": {
+        "$className": "ColorCorrectionEffect",
+        "$properties": {
+          "Brightness": 0.08,
+          "Contrast": 0.02,
+          "Saturation": -0.02,
+          "TintColor": [0.940, 0.960, 1.0]
+        }
+      }
+    }
+  }
+}

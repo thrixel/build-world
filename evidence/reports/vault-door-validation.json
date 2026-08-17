@@ -1,0 +1,84 @@
+{
+  "bytes": 1618804,
+  "errors": [],
+  "maxTrianglesPerMesh": 20000,
+  "meshCount": 5,
+  "meshes": [
+    {
+      "errors": [],
+      "extents": [
+        1.768078088760376,
+        1.3000574111938477,
+        0.14463162422180176
+      ],
+      "isVolume": true,
+      "name": "Cylinder",
+      "triangles": 18844,
+      "volume": 0.1524431506015341,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.47973281145095825,
+        0.4215511083602905,
+        0.16560837626457214
+      ],
+      "isVolume": true,
+      "name": "Cylinder.038",
+      "triangles": 16820,
+      "volume": 0.0025222902933672293,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.8493316173553467,
+        1.9305851459503174,
+        0.1430063098669052
+      ],
+      "isVolume": true,
+      "name": "Cube.010",
+      "triangles": 144,
+      "volume": 0.05742133587965267,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.8814671039581299,
+        0.8814671039581299,
+        0.032501671463251114
+      ],
+      "isVolume": true,
+      "name": "Cylinder.046",
+      "triangles": 736,
+      "volume": 0.00204945485644046,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.5514832735061646,
+        1.5493919849395752,
+        0.13163085281848907
+      ],
+      "isVolume": true,
+      "name": "vf_ring_curve",
+      "triangles": 2064,
+      "volume": 0.043173003392734,
+      "watertight": true,
+      "windingConsistent": true
+    }
+  ],
+  "passed": true,
+  "schemaVersion": 1,
+  "sha256": "2cf1d4dfc15cd3f2e2a235401e14bd5042d36ac1b9ec83e1e87526f0dd294b73",
+  "source": "/Users/maddiedreese/Documents/ChatGPT/Roblox/thrixel_assets/final-vault-door/a-monumental-mechanical-observatory-vault-door-roblox-remeshed.glb",
+  "triangleTotal": 38608,
+  "warnings": []
+}

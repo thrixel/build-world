@@ -1,0 +1,31 @@
+{
+  "name": "Goal to Game Roblox",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "$className": "ReplicatedStorage",
+      "Assets": { "$path": "src/assets" },
+      "Shared": { "$path": "src/shared" }
+    },
+    "ServerScriptService": {
+      "$className": "ServerScriptService",
+      "Game": { "$path": "src/server" },
+      "Verification": { "$path": "src/verification/server" }
+    },
+    "StarterPlayer": {
+      "$className": "StarterPlayer",
+      "StarterPlayerScripts": {
+        "$className": "StarterPlayerScripts",
+        "Game": { "$path": "src/client" },
+        "Verification": { "$path": "src/verification/client" }
+      }
+    },
+    "Workspace": {
+      "$className": "Workspace",
+      "$properties": {
+        "StreamingEnabled": false,
+        "Gravity": 196.2
+      }
+    }
+  }
+}

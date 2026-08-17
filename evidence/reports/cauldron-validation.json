@@ -1,0 +1,196 @@
+{
+  "bytes": 630760,
+  "errors": [],
+  "maxTrianglesPerMesh": 20000,
+  "meshCount": 13,
+  "meshes": [
+    {
+      "errors": [],
+      "extents": [
+        1.0540215969085693,
+        1.1128607988357544,
+        1.0540215969085693
+      ],
+      "isVolume": true,
+      "name": "cauldron_body_mesh",
+      "triangles": 8816,
+      "volume": 0.18698143301175943,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.0664217472076416,
+        0.40300819277763367,
+        1.0664218068122864
+      ],
+      "isVolume": true,
+      "name": "cauldron_body_mesh_1",
+      "triangles": 2304,
+      "volume": 0.017919332076755647,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.28528743982315063,
+        0.22504395246505737,
+        0.0763588547706604
+      ],
+      "isVolume": true,
+      "name": "cauldron_body_mesh_2",
+      "triangles": 4476,
+      "volume": 0.0012942728325950061,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.8680177330970764,
+        0.03100067377090454,
+        0.8680177330970764
+      ],
+      "isVolume": true,
+      "name": "cauldron_body_mesh_3",
+      "triangles": 188,
+      "volume": 0.018292675586513842,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.36470353603363037,
+        0.49191293120384216,
+        0.09300191700458527
+      ],
+      "isVolume": true,
+      "name": "left_handle_curve",
+      "triangles": 2876,
+      "volume": 0.0055126727984214224,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.0912222862243652,
+        0.7219509482383728,
+        0.8503376841545105
+      ],
+      "isVolume": true,
+      "name": "lid_dome_mesh",
+      "triangles": 860,
+      "volume": 0.12725314424878723,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.9920202493667603,
+        0.6503817737102509,
+        0.7680697441101074
+      ],
+      "isVolume": true,
+      "name": "lid_dome_mesh_1",
+      "triangles": 1244,
+      "volume": 0.003326597548753377,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.13640272617340088,
+        0.13588367402553558,
+        0.13588374853134155
+      ],
+      "isVolume": true,
+      "name": "lid_dome_mesh_2",
+      "triangles": 960,
+      "volume": 0.001307618966196024,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.36470353603363037,
+        0.49191293120384216,
+        0.09300191700458527
+      ],
+      "isVolume": true,
+      "name": "right_handle_curve",
+      "triangles": 2876,
+      "volume": 0.005512672782742758,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.8954989314079285,
+        0.6966690719127655,
+        0.8954986035823822
+      ],
+      "isVolume": true,
+      "name": "Cylinder.002",
+      "triangles": 104,
+      "volume": 0.005443785045349363,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.08906404674053192,
+        0.08920713514089584,
+        0.08906406909227371
+      ],
+      "isVolume": true,
+      "name": "Cylinder.002_1",
+      "triangles": 92,
+      "volume": 0.00021319240637176413,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.16890302300453186,
+        0.15256735682487488,
+        0.1689029484987259
+      ],
+      "isVolume": true,
+      "name": "Cylinder.002_2",
+      "triangles": 92,
+      "volume": 0.0006964285865419859,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.09879514575004578,
+        0.09895920753479004,
+        0.09879520535469055
+      ],
+      "isVolume": true,
+      "name": "Cylinder.002_3",
+      "triangles": 960,
+      "volume": 0.0005030060195225419,
+      "watertight": true,
+      "windingConsistent": true
+    }
+  ],
+  "passed": true,
+  "schemaVersion": 1,
+  "sha256": "6486703bc0f5276c7c988a6537887908e2f991d987d68c3742548d3a5bf8cc9e",
+  "source": "thrixel_assets/roblox/moonmarket-mix-up/a-whimsical-moon-market-potion-cauldron-as-a.glb",
+  "triangleTotal": 25848,
+  "warnings": []
+}

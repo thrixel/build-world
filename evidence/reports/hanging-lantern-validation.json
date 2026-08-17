@@ -1,0 +1,98 @@
+{
+  "bytes": 614344,
+  "errors": [],
+  "maxTrianglesPerMesh": 20000,
+  "meshCount": 6,
+  "meshes": [
+    {
+      "errors": [],
+      "extents": [
+        0.8499780893325806,
+        0.8499775826931,
+        0.8499777913093567
+      ],
+      "isVolume": true,
+      "name": "Sphere",
+      "triangles": 1840,
+      "volume": 0.3188396304252029,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.3399910032749176,
+        0.3399909734725952,
+        0.3399910032749176
+      ],
+      "isVolume": true,
+      "name": "Sphere.001",
+      "triangles": 624,
+      "volume": 0.02008860074862492,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.4550360441207886,
+        0.4761495590209961,
+        0.0974174439907074
+      ],
+      "isVolume": true,
+      "name": "hanging_hook_curve",
+      "triangles": 4316,
+      "volume": 0.0053335298460290516,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.917599618434906,
+        1.459128201007843,
+        0.917599618434906
+      ],
+      "isVolume": true,
+      "name": "Cylinder",
+      "triangles": 2816,
+      "volume": 0.0729184949382864,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.7347936034202576,
+        1.4081295132637024,
+        0.6459829211235046
+      ],
+      "isVolume": true,
+      "name": "Cylinder_1",
+      "triangles": 11128,
+      "volume": 0.017769090512642707,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.1274966523051262,
+        0.9821377992630005,
+        0.6494565159082413
+      ],
+      "isVolume": true,
+      "name": "Cylinder_2",
+      "triangles": 4276,
+      "volume": 0.0025209148710584072,
+      "watertight": true,
+      "windingConsistent": true
+    }
+  ],
+  "passed": true,
+  "schemaVersion": 1,
+  "sha256": "18018ac1c7a1fec5dfbe87a2962ff6c5e6aeeb96e5f9c8086a477c4991ac1d37",
+  "source": "thrixel_assets/roblox/moonmarket-mix-up/a-hanging-moon-market-lantern-for-a-whimsical.glb",
+  "triangleTotal": 25000,
+  "warnings": []
+}

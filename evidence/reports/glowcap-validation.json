@@ -1,0 +1,84 @@
+{
+  "bytes": 206836,
+  "errors": [],
+  "maxTrianglesPerMesh": 20000,
+  "meshCount": 5,
+  "meshes": [
+    {
+      "errors": [],
+      "extents": [
+        0.5999295711517334,
+        0.1407044529914856,
+        0.6006094217300415
+      ],
+      "isVolume": true,
+      "name": "Torus",
+      "triangles": 1152,
+      "volume": 0.015759128192890184,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.999999761581421,
+        0.23836612701416016,
+        1.9876431226730347
+      ],
+      "isVolume": true,
+      "name": "cap_rim_curve",
+      "triangles": 3840,
+      "volume": 0.18969350891479353,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.3734556436538696,
+        0.26653289794921875,
+        1.1860706806182861
+      ],
+      "isVolume": true,
+      "name": "Icosphere",
+      "triangles": 400,
+      "volume": 0.00841068646978207,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.801828145980835,
+        0.4771195650100708,
+        1.8018282651901245
+      ],
+      "isVolume": true,
+      "name": "mushroom_cap_mesh",
+      "triangles": 1632,
+      "volume": 0.5890757093619928,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.6792868375778198,
+        1.4364690780639648,
+        0.589383065700531
+      ],
+      "isVolume": true,
+      "name": "mushroom_stem_curve",
+      "triangles": 1916,
+      "volume": 0.2430832418995054,
+      "watertight": true,
+      "windingConsistent": true
+    }
+  ],
+  "passed": true,
+  "schemaVersion": 1,
+  "sha256": "ae1369bf89fffe5056d036479e9304ad5a96dc6ea34a3834d2e5b92247dff92e",
+  "source": "/Users/maddiedreese/Documents/ChatGPT/Roblox/thrixel_assets/moonmarket-final-glowcap/a-premium-collectible-glowcap-mushroom-for-a-roblox.glb",
+  "triangleTotal": 8940,
+  "warnings": []
+}

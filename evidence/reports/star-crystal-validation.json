@@ -1,0 +1,70 @@
+{
+  "bytes": 10329744,
+  "errors": [],
+  "maxTrianglesPerMesh": 20000,
+  "meshCount": 4,
+  "meshes": [
+    {
+      "errors": [],
+      "extents": [
+        1.6012659072875977,
+        0.37222249805927277,
+        1.5936027765274048
+      ],
+      "isVolume": true,
+      "name": "Torus",
+      "triangles": 2560,
+      "volume": 0.14002926283199493,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.1489094495773315,
+        1.5744909644126892,
+        0.8615536689758301
+      ],
+      "isVolume": true,
+      "name": "crystal_pt_0_mesh",
+      "triangles": 2476,
+      "volume": 0.2983530947018788,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.8697488307952881,
+        0.7645505666732788,
+        0.48886173963546753
+      ],
+      "isVolume": true,
+      "name": "glow_0_mesh",
+      "triangles": 364,
+      "volume": 0.017688476627253025,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.4410128593444824,
+        0.5743438899517059,
+        1.2693042755126953
+      ],
+      "isVolume": true,
+      "name": "Icosphere",
+      "triangles": 4164,
+      "volume": 0.7541867707139455,
+      "watertight": true,
+      "windingConsistent": true
+    }
+  ],
+  "passed": true,
+  "schemaVersion": 1,
+  "sha256": "e0669bdb8fe18b210e3f099998d18cbd023ba3889f94b4ab6816e85da6afd5e9",
+  "source": "/Users/maddiedreese/Documents/ChatGPT/Roblox/thrixel_assets/grouped-star_crystal/a-premium-collectible-star-crystal-cluster-repaired.glb",
+  "triangleTotal": 9564,
+  "warnings": []
+}

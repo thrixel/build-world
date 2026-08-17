@@ -1,0 +1,70 @@
+{
+  "bytes": 605412,
+  "errors": [],
+  "maxTrianglesPerMesh": 20000,
+  "meshCount": 4,
+  "meshes": [
+    {
+      "errors": [],
+      "extents": [
+        1.0215827226638794,
+        0.915422797203064,
+        0.8982105255126953
+      ],
+      "isVolume": true,
+      "name": "Torus",
+      "triangles": 12990,
+      "volume": 0.08562076088719121,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.7285370230674744,
+        0.4151079058647156,
+        0.8287769556045532
+      ],
+      "isVolume": true,
+      "name": "Torus_1",
+      "triangles": 4678,
+      "volume": 0.046248215742023625,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.5870503783226013,
+        1.021582841873169,
+        0.5870503783226013
+      ],
+      "isVolume": true,
+      "name": "Torus_2",
+      "triangles": 204,
+      "volume": 0.016206556441474868,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.4892086684703827,
+        1.8705036640167236,
+        0.42366713285446167
+      ],
+      "isVolume": true,
+      "name": "Torus_3",
+      "triangles": 128,
+      "volume": 0.11503273536948304,
+      "watertight": true,
+      "windingConsistent": true
+    }
+  ],
+  "passed": true,
+  "schemaVersion": 1,
+  "sha256": "58f6d1b45470c87f5a724cf4d69dd0a6f1f08ad6bb8bc6bd71d756f90a631519",
+  "source": "thrixel_assets/roblox/orrery-lock/a-prize-star-prism-for-a-stylized-magical.glb",
+  "triangleTotal": 18000,
+  "warnings": []
+}

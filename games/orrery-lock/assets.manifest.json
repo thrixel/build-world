@@ -1,0 +1,60 @@
+{
+  "projectId": "9a1ca801-9b74-433d-9b91-4052b9170e7a",
+  "assets": [
+    {
+      "name": "ThrixelOrrery",
+      "submissionId": "87ca13f3-e89b-4fda-9168-ca49b2a7a802",
+      "file": "../../thrixel_assets/roblox/orrery-lock/a-monumental-tabletop-astronomical-orrery-for-a.glb",
+      "triangles": 24874,
+      "movingGroups": ["crank", "orbit_ring_inner", "orbit_ring_middle", "orbit_ring_outer", "pointer_arm"]
+    },
+    {
+      "name": "ThrixelVaultDoor",
+      "submissionId": "99682552-f9bf-41a8-ac49-b046724ac393",
+      "file": "../../thrixel_assets/roblox/orrery-lock/vault-door-polished.glb",
+      "triangles": 38608,
+      "movingGroups": ["door_panel", "lock_wheel"]
+    },
+    {
+      "name": "ThrixelStarCell",
+      "submissionId": "4a504651-3973-49a7-bf90-520e96836c2b",
+      "file": "../../thrixel_assets/roblox/orrery-lock/star-cell-polished.glb",
+      "triangles": 11758
+    },
+    {
+      "name": "ThrixelLamp",
+      "submissionId": "e2a165cc-93b2-4f25-8fb3-f5745ab8442b",
+      "file": "../../thrixel_assets/roblox/orrery-lock/a-compact-wall-mounted-observatory-lamp-for-a.glb"
+    },
+    {
+      "name": "ThrixelStarPrism",
+      "submissionId": "cdba5087-8ba3-4647-b85f-b25aff9fb0ec",
+      "file": "../../thrixel_assets/roblox/orrery-lock/a-prize-star-prism-for-a-stylized-magical.glb",
+      "triangles": 18000
+    },
+    {
+      "name": "ThrixelTelescope",
+      "submissionId": "55e1e592-8aa9-44c9-a36a-71639e35ca8c",
+      "file": "../../thrixel_assets/roblox/orrery-lock/telescope.glb",
+      "triangles": 21592
+    },
+    {
+      "name": "ThrixelLectern",
+      "submissionId": "f12e6cfd-c103-45f9-a8ed-966c7763aed8",
+      "file": "../../thrixel_assets/roblox/orrery-lock/celestial-lectern.glb",
+      "triangles": 14524
+    },
+    {
+      "name": "ThrixelAstrolabe",
+      "submissionId": "208887fc-f0a9-4c17-a6b9-b89f3668db7b",
+      "file": "../../thrixel_assets/roblox/orrery-lock/astrolabe-pillar.glb",
+      "triangles": 14272
+    },
+    {
+      "name": "ThrixelWorkbench",
+      "submissionId": "f008f65f-3e85-4c8a-ab66-60ec213f14e2",
+      "file": "../../thrixel_assets/roblox/orrery-lock/equipment-workbench.glb",
+      "triangles": 27352
+    }
+  ]
+}

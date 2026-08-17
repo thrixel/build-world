@@ -1,0 +1,154 @@
+{
+  "bytes": 469560,
+  "errors": [],
+  "maxTrianglesPerMesh": 20000,
+  "meshCount": 10,
+  "meshes": [
+    {
+      "errors": [],
+      "extents": [
+        1.8242424726486206,
+        0.4424546957015991,
+        1.4594610929489136
+      ],
+      "isVolume": true,
+      "name": "Cylinder.006",
+      "triangles": 352,
+      "volume": 0.06580141277171866,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.8242424726486206,
+        0.4424546957015991,
+        1.4594610929489136
+      ],
+      "isVolume": true,
+      "name": "Cylinder.006_1",
+      "triangles": 352,
+      "volume": 0.0658014127717187,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        2.000000238418579,
+        1.2125319242477417,
+        1.4621212482452393
+      ],
+      "isVolume": true,
+      "name": "Cylinder.014",
+      "triangles": 10256,
+      "volume": 0.02046993725157867,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.8560607433319092,
+        1.5529289245605469,
+        1.2527705430984497
+      ],
+      "isVolume": true,
+      "name": "Cube.005",
+      "triangles": 168,
+      "volume": 0.15397724630887502,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.8787879943847656,
+        1.7803031206130981,
+        1.356060802936554
+      ],
+      "isVolume": true,
+      "name": "Cube.005_1",
+      "triangles": 404,
+      "volume": 0.3768019935952303,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.35526686906814575,
+        0.26372599601745605,
+        0.08238065242767334
+      ],
+      "isVolume": true,
+      "name": "Cube.005_2",
+      "triangles": 4316,
+      "volume": 0.0016758163104339295,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.05303025245666504,
+        0.05303025245666504,
+        0.05303025245666504
+      ],
+      "isVolume": true,
+      "name": "Sphere.005",
+      "triangles": 960,
+      "volume": 7.683936734649109e-05,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.1515151560306549,
+        0.06818175315856934,
+        0.15151512622833252
+      ],
+      "isVolume": true,
+      "name": "Sphere.005_1",
+      "triangles": 92,
+      "volume": 0.0005631075686871423,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.018181800842285156,
+        0.12878799438476562,
+        0.018181800842285156
+      ],
+      "isVolume": true,
+      "name": "Sphere.005_2",
+      "triangles": 60,
+      "volume": 3.258508300508275e-05,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.13636362552642822,
+        0.13636374473571777,
+        0.13636362552642822
+      ],
+      "isVolume": true,
+      "name": "Sphere.005_3",
+      "triangles": 960,
+      "volume": 0.0013064941449416306,
+      "watertight": true,
+      "windingConsistent": true
+    }
+  ],
+  "passed": true,
+  "schemaVersion": 1,
+  "sha256": "999df928a283c0eacaaa8db04d0e93520c408d0a26f130efe825a4b50ff1bb82",
+  "source": "thrixel_assets/roblox/moonmarket-mix-up/a-compact-whimsical-night-market-stall-for-a.glb",
+  "triangleTotal": 17920,
+  "warnings": []
+}

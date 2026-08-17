@@ -1,0 +1,23 @@
+{
+  "name": "Goal to Game Roblox Studio Sync",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "$className": "ReplicatedStorage",
+      "Shared": { "$path": "src/shared" }
+    },
+    "ServerScriptService": {
+      "$className": "ServerScriptService",
+      "Game": { "$path": "src/server" },
+      "Verification": { "$path": "src/verification/server" }
+    },
+    "StarterPlayer": {
+      "$className": "StarterPlayer",
+      "StarterPlayerScripts": {
+        "$className": "StarterPlayerScripts",
+        "Game": { "$path": "src/client" },
+        "Verification": { "$path": "src/verification/client" }
+      }
+    }
+  }
+}

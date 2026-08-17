@@ -1,6 +1,6 @@
 
 ## Intro
-Users follow the installation process defined in [README.md](README.md). Read that for context. Then, you'll guide them through the setup process. You MUST do EXACTLY what is outlined in this file, in the exact sequence of the file.
+Users follow the installation process defined in the [repository README](../../README.md). Read that for context. Then, you'll guide them through the setup process. You MUST do EXACTLY what is outlined in this file, in the exact sequence of the file.
 
 Tell the user what is about to happen:
 
@@ -298,3 +298,89 @@ powershell -c "irm https://community.chocolatey.org/install.ps1|iex"
 # Download and install Node.js:
 choco install nodejs
 ```
+
+### Roblox Studio installation
+
+Roblox work needs the Studio application and the pinned Rojo toolchain. The optional deterministic
+winding repair also needs Blender, but install it only if a grouped GLB reaches that documented
+failure state. Check the core tools before installing:
+
+```sh
+rokit --version
+rojo --version
+```
+
+Also check that Studio exists:
+
+- macOS: `test -d /Applications/RobloxStudio.app`
+- Windows PowerShell:
+  `Get-ChildItem "$env:LOCALAPPDATA\Roblox\Versions" -Filter RobloxStudioBeta.exe -Recurse`
+- Linux/WSL: there is no supported native Linux Studio. WSL uses Studio on its Windows host.
+
+If Studio is missing, give the user the official download page and stop until installation and
+sign-in are complete: <https://create.roblox.com/docs/studio/setup>. Do not install Wine, automate
+credentials, or treat the web player as Studio.
+
+Install Rokit only if `rokit --version` failed.
+
+macOS or Linux/WSL:
+
+```sh
+curl -sSf https://raw.githubusercontent.com/rojo-rbx/rokit/main/scripts/install.sh | bash
+```
+
+Windows PowerShell:
+
+```powershell
+Invoke-RestMethod https://raw.githubusercontent.com/rojo-rbx/rokit/main/scripts/install.ps1 | Invoke-Expression
+```
+
+Open a new shell if the command is still not found. In the game directory, copy the Roblox
+template `rokit.toml`, then install and verify the exact project version:
+
+```sh
+rokit install
+rojo --version
+rojo build default.project.json -o build/game.rbxlx
+```
+
+Install the matching Rojo Studio plugin from Studio's Plugins/Creator Store if it is absent.
+Start `rojo serve studio-sync.project.json`, connect the plugin, and inspect the sync preview
+before accepting. A failure to connect is a hard stop: do not continue with unsynchronized source.
+
+If `validate_mesh.py` reports only mixed winding on a grouped file while its ungrouped parent is
+watertight, check `blender --version`. Install Blender only when that check fails:
+
+macOS:
+
+```sh
+brew install --cask blender
+```
+
+Windows PowerShell:
+
+```powershell
+winget install --id BlenderFoundation.Blender --exact
+```
+
+Ubuntu/Debian or WSL:
+
+```sh
+sudo apt-get update
+sudo apt-get install blender
+```
+
+Reopen the shell and require `blender --version` to succeed before running
+`engines/roblox/tools/repair_mesh_winding.py`. This is an automated, winding-only recovery step;
+Blender is not a replacement for the required Thrixel generation, reduction, or grouping calls.
+
+For WSL, serve on an address reachable by Windows:
+
+```sh
+rojo serve studio-sync.project.json --address 0.0.0.0
+```
+
+Connect the Windows-host Studio plugin to the WSL address. If host/firewall networking blocks it,
+move the checkout to the Windows filesystem and run the pinned Windows Rojo binary there. A native
+Linux machine may prepare and validate assets, but it needs a reachable Windows or macOS Studio
+host for import and playtesting.

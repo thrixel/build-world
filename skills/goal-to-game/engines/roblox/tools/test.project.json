@@ -1,0 +1,18 @@
+{
+  "name": "Roblox Goal to Game Tool Syntax",
+  "tree": {
+    "$className": "DataModel",
+    "ServerScriptService": {
+      "$className": "ServerScriptService",
+      "RuntimeSelftest": { "$path": "runtime-selftest.server.luau" }
+    },
+    "StarterPlayer": {
+      "$className": "StarterPlayer",
+      "StarterPlayerScripts": {
+        "$className": "StarterPlayerScripts",
+        "Metrics": { "$path": "metrics.client.luau" },
+        "ShotHarness": { "$path": "shot-harness.client.luau" }
+      }
+    }
+  }
+}

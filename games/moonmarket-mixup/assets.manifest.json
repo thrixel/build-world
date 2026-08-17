@@ -1,0 +1,40 @@
+{
+  "projectId": "da221d29-018f-456b-8ad4-4cba138064f8",
+  "assets": [
+    {
+      "name": "ThrixelCauldron",
+      "submissionId": "996777ec-1341-4de2-9687-d3b547ac0eb0",
+      "file": "../../thrixel_assets/roblox/moonmarket-mix-up/a-whimsical-moon-market-potion-cauldron-as-a.glb",
+      "triangles": 25848,
+      "movingGroups": ["lid", "stirring_paddle", "left_handle", "right_handle"]
+    },
+    {
+      "name": "ThrixelStall",
+      "submissionId": "dd4c4879-5c9d-4d3d-be66-66cd35687a17",
+      "file": "../../thrixel_assets/roblox/moonmarket-mix-up/a-compact-whimsical-night-market-stall-for-a.glb"
+    },
+    {
+      "name": "ThrixelLantern",
+      "submissionId": "3d48e107-832a-490c-9fca-5a2d5fbd04d4",
+      "file": "../../thrixel_assets/roblox/moonmarket-mix-up/a-hanging-moon-market-lantern-for-a-whimsical.glb"
+    },
+    {
+      "name": "ThrixelGlowcap",
+      "submissionId": "d82a6603-2138-4b04-8798-9dc8b40ed805",
+      "file": "../../thrixel_assets/roblox/moonmarket-mix-up/glowcap-polished.glb",
+      "triangles": 8940
+    },
+    {
+      "name": "ThrixelMoonfruit",
+      "submissionId": "f25753fb-4e49-4b51-a849-cbdf70ed2c26",
+      "file": "../../thrixel_assets/roblox/moonmarket-mix-up/one-collectible-moonfruit-for-a-whimsical-moon.glb",
+      "triangles": 19340
+    },
+    {
+      "name": "ThrixelStarCrystal",
+      "submissionId": "b0ffc923-34fc-4cb8-a225-54fe8e39b3f8",
+      "file": "../../thrixel_assets/roblox/moonmarket-mix-up/star-crystal-polished.glb",
+      "triangles": 9564
+    }
+  ]
+}

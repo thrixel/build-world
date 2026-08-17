@@ -1,0 +1,84 @@
+{
+  "bytes": 913588,
+  "errors": [],
+  "maxTrianglesPerMesh": 20000,
+  "meshCount": 5,
+  "meshes": [
+    {
+      "errors": [],
+      "extents": [
+        2.000000238418579,
+        0.9127903878688812,
+        0.6236766576766968
+      ],
+      "isVolume": true,
+      "name": "Cube",
+      "triangles": 18000,
+      "volume": 0.3233889478841648,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.418548345565796,
+        0.12822580337524414,
+        0.07016128301620483
+      ],
+      "isVolume": true,
+      "name": "Cube.046",
+      "triangles": 1048,
+      "volume": 0.004961412641010836,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        1.5120967626571655,
+        0.5915322303771973,
+        0.5483871102333069
+      ],
+      "isVolume": true,
+      "name": "Cylinder.021",
+      "triangles": 6444,
+      "volume": 0.040662743556604465,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.3701612949371338,
+        0.5112903118133545,
+        0.38951611518859863
+      ],
+      "isVolume": true,
+      "name": "Cube.025",
+      "triangles": 384,
+      "volume": 0.05065477804754359,
+      "watertight": true,
+      "windingConsistent": true
+    },
+    {
+      "errors": [],
+      "extents": [
+        0.16129028797149658,
+        0.16129028797149658,
+        0.05080649256706238
+      ],
+      "isVolume": true,
+      "name": "Cube.063",
+      "triangles": 1476,
+      "volume": 0.0009052392806220582,
+      "watertight": true,
+      "windingConsistent": true
+    }
+  ],
+  "passed": true,
+  "schemaVersion": 1,
+  "sha256": "374953da5bc65afd91af84a3fb7b1a9e3d0cc50286d7732b2d1e99e3366ce014",
+  "source": "/Users/maddiedreese/Documents/ChatGPT/Roblox/thrixel_assets/final-workbench/a-sturdy-observatory-equipment-cabinet-for-a-roblox-final.glb",
+  "triangleTotal": 27352,
+  "warnings": []
+}
