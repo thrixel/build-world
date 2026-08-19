@@ -1,14 +1,20 @@
 # Goal to Game
 
-Build beautiful games with high-quality 3D assets using [Thrixel](https://thrixel.com/) and [Claude Code](https://claude.com/claude-code).
+Build better Gauntlet Loop games with high-quality 3D assets from [Thrixel](https://thrixel.com/) and your AI agent of choice.
 
-Claude Code handles the game logic and scene setup. Thrixel generates, organizes, and manages the 3D assets. Thrixel processes 3D creation in parallel so you can build your scene faster.
+Claude Code (or your preferred agent) handles the game logic and scene setup. Thrixel generates, organizes, and manages the 3D assets. Save your coding agent tokens and time by using Thrixel to generate 3D assets faster and at higher quality than Claude Code.
 
-Goal to Game currently supports **Unity**, **Three.js**, and **Roblox Studio**. This page covers **Claude Code**, where every step below is tested.
+Goal to Game currently supports **Unity**, **Three.js**, and **Roblox Studio**. This page covers **Claude Code**, but the workflow works with other coding agents as well.
+
+## Thrixel inside the Gauntlet Loop
+
+Goal to Game uses a Gauntlet-style iterative workflow for AI game development. The agent continuously builds, evaluates, and improves both gameplay and 3D assets, with Thrixel generating and refining assets inside the loop. With Goal to Game, you can vibe out a game from a single prompt, then keep refining it with follow-up prompts.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/ThatCharlieK/READMEAssets/main/Thrixel-1prompt-to-game-readme.gif" width="600"/>
 </p>
+
+
 
 ## Quick start
 

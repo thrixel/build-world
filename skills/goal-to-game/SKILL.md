@@ -453,10 +453,18 @@ at once.
   it in the scene, and revise it until it fits.
 - **Never pass an `image`.** Text prompts only, on every endpoint. Thrixel generates and manages
   its reference imagery internally.
-- **Do not assume a forward axis.** glTF does not define one, so it varies per asset - a long
-  axis can land on X where you expected Z. Read the bounding box or look at
-  the thumbnail, decide the facing per asset, and correct it once at import rather than
-  discovering it when a vehicle drives sideways. The engine files cover how.
+- **Every asset arrives at roughly the same size.** Scale is normalised, so a castle keep and
+  a peasant import into the same bounding box. Nothing warns you; the castle just turns out to
+  be a garden shed. Set relative scale explicitly at import - decide the real-world size of
+  each asset class when you write the asset list, not when the scene looks wrong.
+- **Up is always Y. Only FORWARD varies.** Thrixel exports Y-up on every asset, as glTF
+  requires, so never write per-asset up-axis detection or a Z-up correction branch. glTF does
+  not define a forward axis, though, so a long axis can land on X where you expected Z: read
+  the bounding box or look at the thumbnail, decide the facing per asset, and correct it once
+  at import rather than discovering it when a vehicle drives sideways. (If a pivot listing from
+  `thrixel_group_parts` looks Z-up, that is Thrixel's internal working space, not the file -
+  a real project once wrote "these assets came back Z-up" into a source comment on the strength
+  of that listing and carried the wrong belief for its whole life.)
 
 If necessary, read thrixel api docs here: https://thrixel.com/docs/,
 but the vast majority of thrixel information is contained within this skill and the mcp.
