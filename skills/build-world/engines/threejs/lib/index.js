@@ -11,9 +11,10 @@ export { Engine, boot } from './engine.js';
 export { Rng, hash3, noise3, fbm3 } from './rng.js';
 export {
   PHYSICS_HZ, FIXED_DT, MAX_SUBSTEPS, MAX_FRAME_DT,
-  QUALITY_PRESETS, DEFAULTS, createConfig, configFromLocation,
+  QUALITY_PRESETS, DEFAULTS, createConfig, configFromLocation, autoQuality,
 } from './config.js';
-export { Input, DEFAULT_ACTIONS } from './input.js';
+export { Input, DEFAULT_ACTIONS, isTouchDevice } from './input.js';
+export { TouchControls } from './touchui.js';
 export { installShotApi, signalReady } from './shots.js';
 export { prewarm, compileMeshes } from './prewarm.js';
 export { LightBallast, LightPool } from './lights.js';

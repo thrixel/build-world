@@ -21,9 +21,16 @@ export const MAX_FRAME_DT = 0.1;
  * Quality presets. Every entry is a BUDGET or a FEATURE FLAG, never a
  * brightness/scale fudge — a preset must change cost, not art direction.
  * Subsystems must honour the budgets and must never exceed them.
+ *
+ * `maxPixelRatio` is the one that decides whether a phone can run the game at
+ * all, and it is the easiest to get wrong because desktop hides it: a phone
+ * reports devicePixelRatio 3, so an uncapped renderer draws roughly 3.5x the
+ * pixels of a 1080p laptop on a fraction of the GPU. Resolution, not geometry,
+ * is what costs the frames — see threejs.md, Performance doctrine.
  */
 export const QUALITY_PRESETS = {
   low: {
+    maxPixelRatio: 1.5,
     renderScale: 0.72,
     shadowMapSize: 1024,
     shadowDistance: 60,
@@ -40,6 +47,7 @@ export const QUALITY_PRESETS = {
     maxDynamicLights: 4,
   },
   medium: {
+    maxPixelRatio: 2,
     renderScale: 0.85,
     shadowMapSize: 2048,
     shadowDistance: 90,
@@ -56,6 +64,7 @@ export const QUALITY_PRESETS = {
     maxDynamicLights: 8,
   },
   high: {
+    maxPixelRatio: 2,
     renderScale: 1.0,
     shadowMapSize: 2048,
     shadowDistance: 140,
@@ -72,6 +81,7 @@ export const QUALITY_PRESETS = {
     maxDynamicLights: 12,
   },
   ultra: {
+    maxPixelRatio: 2,
     renderScale: 1.0,
     shadowMapSize: 4096,
     shadowDistance: 200,
@@ -101,6 +111,22 @@ export const DEFAULTS = {
   prewarm: true,
 };
 
+/**
+ * Pick a starting preset for the device this is running on.
+ *
+ * Coarse on purpose. There is no reliable way to ask a browser how fast its GPU
+ * is, and every attempt to infer it from the UA string ages badly, so this only
+ * separates handheld from not: a phone or tablet starts at `low`, everything
+ * else at `high`. A game that wants better should measure the first few seconds
+ * of real frame time and call `config.setQuality()` — a running frame rate is
+ * the only honest signal, and it is available to every game for free.
+ */
+export function autoQuality(fallback = 'high') {
+  if (typeof matchMedia !== 'function') return fallback;
+  const handheld = matchMedia('(hover: none) and (pointer: coarse)').matches;
+  return handheld ? 'low' : fallback;
+}
+
 export function createConfig(overrides = {}) {
   const cfg = { ...DEFAULTS, ...overrides };
   const name = QUALITY_PRESETS[cfg.quality] ? cfg.quality : DEFAULTS.quality;
@@ -126,7 +152,11 @@ export function configFromLocation(search = globalThis.location?.search ?? '') {
     lockstep: capture && p.get('lockstep') === '1',
     shot: p.get('shot') ?? null,
     config: createConfig({
-      quality: p.get('q') ?? undefined,
+      // No ?q= -> pick by device, so a phone opening a shared link is not
+      // handed the desktop preset. Capture pins `high` instead: the pixel gate
+      // compares runs against each other, and a preset that varies by machine
+      // would make every diff meaningless.
+      quality: p.get('q') ?? (capture ? DEFAULTS.quality : autoQuality()),
       deterministic: capture,
       prewarm: p.get('prewarm') !== '0',
       seed: p.get('seed') ? Number(p.get('seed')) >>> 0 : undefined,

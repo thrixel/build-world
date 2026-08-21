@@ -14,6 +14,7 @@
     "diff": "node tools/imagediff.mjs --a=shots/base --b=shots/after",
     "profile": "node tools/profile.mjs --dpr=2 --frames=900",
     "smoke": "node tools/smoke.mjs --events=weapon:fire,bullet:impact --expect=forward",
+    "mobile": "node tools/mobilecheck.mjs --out=shots/mobile.png",
     "feeltest": "node example/feeltest.mjs",
     "gate": "node tools/baseline.mjs --out=/tmp/kit-gate && node tools/imagediff.mjs --a=shots/base --b=/tmp/kit-gate"
   },

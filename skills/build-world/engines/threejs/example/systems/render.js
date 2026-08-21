@@ -100,7 +100,12 @@ export class RenderSystem {
   resize(w, h) {
     this._w = w;
     this._h = h;
-    this.renderer.setPixelRatio(Math.min(devicePixelRatio, 2) * this.scale);
+    // The cap is a BUDGET from the preset, not a constant. A phone reports DPR 3
+    // and will happily be asked for 3.5x the pixels of a 1080p laptop; capping
+    // here is the single highest-value mobile optimisation and it costs one
+    // line. See lib/config.js.
+    const cap = this.ctx.config.q.maxPixelRatio ?? 2;
+    this.renderer.setPixelRatio(Math.min(devicePixelRatio, cap) * this.scale);
     this.renderer.setSize(w, h, false);
   }
 

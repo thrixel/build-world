@@ -98,29 +98,46 @@ export async function ensureServer({ port = 5173, root = process.cwd(), quiet = 
  * two runs comparable at the pixel level; without them the display profile leaks
  * into the PNG.
  */
-export function gpuFlags({ vsync = false, angle = null } = {}) {
+export function gpuFlags({ vsync = false, angle = null, pinDeviceScale = true } = {}) {
   const os = platform();
   const flags = [
     '--ignore-gpu-blocklist',
     '--enable-gpu-rasterization',
     '--force-color-profile=srgb',
-    '--force-device-scale-factor=1',
     '--hide-scrollbars',
     '--mute-audio',
   ];
+  // Pinning the device scale is what makes two captures comparable pixel for
+  // pixel. It also overrides playwright's per-context `deviceScaleFactor`, so a
+  // tool that is deliberately emulating a DPR-3 phone must opt out of it.
+  if (pinDeviceScale) flags.push('--force-device-scale-factor=1');
   const backend = angle ?? (os === 'darwin' ? 'metal' : os === 'win32' ? 'd3d11' : null);
   if (backend) flags.push(`--use-angle=${backend}`);
   if (!vsync) flags.push('--disable-frame-rate-limit', '--disable-gpu-vsync');
   return flags;
 }
 
-export async function launchBrowser({ vsync = false, angle = null, extraFlags = [] } = {}) {
-  return chromium.launch({ headless: true, args: [...gpuFlags({ vsync, angle }), ...extraFlags] });
+export async function launchBrowser({ vsync = false, angle = null, pinDeviceScale = true, extraFlags = [] } = {}) {
+  return chromium.launch({
+    headless: true,
+    args: [...gpuFlags({ vsync, angle, pinDeviceScale }), ...extraFlags],
+  });
 }
 
-/** A page that collects console output and page errors — you always want them. */
-export async function newPage(browser, { w = 1920, h = 1080, dpr = 1 } = {}) {
-  const page = await browser.newPage({ viewport: { width: w, height: h }, deviceScaleFactor: dpr });
+/**
+ * A page that collects console output and page errors — you always want them.
+ *
+ * `touch: true` is what makes a phone check possible at all: without it the
+ * context dispatches no touch pointers, `matchMedia('(pointer: coarse)')` is
+ * false, and a game with a perfectly good touch layer measures as unplayable.
+ */
+export async function newPage(browser, { w = 1920, h = 1080, dpr = 1, touch = false, mobile = false } = {}) {
+  const page = await browser.newPage({
+    viewport: { width: w, height: h },
+    deviceScaleFactor: dpr,
+    hasTouch: touch,
+    isMobile: mobile,
+  });
   const logs = [];
   page.on('console', (m) => m.type() !== 'debug' && logs.push(`[${m.type()}] ${m.text()}`));
   page.on('pageerror', (e) => logs.push(`[pageerror] ${e.message}\n${e.stack ?? ''}`));

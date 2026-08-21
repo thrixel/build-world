@@ -10,7 +10,7 @@
     {
       "name": "thrixel",
       "source": "./",
-      "description": "Build playable 3D games with AI-generated assets. Bundles the goal-to-game skill and the Thrixel connector: generate, refine, texture and download game-ready .glb models without leaving your coding agent."
+      "description": "Build playable 3D games with AI-generated assets. Bundles the build-world skill and the Thrixel connector: generate, refine, texture and download game-ready .glb models without leaving your coding agent."
     }
   ]
 }

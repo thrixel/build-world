@@ -241,6 +241,63 @@ Use `page.screenshot()` when any UI is DOM — it composites both. Canvas readba
 gets you WebGL only, and `readPixels` on the default framebuffer after presentation
 returns nothing useful.
 
+### D9. `--force-device-scale-factor=1` overrides an emulated phone DPR
+**Symptom:** a phone-viewport check reports comfortable numbers and a real phone
+stutters.
+**Cause:** the flag that makes two captures pixel-comparable also beats
+playwright's per-context `deviceScaleFactor`, so "a phone at DPR 3" measures as a
+phone-shaped desktop at DPR 1 — the half of the problem that was never hard.
+**Fix:** `launchBrowser({ pinDeviceScale: false })` for that tool only, and keep
+the pin everywhere the pixel gate runs. Also pass `hasTouch: true`, or the context
+dispatches no touch pointers, `(pointer: coarse)` is false, and a game with a
+perfectly good touch layer measures as unplayable.
+
+---
+
+## D-mobile. Phones
+
+### DM1. The game is keyboard-only and every other gate passes
+**Symptom:** builds, captures, contact sheets and `smoke.mjs` are all green; the
+published link is dead on a phone.
+**Cause:** every tool in this kit drives the game with key codes. Nothing in the
+desktop loop ever asks whether a thumb could play it.
+**Fix:** `tools/mobilecheck.mjs`, whose central assertion is that a real swipe on
+the left of the screen moves the player. Read actions (`axis2()`, `held()`), never
+key codes, in gameplay code and the touch layer feeds them for free.
+
+### DM2. An uncapped `devicePixelRatio` on a phone
+**Symptom:** 12-17 fps on a phone for a scene a laptop runs at 120.
+**Cause:** a phone reports DPR 3. `setPixelRatio(devicePixelRatio)` then asks a
+phone GPU for ~3.5x the pixels of a 1080p desktop. Resolution, not geometry — the
+same lesson as the desktop profiler, one device further along.
+**Fix:** `Math.min(devicePixelRatio, ctx.config.q.maxPixelRatio)`, a budget in
+every preset. `mobilecheck.mjs` fails on a drawing buffer over 2.6 MP.
+
+### DM3. Touch works, and nobody can find it
+**Symptom:** the input layer is correct, testers report "it does nothing".
+**Cause:** no on-screen controls. A player who sees a 3D scene and no buttons taps
+once and leaves; they do not discover that the left half is a stick.
+**Fix:** `TouchControls` (`lib/touchui.js`). It stays hidden until
+`input.touchActive`, so it costs the pixel gate nothing — verified: adding the
+whole touch layer left all seven baseline shots `identical: true`.
+
+### DM4. Pull-to-refresh eats the game, and `100vh` hides its bottom
+**Symptom:** dragging down reloads the page mid-play; the HUD's bottom row sits
+under the iOS URL bar; a look-drag stops responding after ~100ms.
+**Cause:** three separate browser defaults — `overscroll-behavior` allowing the
+refresh gesture, `100vh` on iOS meaning the height *without* browser chrome, and
+the browser claiming an un-declared gesture as a scroll so `pointermove` simply
+stops arriving.
+**Fix:** `overscroll-behavior: none`, `height: 100dvh`, `touch-action: none` on
+the canvas (`Input` sets it programmatically too, since a project's own CSS may
+not). All three are in `example/index.html` with comments.
+
+### DM5. An invisible on-screen button still swallows clicks
+**Symptom:** a dead zone in the bottom-right corner on desktop.
+**Cause:** hiding a control layer with `opacity: 0` leaves it in hit-testing.
+**Fix:** `visibility: hidden` (or `pointer-events: none`) on the layer, not just
+opacity.
+
 ---
 
 ## E. Review process

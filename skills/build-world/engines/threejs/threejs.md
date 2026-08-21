@@ -151,6 +151,12 @@ node tools/imagediff.mjs --a=shots/base --b=/tmp/after   # must be identical:tru
 node tools/profile.mjs --dpr=2 --frames=900 --runs=3     # p99 and hitches, 3 runs
 ```
 
+Then check the device you did not develop on, before anyone gets a link:
+
+```bash
+node tools/mobilecheck.mjs --port=5273    # phone viewport, DPR 3, touch, no keyboard
+```
+
 An optimisation that is 20% faster and moves one pixel is a failed optimisation.
 Either find why it moved and eliminate it, or revert and report it as not viable.
 Never rationalise a diff as imperceptible — that is how a regression ships.
@@ -225,8 +231,9 @@ tools to prove it.
 | `engine.js` | frame loop, fixed timestep, `ctx`, boot-with-visible-failure |
 | `registry.js` | topo-sorted subsystems, `ctx.get(id)`, event bus |
 | `rng.js` | seeded xoshiro128** + `fork()`, value noise, fbm |
-| `config.js` | quality presets as budgets, URL-driven config |
-| `input.js` | per-frame input snapshot + `inject()` so bots drive the real input layer |
+| `config.js` | quality presets as budgets, URL-driven config, `autoQuality()` by device |
+| `input.js` | per-frame input snapshot, keyboard + mouse + **touch**, `inject()` so bots drive the real input layer |
+| `touchui.js` | on-screen stick indicator and action buttons, hidden until a real finger arrives |
 | `shots.js` | **the capture API**: named shots, lockstep determinism, fixed shutter |
 | `prewarm.js` | shader pre-warm + the four traps that make it useless |
 | `lights.js` | `LightBallast` / `LightPool` — hold the light count constant |
@@ -246,6 +253,7 @@ tools to prove it.
 | `crop.mjs` | crop + magnify a region; close-range defects are invisible at 1:1 |
 | `profile.mjs` | gameplay profiler: real DPR, moving camera, p99, hitch attribution |
 | `smoke.mjs` | 8-second "does it still work" gate; drives the real input layer |
+| `mobilecheck.mjs` | phone viewport + DPR 3 + touch: can a thumb actually play it? |
 | `example/feeltest.mjs` | pattern: a **bench** for correctness no screenshot shows |
 | `tools/lib/harness.mjs` | shared CLI/server/browser plumbing for all of the above |
 
@@ -263,6 +271,7 @@ npm run dev                       # play it
 node tools/capture.mjs --out=shots/latest --port=5273
 node tools/contactsheet.mjs shots/latest
 node tools/smoke.mjs --port=5273 --events=weapon:fire,bullet:impact --expect=forward
+node tools/mobilecheck.mjs --port=5274    # 13 checks, incl. "a thumb can move the player"
 node example/feeltest.mjs --port=5279     # 29 measured movement assertions
 ```
 
@@ -303,6 +312,72 @@ The three things that actually cost you frames in Three.js, in the order they bi
 Report `p50/p95/p99/max`, hitch count with per-frame program deltas, boot time,
 heap growth, and the **spread across at least 3 runs**. Single runs of a gameplay
 profiler vary enough to have produced one confidently wrong conclusion.
+
+## Mobile — the device most of your players will use
+
+A finished game becomes a link, and a link gets opened on a phone. Every other
+tool in this directory measures the game on a 1920x1080 desktop with a mouse and
+a keyboard, which is the one setup most of the people you share with will not be
+using. Treat phone playability as a requirement of "done", not as a port.
+
+**The kit already does the hard half.** `lib/input.js` feeds touch into the same
+per-frame snapshot the keyboard feeds: the left of the screen is a floating
+analog stick that lands in `axis2()`, the right is a look-drag that lands in
+`look`, and `input.bindButton(el, 'jump')` routes an on-screen button to the same
+`held('jump')`. So **gameplay code needs no touch branch anywhere** — if your
+systems read actions rather than key codes, they are already mobile.
+
+What you still have to do, in the order it bites:
+
+1. **Cap the pixel ratio.** A phone reports `devicePixelRatio` 3, so an uncapped
+   renderer asks a phone GPU for ~3.5x the pixels of a 1080p laptop. This is the
+   single biggest mobile performance fact and it is one line:
+   `renderer.setPixelRatio(Math.min(devicePixelRatio, q.maxPixelRatio) * q.renderScale)`.
+   `maxPixelRatio` is a budget in every quality preset.
+2. **Start phones on a lower preset.** `autoQuality()` returns `low` for a
+   coarse-pointer device. It is deliberately crude — no UA sniffing, no GPU
+   guessing — and a game that wants better should watch its own first seconds of
+   frame time and call `config.setQuality()`. Capture mode ignores all of this
+   and pins `high`, or the pixel gate would vary by machine.
+3. **Show the controls.** `TouchControls` (`lib/touchui.js`) draws the stick
+   indicator and a small cluster of action buttons, and stays hidden until
+   `input.touchActive` — so a headless capture never sees it and your pixel gate
+   is unaffected. Verified in this repo: adding the whole touch layer left all
+   seven baseline shots `identical: true`. **Touch input with no visible controls
+   is the most common mobile failure**, and it does not look like a bug to the
+   player: they see a 3D scene, tap once, and leave.
+4. **Size the HUD for a thumb and a small screen.** 44 CSS px is the floor for
+   anything pressable. 12px monospace diagnostics are unreadable on a phone.
+5. **Get the viewport right.** `viewport-fit=cover` plus `100dvh` (not `100vh`,
+   which on iOS Safari means the height without the URL bar), `touch-action:
+   none` on the canvas, `overscroll-behavior: none` on the body so a downward
+   drag does not pull-to-refresh mid-game, and `env(safe-area-inset-*)` padding
+   so the HUD clears the notch and the home indicator. `example/index.html` has
+   all of it with the reasons in comments.
+6. **Design for one thumb per side.** A control scheme needing a modifier key, a
+   scroll wheel, or four simultaneous keys has no touch equivalent. Decide this
+   while designing the controls, not after.
+
+**The gate:**
+
+```bash
+node tools/mobilecheck.mjs --port=5273
+```
+
+It emulates a 390x844 phone at DPR 3 with touch pointers and no keyboard, then
+dispatches a real swipe on the left of the screen and asserts the player moved.
+That single assertion is the one that matters: a keyboard-only game passes
+`smoke.mjs`, passes every capture, looks perfect in a contact sheet, and is
+completely unplayable on a phone. It also checks horizontal overflow, the
+drawing-buffer size, tap-target sizes, and writes a phone-shaped screenshot —
+**look at it**, because a HUD designed on a 27-inch monitor fails in ways no
+assertion catches.
+
+Frame rate is REPORTED, not gated: headless Chromium without a usable GPU falls
+back to SwiftShader, where this kit's own example measures 9 fps at desktop
+resolution, and a threshold that fails every game on those machines just teaches
+people to ignore the output. Judge performance with `profile.mjs` on a real GPU,
+and phone performance on a real phone.
 
 ## Budgets
 

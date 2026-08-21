@@ -1,14 +1,14 @@
 {
   "name": "thrixel",
   "displayName": "Thrixel",
-  "description": "Build playable 3D games with AI-generated assets. Bundles the goal-to-game skill and the Thrixel connector: generate, refine, texture and download game-ready .glb models without leaving your coding agent.",
+  "description": "Build playable 3D games with AI-generated assets. Bundles the build-world skill and the Thrixel connector: generate, refine, texture and download game-ready .glb models without leaving your coding agent.",
   "author": {
     "name": "Thrixel",
     "email": "support@thrixel.com",
     "url": "https://thrixel.com"
   },
   "homepage": "https://thrixel.com",
-  "repository": "https://github.com/thrixel/goal-to-game",
+  "repository": "https://github.com/thrixel/build-world",
   "license": "Apache-2.0",
   "keywords": ["3d", "game", "assets", "glb", "unity", "threejs", "thrixel"],
   "skills": "./skills/",

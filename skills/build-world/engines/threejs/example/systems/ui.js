@@ -12,6 +12,8 @@
  *     transition is on the browser's clock, so its phase at the shutter depends
  *     on how long boot took.
  */
+import { TouchControls } from '../../lib/index.js';
+
 export class UiSystem {
   static id = 'ui';
   static deps = [];
@@ -52,6 +54,17 @@ export class UiSystem {
     ctx.events.on('bullet:impact', () => {
       this.hitUntil = ctx.time.elapsed + 0.12;
     });
+
+    /**
+     * On-screen controls, hidden until a real finger touches the screen — so a
+     * headless capture never sees them and the pixel gate is unaffected. The
+     * left of the screen is already a movement stick and the right already
+     * looks; these are for the actions a thumb cannot express as a drag.
+     */
+    this.touch = new TouchControls(ctx.input, {
+      host: this.host,
+      buttons: [{ action: 'jump', label: 'JUMP' }, { action: 'primary', label: 'FIRE' }],
+    }).attach();
   }
 
   /** Debug hook so the `hud` shot can capture the busiest state. */
@@ -77,9 +90,11 @@ export class UiSystem {
       }
     }
     this.hit.style.opacity = ctx.time.elapsed < this.hitUntil ? '0.9' : '0';
+    this.touch.sync();
   }
 
   dispose() {
+    this.touch.dispose();
     this.host.innerHTML = '';
   }
 }

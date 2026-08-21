@@ -65,6 +65,33 @@ PBR is what makes independently generated assets look like one set.
 Moving parts kept separate via `keep_groups` arrive as their own GameObjects with origins at
 their own geometric centre, so a wheel spins in place instead of orbiting the model root.
 
+## Publishing a Unity game to thrixel.world
+
+thrixel.world serves static files, so the publishable form of a Unity game is a
+**WebGL build**, not a standalone player. `File > Build Settings > WebGL > Build`
+produces a folder containing `index.html` plus `Build/` and `TemplateData/` — that
+folder, unmodified, is what `thrixel_publish_game` takes.
+
+Three things decide whether it is worth publishing at all, and all three are
+decided long before the build:
+
+- **Download size.** A Unity WebGL build starts in the tens of megabytes before
+  any of your assets. Enable Brotli compression in Player Settings, keep textures
+  compressed, and strip what the game does not use. A player on a phone network
+  abandons a slow load long before it finishes.
+- **Touch controls.** WebGL builds run on phones, and `Input.GetKey` does not.
+  Use the Input System with touch bindings, or add on-screen controls; a
+  keyboard-only Unity game is as dead on a phone as a keyboard-only three.js one.
+- **Memory.** Mobile Safari kills a tab that asks for too much. Set a
+  conservative memory size in Player Settings rather than the desktop default.
+
+Test the built folder locally with any static file server before publishing: a
+WebGL build that works in the editor and 404s on its own data file is a common
+and completely invisible failure. If the size or the memory ceiling makes the web
+build a bad experience, say so and publish anyway only if the user wants the link
+— an honest "this is a desktop game, the web build is heavy" beats a link that
+takes ninety seconds to load.
+
 ## Multiple concurrent game builds — ignore this in 95% of cases
 
 **Skip this entire section unless the user has explicitly said they are running several

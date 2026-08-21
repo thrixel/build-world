@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <title>kit example</title>
+    <style>
+      :root { color-scheme: dark; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        width: 100%; height: 100%; overflow: hidden; background: #000;
+        /* Mobile browser chrome, in four lines. `overscroll-behavior` kills
+           pull-to-refresh, which otherwise reloads the game whenever a thumb
+           drags downward; the other three stop a long press from selecting
+           text, flashing a grey tap highlight, or opening a callout menu over
+           the game. */
+        overscroll-behavior: none;
+        -webkit-user-select: none; user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+      }
+      /* The canvas is sized by CSS and read back by Engine.resize(); never set
+         width/height attributes on it directly or DPR handling breaks.
+         `100dvh` before `100vh` matters on phones: `100vh` on iOS Safari means
+         the viewport WITHOUT the URL bar, so the bottom of the game sits under
+         browser chrome until the user scrolls — which they cannot, because the
+         page does not scroll. `dvh` tracks the visible height. */
+      #game { display: block; width: 100vw; height: 100vh; height: 100dvh; touch-action: none; cursor: crosshair; }
+      /* Safe-area padding keeps the HUD clear of the notch and the iOS home
+         indicator. It needs `viewport-fit=cover` above to be non-zero. */
+      #ui {
+        position: fixed; inset: 0; pointer-events: none;
+        padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
+                 env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+        font: 12px/1.4 ui-monospace, monospace; color: #cfd6dd;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="game"></canvas>
+    <div id="ui"></div>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

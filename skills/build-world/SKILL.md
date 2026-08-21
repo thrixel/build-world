@@ -1,6 +1,6 @@
 ---
-name: goal-to-game
-description: Generates polished, fully playable 3D game prototypes in Unity, three.js, or Roblox Studio, with high quality 3D meshes generated through the Thrixel API. Use when the user wants to make a game, build a playable prototype, or generate 3D assets.
+name: build-world
+description: Builds polished, fully playable 3D game prototypes in Unity, three.js, or Roblox Studio with high-quality meshes from the Thrixel API, and publishes supported finished games to a public thrixel.world link. Use when the user wants to make a game, build a playable prototype, generate 3D assets, publish or host a game folder they already have, share a playable link, or list, rename, update, unpublish, or find a previously published game.
 ---
 
 # Before anything else - update this skill
@@ -23,7 +23,7 @@ For a plugin install, check staleness without touching git. If one segment of th
 tip of `main`:
 
 ```sh
-curl -s --max-time 5 https://api.github.com/repos/thrixel/goal-to-game/commits/main
+curl -sL --max-time 5 https://api.github.com/repos/thrixel/build-world/commits/main
 ```
 
 The returned `sha` starts with that hex segment -> this copy IS current. Continue, and do not
@@ -42,7 +42,8 @@ the USER'S OWN repository. Never skip it.
 git -C <the directory this file is in> rev-parse --show-prefix
 ```
 
-- Output is exactly `skills/goal-to-game/` -> this is its own clone, safe, go to step 3.
+- Output is exactly `skills/build-world/` (or `skills/goal-to-game/` in an older clone) -> this
+  is its own clone, safe, go to step 3.
 - Any other path -> git walked up into the user's project. **Stop. Do not pull anything.**
   Continue with the copy you have.
 - `not a git repository` -> this copy was downloaded rather than cloned, so it cannot update.
@@ -71,6 +72,33 @@ silently, and be sure it was right to. Asking git where this file sits relative 
 answers the question actually being asked, survives the folder being renamed, and gives the same
 answer whether the clone is at `~/.claude/skills/thrixel` or anywhere else.
 
+# What is being asked for - route before you read further
+
+This skill covers three jobs, and only one of them is a build. Decide which one
+you are on now, because the wrong route wastes a lot of the user's time: an agent
+asked to publish a folder that starts planning an asset list and calling
+`thrixel_account_status` looks like it did not read the request.
+
+**1. Build a game** ("make me a game", "build a X prototype"). The default, and
+the rest of this file. Continue below.
+
+**2. Publish a game that already exists** ("publish the game in ~/mygame", "put
+this online", "I have a game folder, can you host it"). **Skip everything between
+here and "Publishing to thrixel.world"** - the settings check, the asset list, the
+plan offer, the engine choice, every generation step. None of it applies: no
+assets are being generated, so nothing is being spent, so there is nothing to ask
+about. Go straight to **Publishing to thrixel.world**, and specifically to
+"Publishing a game you did not just build".
+
+**3. Manage what is already published** ("what have I published?", "what was the
+link for my racing game?", "take the golf one down", "rename it", "hide it from
+the directory"). One or two tool calls and an answer. Go straight to **Managing
+published games**. Do not read the rest of this file.
+
+Jobs 2 and 3 need no Thrixel plan, no cubes and no account balance - publishing is
+free. The only requirement is a signed-in account, which the MCP server handles;
+if it is not signed in, the tool says so.
+
 # Check your own settings first
 
 **Every question you ask costs the user something, so ask as few as possible.** Across the whole
@@ -96,15 +124,52 @@ your model but not your effort level, that is not worth a message either.
 # First time setup - go through setup and installation flow.
 IMPORTANT! MUST DO! If you are reading this, and the user has just asked you to install the skill into the project, then read [SetupAndInstallationFlow.md](SetupAndInstallationFlow.md) and you MUST follow the instructions there. Do this before anything else.
 
+(This is about INSTALLING the skill. A user who asked you to publish an existing folder, or
+asked what they have published, has not asked for an install - do not run the setup flow at
+them, and do not install a game engine to publish a folder that is already built.)
+
 # Overview
 
 Use Thrixel for 3D assets. Use the target engine to orchestrate game logic, UI, effects, and sounds.
-The game MUST be polished and visually stunning and visually stunning. The game should do everything thats
+The game MUST be polished and visually stunning. The game should do everything thats
 done in a AAA game, anything from high quality models, to physics, including:
 - UI (HUD, health bars, etc.)
 - A mix of Architect and Architect -> Detailer meshes from Thrixel
 - Rigorously playtested gameplay with intuitive keyboard controls
+- **Playable on a phone**, with touch controls and a HUD that fits a small screen
 - Optimized framerate of at least 30 FPS
+
+## Mobile is a requirement, not a port
+
+**Build every game to be playable on a phone from the start.** The finished game
+becomes a public link (see Publishing, below), the user sends that link to
+someone, and that someone opens it on a phone. A game that needs WASD is dead on
+arrival for most of the people who will ever see it.
+
+This is a design constraint before it is a technical one, so decide it while you
+are deciding the controls, not afterwards:
+
+- Every action needs a touch equivalent. A scheme built on a modifier key, a
+  scroll wheel, or four simultaneous keys cannot be retrofitted onto two thumbs.
+- On-screen controls have to be visible. Touch input with no visible controls is
+  the most common mobile failure and it does not read as a bug to the player:
+  they see a 3D scene, tap once, and leave.
+- HUD text and buttons have to work at 390 px wide, with 44 px as the floor for
+  anything pressable.
+- A phone reports `devicePixelRatio` 3, so an uncapped renderer asks a phone GPU
+  for several times the pixels of a laptop. Cap it.
+
+The three.js kit does most of this for you: `lib/input.js` feeds touch into the
+same input snapshot the keyboard feeds (so gameplay code needs no touch branch),
+`lib/touchui.js` draws the on-screen controls, and `tools/mobilecheck.mjs` is the
+gate - it emulates a phone with no keyboard and asserts a thumb can actually move
+the player. Read the Mobile section of
+[engines/threejs/threejs.md](engines/threejs/threejs.md). For Unity, the
+equivalent notes are in [engines/unity.md](engines/unity.md) under Publishing.
+
+**Verify it, do not assume it.** `node tools/mobilecheck.mjs` before you call a
+game done, and look at the screenshot it writes - a HUD designed on a big monitor
+fails in ways no assertion catches.
 
 Pay special attention to mesh quality, realism, character quality, to ensure it looks AAA.
 Work alone, do NOT launch subagents to do work - subagents will interfere with each other and make
@@ -112,23 +177,24 @@ everything more difficult. However, frequently launch subagents as harsh critic 
 your work. If the subagent determines the game doesn't look absolutely AAA, you must continue the
 build until the subagent decides the game looks good enough.
 
-# Plan the asset list - REQUIRED first step
-Once the user has asked for a game, do this FIRST. It applies to every game, whether or not you
-walked them through [SetupAndInstallationFlow.md](SetupAndInstallationFlow.md) this session:
-most games are built by someone who installed the skill weeks ago and never sees that file again.
+# Plan the asset list - REQUIRED first step when BUILDING a game
+**"Required" means required on the build path.** If the user asked you to publish a folder
+they already have, or asked about games they published earlier, none of this section applies -
+no assets are being generated, so there is nothing to plan or to spend. Go to Publishing or to
+Managing published games.
 
-**Size the asset list to the game, never to the balance.** Write out every 3D asset the game
-needs in order to be good, then rank that list by how much the player will notice each item.
-Build in that order. Do not shorten the list, downgrade a tier, or cut a feature because of what
-the balance says - a game planned around a cube budget is a smaller, duller game, and the game is
-the point.
-
+Otherwise, once the user has asked for a game, do this FIRST. It applies to every game, whether
+or not you walked them through [SetupAndInstallationFlow.md](SetupAndInstallationFlow.md) this
+session: most games are built by someone who installed the skill weeks ago and never sees that
+file again.
 
 **Size the asset list to the game, never to the balance.** Write out every 3D asset the game
 needs in order to be good, then rank that list by how much the player will notice each item.
 Build in that order. The balance decides how far down that list this session gets; it does not
-decide how big the idea is. Do not shorten the list, downgrade a tier, or cut a feature before
-the user has had a chance to say how ambitious they want this build to be.
+decide how big the idea is. Do not shorten the list, downgrade a tier, or cut a feature because
+of what the balance says - a game planned around a cube budget is a smaller, duller game, and
+the game is the point. Not before the user has had a chance to say how ambitious they want this
+build to be, either.
 
 
 **Call `thrixel_account_status` and read the real numbers.** Do not assume a plan. It returns the
@@ -647,3 +713,183 @@ UVs, which are stored per-corner, so each island keeps its own coordinates.
 
 Better still, do not decimate by hand at all - `thrixel_reduce_triangles` is free and already
 correct.
+
+# Publishing to thrixel.world - local first, ship when it's done
+
+Every game can go live on the public internet at `<slug>.thrixel.world` - a real URL the
+user can text to a friend, who plays it in a browser with nothing to install. Publishing is
+free and does not consume cubes.
+
+**The timing rules immediately below apply when YOU built the game in this session.** If the
+user asked you to publish a folder they already have, they have already decided; skip to
+"Publishing a game you did not just build".
+
+**While building and iterating: localhost only.** Never publish as a way to demo work in
+progress. The dev server reloads in milliseconds; a publish is a build plus an upload, and a
+half-finished game on a public URL is not a good look for the user. Do not bring publishing
+up while there is still visible work on the table.
+
+**When the game reaches a natural finish line, offer it once.** Signals: the user says some
+version of "it's done", "I love it", "how do I show this to someone" - or asks for a
+recording, a share link, or "what now". Then offer exactly this, once:
+
+> Want me to publish it to thrixel.world? You'll get a public link anyone can play in a
+> browser. It's free, and republishing later keeps the same link.
+
+If they decline, do not ask again this session. If they ask what publishing means first,
+lead with the two facts that matter: the game becomes publicly playable at a random
+`name.thrixel.world` address, and they can unpublish or update it at any time.
+
+## Publishing a game you did not just build
+
+The user points at a folder and asks for it to go online. This is a complete job on
+its own: **no asset planning, no plan or balance talk, no engine choice, nothing is
+spent.** Publishing is free.
+
+**Look at the directory before you do anything with it.** `ls` it, read its
+`package.json` if it has one, open its `index.html`. You are about to put its
+contents on the public internet under the user's account, and you cannot judge any
+of what follows without having seen what is in there. Then work out which of these
+you have:
+
+| what you find | what to do |
+|---|---|
+| `index.html` at the top, next to `.js` / `.css` / asset folders | Ready. Go to "Check it before it is public". |
+| `package.json`, `src/`, `vite.config.*`, maybe `dist/` | A source tree. **Build it first** - see "Assemble the bundle". Raw source serves a black screen. |
+| `index.html` + `Build/` + `TemplateData/` | A Unity WebGL build. Ready as-is; see [engines/unity.md](engines/unity.md) for the size and memory caveats worth mentioning. |
+| A folder whose game is one level down (`game/`, `dist/`, `build/`) | Publish THAT folder, not its parent. |
+| No `index.html` anywhere | Not a web game. Say so plainly and ask what they meant - a Unity/Unreal project folder, a `.exe`, or a Python game cannot be published; thrixel.world serves static web files only. |
+
+Then go through the checks below, publish, and give them the URL. The whole job is
+usually under two minutes.
+
+## Assemble the bundle
+
+**Skip this section if the folder is already a built bundle** - `index.html` at the
+top next to its assets - and go straight to "Check it before it is public".
+
+`thrixel_publish_game` wants a directory of static files with `index.html` at its
+ROOT. For a Vite project - which is what the three.js kit produces - assemble the
+shippable form first:
+
+1. **Build.** `npx vite build` -> `dist/`. Source form does not work on a static
+   host: the dev server resolves `import 'three'`; nothing on a CDN will. If
+   `node_modules/` came from a different machine (a zip from a Mac, say), delete it
+   and `npm ci` first, or the build fails on the wrong platform binaries.
+2. **Runtime assets.** Anything the game fetches at runtime (`/assets/*.glb`,
+   `manifest.json`, audio) is NOT bundled by Vite unless it sits in `public/`. Copy
+   those directories into the bundle next to `dist/index.html`, preserving their
+   paths.
+3. **Cover.** Put a representative screenshot at the bundle root as `cover.png` - it
+   becomes the game's card in the public thrixel.world directory. If you built the
+   game, you already have shots from the capture harness; pick the best one. If the
+   folder came from the user, take one - open the game and screenshot it, or ask
+   them for a picture they like. A game without a cover gets a plain placeholder,
+   which is the difference between a card someone clicks and one they scroll past.
+4. **Serve the assembled bundle locally** and confirm the game loads from THOSE
+   files. Any static file server will do. This catches a missing asset directory in
+   seconds, and it is the difference between publishing a game and publishing a
+   black screen.
+
+## Check it before it is public
+
+The server already refuses the things a server can judge: path traversal, symlinks,
+zip bombs, absolute paths. It skips what is merely junk - dotfiles, `node_modules/`,
+lockfiles, stray scripts, unknown file types - silently and non-fatally, so you do
+not need to prune those by hand.
+
+What the server cannot judge is what the files MEAN, and that is your job, because
+you are the only one who has read them. Four things, quickly:
+
+1. **Secrets.** This is the one that actually happens, and it is silent. A `.env`
+   file is skipped by the server, but **Vite inlines every `VITE_*` variable into
+   the built bundle**, and hand-written keys live in source too. Grep the assembled
+   bundle - not the source tree - before it ships:
+
+   ```sh
+   grep -rIEn "sk-[A-Za-z0-9]{16}|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{20}|ghp_[A-Za-z0-9]{20}|xox[baprs]-|-----BEGIN [A-Z ]*PRIVATE KEY" <bundle> | head
+   ```
+
+   Anything that matches: **stop, tell the user which file and which key**, and do
+   not publish until it is out. A key on a public CDN is a key that is gone. Note
+   that a game calling an API from the browser needs the key in the browser, so
+   "just move it to a variable" does not fix it - the fix is a key that is safe to
+   be public, or a server the game talks to instead.
+2. **Private files that came along for the ride.** Notes, screenshots of other
+   things, documents, exports - a game folder often accumulates them. Name anything
+   that does not look like part of the game and let the user decide.
+3. **Content that is not theirs to publish.** Downloaded models, ripped audio,
+   someone else's game. Local play and a public URL under their name are different
+   things. If the folder is obviously somebody else's work, ask before publishing.
+4. **What it actually is.** Publish games. Do NOT publish a page that imitates a
+   real company's login, a payment form, a fake storefront, or anything built to
+   look like a service it is not - regardless of how it is described. That is
+   phishing infrastructure, and it is not a judgement call about the user's
+   intentions: the platform must not host it. If a folder is that, say plainly you
+   cannot publish it, and do not offer a workaround.
+
+Then two facts about the game itself, which are not problems but must be said out
+loud before the link exists:
+
+- **A server component will be dead.** A multiplayer relay, an LLM proxy, a score
+  backend - only static files ship. Say which feature stops working, and make sure
+  the game degrades gracefully rather than hanging on a failed fetch.
+- **Phones.** Run `node tools/mobilecheck.mjs` if this is a three.js kit game. If
+  it is not, at least open the bundle at a phone-sized viewport and try it with a
+  mouse-as-thumb. Most people who receive the link will be on a phone; publishing a
+  keyboard-only game means most of them see a scene they cannot play.
+
+## Publish
+
+Use `thrixel_publish_game` if your Thrixel MCP server has it. **If the tool is not in your
+tool list, publishing has not reached your server version yet: say the feature is rolling
+out and offer the localhost URL instead. Do not attempt the REST API by hand.**
+
+```
+thrixel_publish_game(directory="<the assembled bundle>", title="Order Up!")
+```
+
+It zips the directory, uploads it, waits for the deploy and returns the live URL.
+Give the user the URL as the first line of your reply - it is the thing they asked
+for. A random address like `zesty-panda-14743.thrixel.world` is normal and is
+theirs permanently.
+
+## After the first publish
+
+- **Updates:** republish with the same `game_id` - the link never changes, and the old
+  version keeps serving until the new one is fully deployed, so a failed republish never
+  takes a live game down. Offer this when the user makes further changes to a published game.
+- **Unpublish** takes the game offline immediately; the address stays theirs and
+  republishing revives it.
+- The game appears in the public directory at thrixel.world; `listed=false` keeps the link
+  working but takes it out of the directory - offer that if the user wants "link only for
+  friends".
+
+# Managing published games
+
+The user does not have to be building anything to ask about what they have already
+published. Answer these directly, without touching the rest of this file.
+
+**If these tools are not in your tool list**, publishing has not reached your Thrixel
+MCP server version yet. Say so in one line, point them at https://thrixel.world where
+their games are listed, and stop. Do not call the REST API by hand and do not guess at
+what they have published.
+
+| they ask | do this |
+|---|---|
+| "what have I published?" / "list my games" | `thrixel_list_games()` - returns title, status, URL and `game_id` for each |
+| "what's the link for X?" | `thrixel_list_games()`, then give them the URL for X. Do not make them scroll a table for one link. |
+| "take X offline" / "unpublish X" | Get the `game_id` from `thrixel_list_games()`, then `thrixel_unpublish_game(game_id=...)`. Tell them the address stays theirs and republishing revives it. |
+| "hide X from the directory but keep the link" | `thrixel_update_game(game_id=..., listed=false)`. This is the "link only for friends" mode - the game stays fully playable. |
+| "rename X" | `thrixel_update_game(game_id=..., title="...")` |
+| "update X with my changes" | Assemble the bundle again (rebuild it if it is a source tree), then `thrixel_publish_game(directory=..., game_id=...)`. Same URL, and the live version keeps serving until the new one is ready. |
+
+Two rules for this whole set:
+
+- **Look up the `game_id`; never ask the user for it.** They know their game by its
+  name, and `thrixel_list_games` maps names to ids in one free call. Asking for an
+  id is asking them to do your lookup.
+- **Confirm before unpublishing.** It takes the game offline for everyone
+  immediately, and a link the user has already sent to people stops working. Name
+  the game and its URL and get a yes first. Renaming, relisting and republishing
+  need no confirmation - they are all reversible and none of them break a link.

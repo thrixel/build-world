@@ -107,6 +107,7 @@ VERIFY BEFORE YOU CLAIM ANYTHING
   npx vite build
   node tools/smoke.mjs --port=<port>
   node tools/capture.mjs --shots=<the shots this affects> --out=/tmp/<you> --port=<port>
+  node tools/mobilecheck.mjs --port=<port>    (if you touched input, UI or the renderer)
   <the gate, if this is a no-visual-change pass>
 
 REPORT
