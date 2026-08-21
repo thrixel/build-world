@@ -1518,7 +1518,7 @@ NzY1ODk2YjU5]]></BinaryString>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">28fdfac4bf5da1a10a90e24c000003c5</UniqueId>
 			</Properties>
-			<Item class="LocalScript" referent="RBXBA86958431E54E86AE83E40683DA8C0B">
+			<Item class="LocalScript" referent="RBXEC9FE3ECC0334ACF914275E526DD8442">
         <Properties>
           <string name="Name">HUD</string>
           <string name="Source"><![CDATA[local Players = game:GetService("Players")
@@ -1549,13 +1549,19 @@ update()
 ]]></string>
         </Properties>
       </Item>
-      <Item class="LocalScript" referent="RBXB80691D12C7040BCBF79FD645BBA81D3">
+      <Item class="LocalScript" referent="RBXBE72DCE6550E4B46B1B5BBB0A8D4A874">
         <Properties>
           <string name="Name">ThrixelCameraTour</string>
           <string name="Source"><![CDATA[local CollectionService = game:GetService("CollectionService")
 local ContextActionService = game:GetService("ContextActionService")
 local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
+
+-- Keep the published experience on Roblox's normal player camera. Evidence
+-- capture opts in explicitly from Studio by setting this Workspace attribute.
+if not RunService:IsStudio() or Workspace:GetAttribute("ThrixelEvidenceMode") ~= true then
+    return
+end
 
 local expectedName = Workspace:FindFirstChild("delivery-cart-grouped")
     and "ThrixelDeliveryCart"
@@ -1633,7 +1639,7 @@ ContextActionService:BindAction(
 ]]></string>
         </Properties>
       </Item>
-      <Item class="LocalScript" referent="RBX72A2C08531314D1CB31A14A7125110E8">
+      <Item class="LocalScript" referent="RBX7B576FD12D334001B366D207D624802F">
         <Properties>
           <string name="Name">ThrixelPerformance</string>
           <string name="Source"><![CDATA[local HttpService = game:GetService("HttpService")
@@ -2019,7 +2025,7 @@ print("THRIXEL_PERFORMANCE_JSON=" .. HttpService:JSONEncode(result))
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">28fdfac4bf5da1a10a90e24c000003a0</UniqueId>
 		</Properties>
-		<Item class="Script" referent="RBXCFF8B1904F9C412BA34F9A13078C5257">
+		<Item class="Script" referent="RBX3DAF1EE64F6B452989B505C4968306CB">
       <Properties>
         <string name="Name">Main</string>
         <token name="RunContext">0</token>
@@ -2172,7 +2178,7 @@ end)
 ]]></string>
       </Properties>
     </Item>
-    <Item class="Script" referent="RBX5F4CD0E512AF4036BB16B494E40DEF27">
+    <Item class="Script" referent="RBX1574DFA7919B44CD97238C4F6DBD3EC6">
       <Properties>
         <string name="Name">ThrixelSelftest</string>
         <token name="RunContext">0</token>

@@ -3,6 +3,12 @@ local ContextActionService = game:GetService("ContextActionService")
 local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 
+-- Keep the published experience on Roblox's normal player camera. Evidence
+-- capture opts in explicitly from Studio by setting this Workspace attribute.
+if not RunService:IsStudio() or Workspace:GetAttribute("ThrixelEvidenceMode") ~= true then
+    return
+end
+
 local expectedName = Workspace:FindFirstChild("delivery-cart-grouped")
     and "ThrixelDeliveryCart"
     or "ThrixelLighthouse"
