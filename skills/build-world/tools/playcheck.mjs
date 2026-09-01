@@ -26,9 +26,17 @@
  *   fits           no horizontal overflow, canvas fills the screen, and the
  *                  drawing buffer is not asking a phone GPU for desktop pixels
  *
+ * It also LEAVES THE COVER BEHIND. The browser is already open, the game is
+ * already running and already being driven, so the same session writes
+ * cover.png into the bundle - the still that listings show. It is never
+ * written over one the author supplied, and not written at all if the checks
+ * failed: artwork for a broken game is worse than none. Pass --no-capture to
+ * skip it.
+ *
  *   node tools/playcheck.mjs ./dist
  *   node tools/playcheck.mjs https://slug.thrixel.world     # after publishing
  *   node tools/playcheck.mjs ./dist --shot=check.png --keep-serving
+ *   node tools/playcheck.mjs ./dist --no-capture            # skip the cover
  *
  * Exit codes: 0 pass, 1 the bundle is broken, 2 could not check (no browser).
  * Treat 2 as "unknown", never as "fine".
@@ -251,12 +259,92 @@ async function run(label, opts) {
   await page.close();
 }
 
+// ---------------------------------------------------------------------------
+// Cover capture
+//
+// Listings show a still, and it comes from the bundle itself (cover.png at its
+// root), which is why it can be produced here: this process already has a
+// browser open with the game running in it.
+//
+// WITHDRAWN: this also recorded a preview.webm, a five-second silent clip the
+// listings played on hover. The idea is sound and the plumbing was fine; the
+// clips were not. The input loop below drives WASD and Space, so a world that
+// answers to clicks or drags recorded five motionless seconds and shipped a
+// 2 MB image pretending to be a video - worse than no clip, because the card
+// then promises something that is not there. Restoring it needs three things
+// first: probe which inputs actually move the picture (playcheck already
+// measures exactly that, as respondedPct, and capture never read it), treat
+// "no input at all" as a candidate since many scenes animate on their own,
+// and refuse to ship a clip whose frames do not change.
+//
+// Capture happens in its own context rather than piggy-backing on a check run:
+// the checks want a clean, undisturbed first paint, and this context is scaled
+// to the card's aspect rather than to the viewport each check asserts about.
+//
+// The input pass is still worth its two seconds for a still image. It is what
+// gets the shot past a title screen and into something that looks like the
+// game.
+// ---------------------------------------------------------------------------
+
+const COVER_W = 960, COVER_H = 540;   // 16:9, the aspect every listing card uses
+const COVER_DRIVE_MS = 2000;
+
+async function capture(outDir) {
+  const has = async (name) => {
+    try { await stat(join(outDir, name)); return true; } catch { return false; }
+  };
+  // Author-supplied artwork always wins. Someone who picked a cover meant it.
+  const wantCover = !(await has('cover.png') || await has('cover.jpg')
+    || await has('cover.jpeg') || await has('cover.webp'));
+  if (!wantCover) return { skipped: 'bundle already has a cover' };
+
+  const context = await browser.newContext({
+    viewport: { width: COVER_W, height: COVER_H },
+  });
+  const page = await context.newPage();
+  const made = {};
+  try {
+    await page.goto(base, { waitUntil: 'load', timeout: 60000 });
+    await page.waitForTimeout(2500);   // boot, load assets, draw a few frames
+
+    // Drive briefly before shooting, so the still shows the game rather than
+    // whatever its title screen happens to be.
+    const until = Date.now() + COVER_DRIVE_MS;
+    while (Date.now() < until) {
+      await page.keyboard.down('KeyW');
+      await page.mouse.move(300 + Math.random() * 360, 260 + Math.random() * 200, { steps: 10 });
+      await page.waitForTimeout(220);
+      await page.keyboard.up('KeyW');
+      await page.keyboard.press('Space');
+      await page.waitForTimeout(220);
+    }
+    await page.screenshot({ path: join(outDir, 'cover.png') });
+    made.cover = 'cover.png';
+  } finally {
+    await page.close();
+    await context.close();
+  }
+  return made;
+}
+
 try {
   await run('desktop', { viewport: { width: 1280, height: 720 } });
   await run('phone', { viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, hasTouch: true, isMobile: true });
   if (server?.missing.length) {
     ck('every referenced file is in the bundle', false,
        `missing: ${[...new Set(server.missing)].slice(0, 6).join(', ')}`);
+  }
+  // Only after the checks, and only if they passed: a cover for a game that
+  // throws on load advertises a broken thing. Skipped for a URL target too -
+  // there is no bundle directory to write into.
+  if (ok && !isUrl && flag('no-capture') !== true) {
+    try {
+      report.artwork = await capture(resolve(target));
+    } catch (e) {
+      // Never fail a passing bundle over artwork. The listing falls back to a
+      // generated gradient, which is a complete answer.
+      report.artwork = { error: e.message };
+    }
   }
 } catch (e) {
   ck('fatal', false, e.message);

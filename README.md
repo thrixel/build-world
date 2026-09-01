@@ -185,6 +185,14 @@ ls ~/.claude/skills/   # thrixel listed
 
 If either is missing, Claude will build the game without Thrixel and never mention it.
 
+**Cloned before the rename?** `github.com/thrixel/goal-to-game` still redirects here, so an older
+clone keeps working and keeps updating itself. All it leaves behind is the old name, in your folder
+and in `git remote -v`. Point it at the current URL once:
+
+```bash
+git -C ~/.claude/skills/thrixel remote set-url origin https://github.com/thrixel/build-world
+```
+
 **3. Ask for a game**
 
 Identical to step 3 above, same command and all:

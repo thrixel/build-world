@@ -150,7 +150,7 @@ If they are already signed in, drop the login half and give them just
 After the restart you land in Case A, or Case B if the sign-in did not complete.
 
 This blocking rule applies to getting connected ONLY. The upgrade prompt further down is
-explicitly non-blocking - see "Offer the upgrade (free plan only)".
+explicitly non-blocking - see "HARD STOP 1: the plan question (free plan only)".
 
 ### If `uvx` is missing
 
@@ -182,7 +182,7 @@ The same applies if the Thrixel tools are unavailable for any other reason. With
 ## Money: see SKILL.md
 
 The upgrade offer and what to do when the cubes run out **moved to SKILL.md**, under
-"Offer the upgrade (free plan only)".
+"HARD STOP 1: the plan question (free plan only)".
 
 They live there because they are not installation steps. They happen on every game, forever,
 while this file is read once. Leaving them here meant a returning user never saw them: the

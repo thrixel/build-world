@@ -208,16 +208,110 @@ export function installShotApi(
  * you add or remove an expensive boot step and still prove the pixels did not
  * move.
  */
+// Told to whoever framed us, as well as set on window.
+//
+// window.__READY__ works for the capture harness, which drives this page from
+// the same process. It cannot work for a host page: a published world is on
+// its own registrable domain, so a parent frame is forbidden from reading any
+// variable in here. A postMessage crosses that line by design, and it is the
+// difference between a host that can hide its loading state at the exact
+// frame the world starts drawing and one that has to guess.
+//
+// targetOrigin is '*' deliberately. There is nothing secret in the message,
+// and the alternative is baking the host's origin into every published
+// bundle - which would then be wrong for anyone who frames it elsewhere.
+function post(message) {
+  try {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ source: 'thrixel-world', ...message }, '*');
+    }
+  } catch {
+    // A sandbox that forbids it. The world still runs and nothing here is
+    // load-bearing for play; the host falls back to its own signals.
+  }
+}
+
+function announceReady() {
+  window.__READY__ = true;
+  post({ type: 'ready' });
+  sendCover();
+}
+
+// A still of the world, taken by the world.
+//
+// Anything published through the skill already has artwork - playcheck runs
+// the game, drives it for a couple of seconds and screenshots it into the
+// bundle, which is a better picture than this one. This is for the bundle
+// that arrived another way: somebody zipping their build by hand and
+// uploading it, which skips playcheck and lands with no picture at all.
+//
+// Two things make it fiddly, and both are handled by retrying rather than by
+// timing luck:
+//
+//  1. A WebGL canvas without preserveDrawingBuffer is EMPTY to toDataURL
+//     unless it is read in the same frame it was drawn. Whether our rAF
+//     lands after the engine's is not something a library can promise, so
+//     this tries again next frame instead of assuming.
+//  2. A frame taken the instant boot completes is often a loading screen, or
+//     a scene whose models have not arrived. So it waits first.
+//
+// The blank check is what makes the retry safe: a uniform image is never
+// sent, so the worst case is no cover rather than a grey rectangle stored as
+// one.
+const COVER_WAIT_MS = 2500;
+const COVER_MAX_W = 1280;
+const COVER_TRIES = 8;
+
+function frameIfNotBlank(canvas) {
+  const scale = Math.min(1, COVER_MAX_W / (canvas.width || COVER_MAX_W));
+  const flat = document.createElement('canvas');
+  flat.width = Math.max(1, Math.round(canvas.width * scale));
+  flat.height = Math.max(1, Math.round(canvas.height * scale));
+  const ctx = flat.getContext('2d');
+  if (!ctx) return null;
+  ctx.drawImage(canvas, 0, 0, flat.width, flat.height);
+
+  // Sample a grid rather than every pixel: enough to tell a rendered scene
+  // from a cleared buffer, cheap enough to run eight times.
+  const { data } = ctx.getImageData(0, 0, flat.width, flat.height);
+  let min = 255;
+  let max = 0;
+  for (let i = 0; i < data.length; i += 4 * 997) {
+    const lum = (data[i] + data[i + 1] + data[i + 2]) / 3;
+    if (lum < min) min = lum;
+    if (lum > max) max = lum;
+  }
+  if (max - min < 8) return null;   // one flat colour: nothing was drawn
+  return flat.toDataURL('image/jpeg', 0.75);
+}
+
+function sendCover() {
+  const canvas = window.__ENGINE__?.canvas || document.querySelector('canvas');
+  if (!canvas) return;
+  let left = COVER_TRIES;
+  const attempt = () => {
+    let shot = null;
+    try {
+      shot = frameIfNotBlank(canvas);
+    } catch {
+      return;   // tainted or unreadable: not worth another try
+    }
+    if (shot) post({ type: 'cover', dataUrl: shot });
+    else if (--left > 0) requestAnimationFrame(attempt);
+  };
+  setTimeout(() => requestAnimationFrame(attempt), COVER_WAIT_MS);
+}
+
 export async function signalReady(shotApi, bootFrames = 3) {
   if (shotApi.lockstep) {
     await shotApi.pump(bootFrames);
-    window.__READY__ = true;
+    announceReady();
     return;
   }
   let warm = 0;
   const probe = () => {
     if (++warm >= bootFrames) {
-      window.__READY__ = true;
+      announceReady();
       return;
     }
     requestAnimationFrame(probe);
