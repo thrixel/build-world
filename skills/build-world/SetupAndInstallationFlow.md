@@ -298,3 +298,7 @@ powershell -c "irm https://community.chocolatey.org/install.ps1|iex"
 # Download and install Node.js:
 choco install nodejs
 ```
+
+### Roblox Installation
+See `engines/roblox/setup.md`.
+
