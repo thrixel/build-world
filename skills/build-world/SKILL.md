@@ -1005,8 +1005,39 @@ tool list, publishing has not reached your server version yet: say the feature i
 out and offer the localhost URL instead. Do not attempt the REST API by hand.**
 
 ```
-thrixel_publish_game(directory="<the assembled bundle>", title="Order Up!")
+thrixel_publish_game(
+    directory="<the assembled bundle>",
+    title="Order Up!",
+    prompt="a restaurant game where I plate dishes before the timer runs out",
+    controls="Arrow keys to move, Space to plate, Esc to pause",
+    controls_touch="Drag a dish onto a plate, tap the bell to serve",
+    engine="threejs",
+)
 ```
+
+**Pass the last three every time. Nothing can recover them later.**
+
+- **`prompt`** - what they asked for, in THEIR words, not your summary of what you
+  built. First publish: the request the game came from. Republish: the change they
+  asked for this time. It exists only in this conversation; once the session ends it
+  is gone, and the game page has a blank where the reason should be.
+- **`controls`** and **`controls_touch`** - one line each, and both must be what
+  you actually WIRED UP rather than what you meant to. `playcheck` already drove
+  real keys AND a real touch drag to pass this bundle, so you have tested both:
+  say those. A stranger who opens this from the gallery and presses the wrong
+  thing concludes the game is broken, which makes a wrong answer here worse than
+  none.
+
+  The page picks between them by POINTER TYPE, not screen size, so a phone gets
+  the touch line and a laptop gets the keyboard one even at the same width. Omit
+  `controls_touch` when the game plays the same either way - an absent line falls
+  back to `controls`, so leaving it out says "no difference" rather than "no
+  phone support".
+- **`engine`** - `threejs`, `unity` or `roblox`. You settled this before generating
+  anything; pass that answer.
+
+The project is attached for you - the MCP server knows which one the assets came
+out of, so there is nothing to look up and nothing to pass.
 
 It zips the directory, uploads it, waits for the deploy and returns the live URL.
 Give the user the URL as the first line of your reply - it is the thing they asked
@@ -1075,7 +1106,7 @@ published - the user's own record of their links is better than a guess.
 | "take X out of the gallery" | Only if it is actually in it. `thrixel_update_game(game_id=..., listed=false)` ASKS to be taken off; staff answer, and it stays listed until they do. On a game that was never listed this is a 409, so check `thrixel_list_games()` first. The link is unaffected either way. |
 | "get X featured" / "put X in the gallery" | `thrixel_update_game(game_id=..., listed=true)`. Tell them staff review it, and that the link keeps working regardless. Do not promise a timescale. |
 | "rename X" | `thrixel_update_game(game_id=..., title="...")` |
-| "update X with my changes" | Assemble the bundle again (rebuild it if it is a source tree), then `thrixel_publish_game(directory=..., game_id=...)`. Same URL, and the live version keeps serving until the new one is ready. |
+| "update X with my changes" | Assemble the bundle again (rebuild it if it is a source tree), then `thrixel_publish_game(directory=..., game_id=..., prompt="<what they asked for this time>")`. Same URL, and the live version keeps serving until the new one is ready. Pass `controls` again only if they changed. |
 
 Two rules for this whole set:
 
