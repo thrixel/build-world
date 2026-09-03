@@ -1011,6 +1011,7 @@ thrixel_publish_game(
     prompt="a restaurant game where I plate dishes before the timer runs out",
     controls="Arrow keys to move, Space to plate, Esc to pause",
     controls_touch="Drag a dish onto a plate, tap the bell to serve",
+    description="A restaurant kitchen where the orders never stop and the timer always wins.",
     engine="threejs",
 )
 ```
@@ -1033,6 +1034,12 @@ thrixel_publish_game(
   `controls_touch` when the game plays the same either way - an absent line falls
   back to `controls`, so leaving it out says "no difference" rather than "no
   phone support".
+- **`description`** - one sentence about the GAME, for somebody who has never seen
+  it. This is not the prompt reworded. The prompt is what they asked YOU for and it
+  stays on their own page; this is the blurb a stranger reads in the public gallery,
+  so it goes on the card there and nowhere near their request. Describe what the
+  game IS, not what you built or how. "A restaurant kitchen where the orders never
+  stop" - not "I built a restaurant game with a timer".
 - **`engine`** - `threejs`, `unity` or `roblox`. You settled this before generating
   anything; pass that answer.
 
@@ -1106,7 +1113,7 @@ published - the user's own record of their links is better than a guess.
 | "take X out of the gallery" | Only if it is actually in it. `thrixel_update_game(game_id=..., listed=false)` ASKS to be taken off; staff answer, and it stays listed until they do. On a game that was never listed this is a 409, so check `thrixel_list_games()` first. The link is unaffected either way. |
 | "get X featured" / "put X in the gallery" | `thrixel_update_game(game_id=..., listed=true)`. Tell them staff review it, and that the link keeps working regardless. Do not promise a timescale. |
 | "rename X" | `thrixel_update_game(game_id=..., title="...")` |
-| "update X with my changes" | Assemble the bundle again (rebuild it if it is a source tree), then `thrixel_publish_game(directory=..., game_id=..., prompt="<what they asked for this time>")`. Same URL, and the live version keeps serving until the new one is ready. Pass `controls` again only if they changed. |
+| "update X with my changes" | Assemble the bundle again (rebuild it if it is a source tree), then `thrixel_publish_game(directory=..., game_id=..., prompt="<what they asked for this time>")`. Same URL, and the live version keeps serving until the new one is ready. Pass `controls` and `description` again only if they changed. |
 
 Two rules for this whole set:
 
