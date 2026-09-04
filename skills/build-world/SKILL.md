@@ -5,18 +5,37 @@ description: Builds polished, fully playable 3D game prototypes in Unity, Roblox
 
 # The two things you may not decide alone
 
-Everything else in this file is guidance you apply with judgement. These two are gates. Each
-is a question you ask and then WAIT for an answer to, in plain text if your harness has no
-option picker. Asking and acting in the same turn is not asking.
+Everything else in this file is guidance you apply with judgement. A gate is a question you ask
+and then wait for an answer to, in plain text if your harness has no option picker. Asking and
+acting in the same turn is not asking.
 
-1. **Before the first asset-generation call, on any free account** - the plan question. Paid
-   plans go straight through. See "HARD STOP 1".
-2. **At the first build that plays end to end** - the publish question, instead of handing
-   over a localhost URL. See "HARD STOP 2".
+A build has at most two of them, and which two depends on the account:
 
-If you are about to call `thrixel_create_model` or `thrixel_sculpt_model` and have not asked
-the first one, or about to give a `localhost:` address and have not asked the second, stop and
-ask now.
+| account | first gate | second gate |
+|---|---|---|
+| free | **HARD STOP 1** - the plan question, before the first generation call | **HARD STOP 2** - the publish question, at the first build that plays end to end |
+| paid | **HARD STOP 2** - the publish question, at the first build that plays end to end | **HARD STOP 3** - the finish-it question, but only if the cubes ran out with assets still unbuilt |
+
+Behind the asymmetry is one rule: **each account is asked about money at most once per build.**
+
+- A **free** account is asked at the start, while the answer can still shape what gets made, and
+  is not asked again. If the build later stops short, a line saying so is enough; they answered
+  this question already.
+- A **paid** account is not asked at the start, since interrupting somebody who already pays
+  buys nothing. Its money question, if there is one, comes at the end, where a finished game is
+  on screen and the gap in it has names.
+
+**HARD STOP 3 often does not happen at all.** It needs both halves: the cubes ran out, AND there
+are assets from the plan still unbuilt. A build that had enough cubes and finished its list ends
+at HARD STOP 2, with the link and nothing further to ask.
+
+The balance forecast is not a gate. On every plan, say in one line where the balance runs out in
+the ranked list before generating anything (see "Draw the line through the list"), then carry on
+without waiting. It is what keeps the end of the build from being a surprise.
+
+If you are about to call `thrixel_create_model` or `thrixel_sculpt_model` on a free account and
+have not asked HARD STOP 1, or about to give a `localhost:` address and have not asked HARD
+STOP 2, ask now.
 
 # Before anything else - update this skill
 
@@ -118,8 +137,8 @@ asked to publish a folder that starts planning an asset list and calling
 **1. Build a game** ("make me a game", "build a X prototype"). The default, and
 the rest of this file. Continue below.
 
-> Both gates from the top of this file apply to route 1, and only to route 1.
-> Routes 2 and 3 spend nothing and publish nothing new, so neither gate fires there.
+> The gates from the top of this file apply to route 1, and only to route 1.
+> Routes 2 and 3 spend nothing and publish nothing new, so none of them fires there.
 
 **2. Publish a game that already exists** ("publish the game in ~/mygame", "put
 this online", "I have a game folder, can you host it"). **Skip everything between
@@ -254,6 +273,58 @@ packs) and `thrixel_account_status` for this account. Both read live from Thrixe
 show the user is always what they will actually be charged. Numbers written into this file
 eventually are not.
 
+## Draw the line through the list before you generate anything
+
+You have the list the game wants and the balance that exists. Work out where one meets the
+other now, at the desk, rather than discovering it later when a call fails.
+
+1. **Rank the whole list as if cubes were unlimited.** A chicken farm wants twenty things.
+   Write all twenty, then order them by how much a player would miss each one.
+2. **Estimate how far the balance reaches.** From `thrixel_account_status` and
+   `thrixel_pricing`, remembering that Architect is metered on object complexity and the spread
+   between a simple prop and a complex one is roughly four to one. Approximate is the point.
+   You are looking for "about eight of these", not a figure to defend.
+3. **Say where the line falls, in one line, before the first generation call.** "Twenty things
+   would make this farm properly. Your balance covers roughly the first eight, so the coop, the
+   hens and the feed trough get built and the tractor, the silo and the scarecrow start as
+   blocks." Then start. It is a statement, not a question - do not wait for an answer, and on a
+   free account fold it into HARD STOP 1 below rather than saying it twice.
+4. **Build above the line, block out below it, then finish the game.** Everything under the line
+   goes into the scene as a labelled placeholder at the right size and in the right place, and
+   the game logic is written against the FULL list. What ships is a complete game with some of
+   its art still grey, which is playable, rather than a fraction of a game, which is not.
+
+**Do this on every plan, paid included.** A plan name is not a balance: the allowance arrives
+once a billing month and spends down from there, so an account on the largest plan, late in its
+cycle, can be holding less than a brand-new free one. Reading the plan name instead of the
+number is how a paying user ends up starting a twenty-asset game with seven assets' worth of
+cubes.
+
+**If the balance reaches the whole list, there is nothing to say.** No line, no news.
+
+**Re-check `thrixel_account_status` every few assets.** Estimates drift, and a balance that
+jumped means they paid: move the line down and carry on in the same ranked order.
+
+### The line is a forecast, not a quota
+
+It exists so the user knows what to expect, and it is deliberately approximate. Treating it as a
+budget to stop at leaves cubes unspent and the game thinner than the balance was good for, so
+keep working down the ranked list until the service says no. Whether the balance covers the next
+item is something it will tell you, at no cost, more accurately than an estimate can.
+
+Two kinds of operation, gated differently, so "no" arrives in two shapes:
+
+- **Create, Edit and Autofix are priced after the run**, so the only question is whether
+  anything is left. Any positive balance buys one more, and a single overrun past zero is
+  absorbed rather than refused mid-job. Worth attempting even when what remains looks small
+  for it.
+- **Detailer, Sculptor and Texture cost a flat price** the balance has to cover up front. Once
+  it no longer does, those are finished for the session while a Create may still go through.
+  That is a reason to reorder rather than to stop; a plain Architect asset is still worth having.
+
+So the build ends when the service refuses, or when `thrixel_account_status` reports nothing
+left, rather than at a number estimated earlier.
+
 ## HARD STOP 1: the plan question (free plan only)
 
 **On a paid plan (Pro / Studio): ask nothing.** Go straight to the engine. Interrupting a
@@ -370,18 +441,27 @@ Ask at the start, then get out of the way. Do **not** stop mid-build to report a
 balance or to offer an upgrade: the user chose a scope already, and a prompt between assets
 just breaks a run that was going to finish anyway.
 
-The one exception is running out, and that is not really an interruption - generation has
-already stopped, because every further call fails. When the balance reaches zero:
+The one exception is a plan that did not fit - the cubes ran out with assets from the list still
+unbuilt. That is barely an interruption, because it is handled at the END, once the game is
+built and playable, and it is where HARD STOP 3 lives on a paid account. If the cubes lasted and
+the list got finished, none of what follows applies.
 
-**1. Stop submitting.** Continuing only produces a string of failures.
+**Where this goes in the running order.** Finish the game, take it through playcheck, then ask
+HARD STOP 2 as written there and on its own. What is missing, and what it would take to finish,
+comes after that answer, with the game either live or running locally. Money after the thing
+works rather than before it, and kept out of the publish question: someone decides whether to
+pay for more once they have played what they have, and by then they have walked past the grey
+blocks themselves. They heard at planning time where the line fell, so this is a reminder rather
+than news.
 
-**2. Get the game in front of them BEFORE mentioning money.** Whatever is built is playable,
-and a person decides whether to pay for more after seeing what they already have, not while
-reading a bill. So finish the current pass first: wire in the assets that did land, make sure
-it runs, and show it.
+**1. Stop submitting** once the balance is gone, and not before - see "The line is a forecast,
+not a quota" above. Past that point further calls only return failures.
 
-- **three.js**: run the capture tooling and show the frames, and give them the dev-server URL
-  so they can play it themselves.
+**2. Finish the game with what did land, and get it in front of them.** Wire in the assets you
+have, write the logic against the whole list, and make it run. This is the ordinary end of a
+build and it goes through the ordinary route: playcheck, then HARD STOP 2, then the link.
+
+- **three.js**: the published link is how they see it. Capture frames to show alongside it.
 - **Unity and Roblox**: make sure the scene opens and plays, and say exactly what to press.
 
 Then say what is there in one line: "here is the course with the clubhouse, four holes and the
@@ -400,35 +480,62 @@ Then name them in words too, from the plan you made at the start, never as a cou
 lighthouse, the dock cranes and the fishing boats are still blocks" tells them what they are
 missing; "3 assets remaining" does not.
 
-**4. Ask the question in terms of the game, not the wallet.** Name the specific assets in the
-question itself, and make the alternative a real choice rather than a consolation prize. Call
-`thrixel_account_status` first if you are unsure which plan they are on.
+**4. Say what it would take to finish.**
 
-**On the free plan:**
+**None of this applies unless the cubes actually ran out with assets still unbuilt.** A build
+that got through its list has nothing to report here; it ends at HARD STOP 2 with the link.
+
+Otherwise there are two cases, and the account decides which.
+
+**Free account: a line, not a gate.** They answered the money question at HARD STOP 1, before
+any of it was spent, and that answer holds. Name what is still a block, mention that an upgrade
+would let you finish it, and leave it there. No question, nothing to wait for, no list of
+options. The whole thing looks like this:
 
 ```
-- Upgrade so I can finish the lighthouse, dock cranes and fishing boats
+The lighthouse, the dock cranes and the fishing boats are still grey blocks. An upgrade
+would let me finish them whenever you want it.
+```
+
+**Paid account: HARD STOP 3.** Here it is worth asking properly and waiting for the answer,
+the same as the other two gates. Ending the turn on "let me know if you want more" is not the
+same thing - it reads as a passing remark and tends to get scrolled past. This is the only time
+all build that a paying user is asked about money, and it lands at the easiest moment to answer:
+the game is finished and on screen, and the gap in it has names.
+
+**Put it in terms of the game, not the wallet.** Name the specific assets, and make every option
+a real choice rather than a consolation prize. Never phrase it as "upgrade to Pro" versus "keep
+what you have": the first is a product tier and the second is a shrug, and neither says what
+they are choosing between.
+
+**The options are the paid ones only**, since a free account gets the line above and no
+question. Call `thrixel_account_status` and `thrixel_pricing` before writing them, because one
+rule decides the list and it is read from the tools, not from here:
+
+**A tier change is offered first when a tier above them exists, and not at all when it does
+not.** It is first because it raises the monthly allowance AND the concurrent-job cap, so it
+finishes this game and makes the next one faster, where a top-up only does the first. It is
+absent on the top self-serve tier, and offering somebody the plan they are already on is worse
+than offering nothing. Tiers change; never decide this from memory or from this file.
+
+**With a tier above them** - upgrade first, then the top-up:
+
+```
+- Move up a tier: a bigger monthly allowance, and a higher concurrent-job cap so future
+  builds run in bigger waves
+- Top up cubes now to finish the lighthouse, dock cranes and fishing boats
 - Leave them as blocks for now, and keep playing what is there
 ```
 
-Use their actual asset names, not those. Never phrase it as "upgrade to Pro" versus "keep what
-you have": the first is a product tier and the second is a shrug, and neither tells them what
-they are actually choosing between.
-
-If they upgrade: `thrixel_upgrade_plan(tier="pro")` and give them the link. It may come back
-as a free first month rather than a full-price checkout; relay whatever the tool says, whole.
-
-**On a paid plan**, the two options are different, because they can already do both:
+**Already on the top tier** - there is no upgrade to offer, so do not invent one:
 
 ```
-- Top up cubes now to finish the lighthouse, dock cranes and fishing boats
-- Move to Studio for a bigger monthly allowance, and a higher concurrent-job cap so future
-  builds run in bigger waves
+- Top up cubes to finish the lighthouse, dock cranes and fishing boats
+- Leave them as blocks for now, and keep playing what is there
 ```
 
-The distinction is worth drawing for them: a top-up finishes this game, a tier change also makes
-the next one faster. Check `thrixel_pricing` for whether the higher tier actually raises the cap
-before you say it does.
+Use their actual asset names in place of the examples. If they move up a tier, call
+`thrixel_upgrade_plan(tier=...)` with the tier they picked and give them the link it returns.
 
 If they choose top up, call **`thrixel_pricing`** and show exactly the packs it returns:
 
@@ -444,11 +551,14 @@ Cube packs:
 is only an example of the shape - packs and prices change. Ask them which one, then pass that
 dollar amount to `thrixel_buy_cubes(usd=...)` and give them the link it returns.
 
-If they choose Studio instead: `thrixel_upgrade_plan(tier="studio")`.
+If they choose to leave the blocks, that is a real answer and it stands. Say the offer is there
+whenever they want it and stop raising it; a build that ends with the user having declined once
+is finished, not pending.
 
 **5. After they say they have paid**, call `thrixel_account_status` again before building on the
 new balance - confirmation is asynchronous and takes a few seconds. Then pick the asset list up
-exactly where it stopped, in the same ranked order.
+exactly where it stopped, in the same ranked order, and republish when it is done so the link
+they already have shows the finished game.
 
 Frame all of this as a choice about whether to finish, not as a failure. What is already built
 stays built and playable either way.
@@ -511,7 +621,7 @@ nearby files. Then read that engine's file **in full**:
 
 - **Unity** → [engines/unity.md](engines/unity.md)
 - **three.js / web** → [engines/threejs/threejs.md](engines/threejs/threejs.md)
-- **Roblox** → [engines/roblox/roblox.md](engines/roblox/roblox.md) — toolchain setup is engine-specific here: use [engines/roblox/setup.md](engines/roblox/setup.md), not SetupAndInstallationFlow.md
+- **Roblox** → [engines/roblox/roblox.md](engines/roblox/roblox.md) - toolchain setup is engine-specific here: use [engines/roblox/setup.md](engines/roblox/setup.md), not SetupAndInstallationFlow.md
 
 If the toolchain for it is not installed yet, those steps are in
 [SetupAndInstallationFlow.md](SetupAndInstallationFlow.md) under "Install the engine toolchain".
