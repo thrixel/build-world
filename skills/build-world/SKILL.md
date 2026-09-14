@@ -236,7 +236,11 @@ first frame produces exactly the same terminal output as one that works. Run
 run it, say the game is unverified - that is a useful sentence, and a confident
 wrong one is not.
 
-Pay special attention to mesh quality, realism, character quality, to ensure it looks AAA.
+Pay special attention to mesh quality, realism, character quality, and UI to ensure it looks AAA.
+Be thoughtful about UI design to avoid clutter - use a combination of HUD elements, menus, tooltips,
+etc. as appropriate, to ensure all necessary information is easily viewable without cluttering the
+screen.
+
 Work alone, do NOT launch subagents to do work - subagents will interfere with each other and make
 everything more difficult. However, frequently launch subagents as harsh critic agents to inspect
 your work. If the subagent determines the game doesn't look absolutely AAA, you must continue the
