@@ -239,7 +239,8 @@ wrong one is not.
 Pay special attention to mesh quality, realism, character quality, and UI to ensure it looks AAA.
 Be thoughtful about UI design to avoid clutter - use a combination of HUD elements, menus, tooltips,
 etc. as appropriate, to ensure all information can easily be found when it is needed, without
-creating a cluttered screen that shows everything at all times.
+creating a cluttered screen that shows everything at all times. Do NOT list the entire control scheme
+on the screen during gameplay; this is unnecessary and creates clutter.
 
 Work alone, do NOT launch subagents to do work - subagents will interfere with each other and make
 everything more difficult. However, frequently launch subagents as harsh critic agents to inspect
