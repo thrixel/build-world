@@ -16,8 +16,9 @@
  *
  *   node tools/record.mjs ./dist --storyboard=preview.json
  *   node tools/record.mjs https://slug.thrixel.world --storyboard=preview.json --out=./preview.webm
+ *   node tools/record.mjs ./dist --storyboard=preview.json --size=1080p
  *
- * Storyboard, in viewport pixels of a 960x540 frame:
+ * Storyboard, in viewport pixels of a 1280x720 frame:
  *
  *   { "steps": [
  *     { "note": "let the opening view settle" }, { "wait": 3000 },
@@ -28,7 +29,16 @@
  *     { "click": [512, 380] },                   { "type": "go" }
  *   ] }
  *
- * Optional top-level keys: width, height (default 960x540), boot (ms to wait
+ * SIZE. 720p by default, because the clip is shown at the size of the thing it
+ * is standing in for - full-bleed on the world's own page, and the card's art
+ * in a listing - and a 540p frame stretched over a laptop viewport is visibly
+ * soft next to the game that replaces it. `--size=1080p` (or WxH, or the
+ * storyboard's width/height) buys a sharper clip for roughly twice the bytes;
+ * the bitrate follows the pixel count rather than being fixed, so quality
+ * holds at every size. The viewport is the same number, so the game renders
+ * at the resolution it is filmed at.
+ *
+ * Optional top-level keys: width, height (default 1280x720), boot (ms to wait
  * for the game to load before the clip starts; default 3000, and it is cut
  * from the recording so the clip opens on the game, not on a black frame).
  *
@@ -125,7 +135,46 @@ try {
 }
 if (!Array.isArray(board.steps) || board.steps.length === 0) fail(2, 'the storyboard has no "steps"');
 
-const W = Number(board.width ?? 960), H = Number(board.height ?? 540);
+/** --size=1080p | 720p | 1440x900. Beats the storyboard, which beats 720p. */
+function askedSize() {
+  const raw = flag('size');
+  if (typeof raw !== 'string') return null;
+  const named = { '480p': [854, 480], '540p': [960, 540], '720p': [1280, 720],
+                  '1080p': [1920, 1080], '1440p': [2560, 1440] }[raw.toLowerCase()];
+  if (named) return named;
+  const m = /^(\d{3,4})x(\d{3,4})$/.exec(raw);
+  return m ? [Number(m[1]), Number(m[2])] : null;
+}
+const sized = askedSize();
+// Even numbers, which every VP8 encoder wants, and a floor that keeps a typo
+// from filming a postage stamp.
+const even = (n, min) => Math.max(min, Math.round(n / 2) * 2);
+const W = even(sized ? sized[0] : Number(board.width ?? 1280), 320);
+const H = even(sized ? sized[1] : Number(board.height ?? 720), 240);
+
+/** Bits per second for this frame size.
+ *
+ *  Scaled by pixel count from the 1800k that looked right at 960x540, rather
+ *  than fixed: the same bitrate spread over four times the pixels is what
+ *  makes a bigger clip look worse than a smaller one. Capped, because VP8
+ *  stops buying much past this and the clip is fetched before anybody has
+ *  decided they want the game.
+ */
+const BITRATE_K = Math.min(8000, Math.round(1800 * (W * H) / (960 * 540)));
+
+/** The frame the STORYBOARD's coordinates are written in, and the scale from
+ *  it to what we actually film.
+ *
+ *  Without this, raising the default size silently moved every click: a
+ *  storyboard aiming at the middle of a 960x540 frame lands up and to the
+ *  left of the middle of a 1280x720 one, and the clip shows the game ignoring
+ *  the pointer. Coordinates are therefore RELATIVE to the frame the
+ *  storyboard declares, so `--size` changes the sharpness and nothing else.
+ */
+const FRAME_W = Number(board.width ?? W), FRAME_H = Number(board.height ?? H);
+const SX = W / FRAME_W, SY = H / FRAME_H;
+const sx = (n) => Math.round(Number(n) * SX);
+const sy = (n) => Math.round(Number(n) * SY);
 const BOOT_MS = Number(board.boot ?? 3000);
 
 /** How long the scripted part runs - the clip's length, and what the caps
@@ -305,24 +354,25 @@ try {
       // common enough in shooters that a storyboard without them cannot show
       // the game's main verb.
       const button = s.button ?? 'left';
+      const cx = sx(s.click[0]), cy = sy(s.click[1]);
       if (s.hold) {
-        await page.mouse.move(s.click[0], s.click[1]);
-        pointer = { x: s.click[0], y: s.click[1] };
+        await page.mouse.move(cx, cy);
+        pointer = { x: cx, y: cy };
         await page.mouse.down({ button });
         await page.waitForTimeout(s.hold);
         await page.mouse.up({ button });
       } else {
-        await page.mouse.click(s.click[0], s.click[1], { button });
-        pointer = { x: s.click[0], y: s.click[1] };
+        await page.mouse.click(cx, cy, { button });
+        pointer = { x: cx, y: cy };
       }
     }
-    if (s.move) await glide(s.move[0], s.move[1], s.ms ?? 800);
+    if (s.move) await glide(sx(s.move[0]), sy(s.move[1]), s.ms ?? 800);
     if (s.drag) {
       const [x0, y0, x1, y1] = s.drag;
-      await page.mouse.move(x0, y0);
-      pointer = { x: x0, y: y0 };
+      await page.mouse.move(sx(x0), sy(y0));
+      pointer = { x: sx(x0), y: sy(y0) };
       await page.mouse.down();
-      await glide(x1, y1, s.ms ?? 800);
+      await glide(sx(x1), sy(y1), s.ms ?? 800);
       await page.mouse.up();
     }
     if (s.type) await page.keyboard.type(s.type, { delay: 60 });
@@ -346,7 +396,7 @@ try {
 // --- the gate ---------------------------------------------------------------------
 
 const software = /swiftshader|llvmpipe|software/i.test(renderer);
-const report = { target, out, frames: framesDir, renderer, software, seconds: null, sizeKB: null, movingPct: null, errors: errors.slice(0, 5) };
+const report = { target, out, frames: framesDir, size: `${W}x${H}`, bitrateK: BITRATE_K, renderer, software, seconds: null, sizeKB: null, movingPct: null, errors: errors.slice(0, 5) };
 const refuse = async (why) => {
   await rm(out, { force: true }).catch(() => undefined);
   report.ok = false;
@@ -421,7 +471,7 @@ if (ffmpeg) {
   const startS = (board.__span[0] / 1000).toFixed(2);
   const code = await new Promise((ok) => {
     const p = spawn(ffmpeg, ['-y', '-loglevel', 'error', '-ss', startS, '-i', rawPath,
-      '-c:v', 'libvpx', '-b:v', '1800k', '-deadline', 'good', '-cpu-used', '2', '-an', out], { stdio: 'inherit' });
+      '-c:v', 'libvpx', '-b:v', `${BITRATE_K}k`, '-deadline', 'good', '-cpu-used', '2', '-an', out], { stdio: 'inherit' });
     p.on('close', ok); p.on('error', () => ok(-1));
   });
   trimmed = code === 0 && existsSync(out);

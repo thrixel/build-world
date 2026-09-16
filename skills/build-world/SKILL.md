@@ -1233,6 +1233,28 @@ If it exits **2**, it could not record: no browser, or the storyboard is invalid
 Publish anyway and say the world has no preview yet - a clip is worth having and
 never worth blocking a publish over. Never publish a clip that was refused.
 
+### Put the clip in front of the game too
+
+`thrixel_publish_game(..., cold_open=True)` shows the clip and the control line OVER
+the game when somebody opens its link, with a Play button that clears them. The game
+loads underneath while the clip runs, so Play is instant. It is the same question the
+clip answers on a card - what is this, and how do I play it - asked at the moment a
+stranger actually arrives.
+
+**Check it before you turn it on, every time.** It puts an overlay on the page, and a
+game that grabs the pointer or the keyboard on load can fight it. Serve the bundle,
+open it, watch the clip play, press Play, confirm the game is there and responds:
+
+```
+node <skill>/tools/serve.mjs <bundle>
+```
+
+Turn it on when you have a clip and that check passed. Leave it off otherwise - a
+game nobody can start is worse than one nobody was introduced to. `cold_open=False`
+takes it back off on the next publish. It shows on every load, a refresh included,
+because it is the game's title screen; `?play=1` on the URL skips it outright, which
+is the link to send when you mean "play this" rather than "look at this".
+
 ## Publish
 
 Use `thrixel_publish_game` if your Thrixel MCP server has it. **If the tool is not in your
