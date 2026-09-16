@@ -221,6 +221,21 @@ missing assets as labelled blocks, and asks how you want to continue.
 
 </details>
 
+### 4. Publish and share
+
+When your world is ready, ask your coding agent to publish it. Build World handles the deployment and gives you a live, shareable link, with no separate hosting setup required.
+
+```text
+Publish this world and give me a link I can share.
+```
+
+You can continue refining the project after publishing and deploy the updated version whenever you are ready. You may also ask your agent to record an mp4 preview to share online. E.g.,
+
+```text
+Create a recording of this in .mp4 format to help demonstrate the capabilities to others
+```
+
+
 ## Working with Thrixel API
 
 Every asset generated through the Thrixel API is saved to your Thrixel workspace.
