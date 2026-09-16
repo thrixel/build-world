@@ -237,15 +237,53 @@ run it, say the game is unverified - that is a useful sentence, and a confident
 wrong one is not.
 
 Pay special attention to mesh quality, realism, character quality, and UI to ensure it looks AAA.
-Be thoughtful about UI design to avoid clutter - use a combination of HUD elements, menus, tooltips,
-etc. as appropriate, to ensure all information can easily be found when it is needed, without
-creating a cluttered screen that shows everything at all times. Do NOT list the entire control scheme
-on the screen during gameplay; this is unnecessary and creates clutter.
-
 Work alone, do NOT launch subagents to do work - subagents will interfere with each other and make
 everything more difficult. However, frequently launch subagents as harsh critic agents to inspect
 your work. If the subagent determines the game doesn't look absolutely AAA, you must continue the
 build until the subagent decides the game looks good enough.
+
+### Game Design and Player Experience
+
+Design the game so the player can understand and navigate it primarily through **play, level design,
+visual language, and feedback—not explanatory UI text**.
+
+Do not assume every mechanic, objective, or interaction must be explicitly explained while the player
+is playing. Discovering how the game works can be part of the experience. Prefer teaching through
+carefully designed situations: introduce mechanics progressively, give players safe opportunities to
+experiment, and make cause and effect easy to observe.
+
+Use environmental and visual guidance where appropriate: composition, sightlines, lighting, landmarks,
+contrast, animation, spatial layout, recurring colors or materials, and other forms of signposting can
+direct attention or suggest affordances without words. Clear feedback from the world—movement, sound,
+particles, object reactions, state changes, etc.—should help the player form an accurate mental model
+of the game.
+
+Treat HUD space as scarce. Persistent UI should normally be limited to information the player needs
+**continuously or urgently** to make gameplay decisions, such as health, resources, score, time, or
+a current objective when those are genuinely relevant. Avoid filling the screen with instructions,
+mechanic descriptions, control explanations, flavor text, or redundant labels.
+
+The UI is also part of the game's **visual identity**. It should feel intentionally designed for the
+specific game rather than like a generic overlay placed on top of it. Typography, shapes, spacing,
+iconography, materials, motion, and other interface treatments should complement the game's art direction,
+tone, and world while remaining clear and functional.
+
+When textual guidance is necessary, prefer **progressive and contextual disclosure** over permanent
+explanation. A short prompt shown when a mechanic first becomes relevant is usually better than leaving
+its instructions onscreen indefinitely. Information that is useful only occasionally should appear only
+when needed, or be placed in a secondary/help surface if the scope of the game justifies one.
+
+Before adding explanatory UI, ask:
+
+- Can the player learn this naturally by trying it?
+- Can the level or environment demonstrate it?
+- Can visual, spatial, audio, or interactive feedback communicate it?
+- Does the player need this information right now?
+- Does it need to remain visible after they understand it?
+
+Do not add text merely to ensure that the game is completely self-explanatory at first glance. Optimize for **clarity during play, visual hierarchy, immersion, learnability, and a cohesive visual experience**, not for explaining every system upfront.
+
+These are design principles, not absolute rules. Some games legitimately depend on text-heavy interfaces, explicit objectives, tutorials, or persistent information. Choose the approach that best serves the specific game, but make each piece of UI earn its place on screen.
 
 # Plan the asset list - REQUIRED first step when BUILDING a game
 **"Required" means required on the build path.** If the user asked you to publish a folder
