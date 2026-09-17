@@ -248,11 +248,55 @@ first frame produces exactly the same terminal output as one that works. Run
 run it, say the game is unverified - that is a useful sentence, and a confident
 wrong one is not.
 
-Pay special attention to mesh quality, realism, character quality, to ensure it looks AAA.
+Pay special attention to mesh quality, realism, character quality, and UI to ensure it looks AAA.
 Work alone, do NOT launch subagents to do work - subagents will interfere with each other and make
 everything more difficult. However, frequently launch subagents as harsh critic agents to inspect
 your work. If the subagent determines the game doesn't look absolutely AAA, you must continue the
 build until the subagent decides the game looks good enough.
+
+## Player Guidance and UI Design
+
+Teach and guide the player primarily through the **game itself**, not through HUD explanations.
+
+The first question should not be “what UI should explain this?” but **“how can the game design communicate this?”** Use level layout, encounters, environmental cues, animation, sound, object behavior, NPC dialogue, diegetic signs/displays, pacing, and player experimentation to convey mechanics and objectives whenever practical.
+
+A mechanic can be introduced by creating a safe situation where the player naturally discovers it. A required action can be taught by designing an obstacle that makes that action necessary. A control can appear on a sign, device, NPC prompt, or other element that belongs in the world. Sightlines, lighting, landmarks, contrast, recurring colors/materials, and spatial composition can guide attention without explicitly telling the player where to go.
+
+The player does **not** need to understand everything immediately. It is often better to let them experiment, notice patterns, and build an understanding through play. Introduce complexity progressively and make cause and effect clear enough that the player can learn from what happens.
+
+### Use Non-Diegetic UI Sparingly
+
+HUD space and player attention are scarce. Treat **all onscreen text—persistent or temporary—as something that must justify interrupting the game**.
+
+Persistent UI should primarily show information the player genuinely needs during play, such as health, resources, time, score, or other important state. Temporary text should not become a substitute for good teaching or level design.
+
+Generally avoid:
+
+- persistent chapter, area, or scene titles that are not useful during play;
+- prose explaining mechanics or controls;
+- repeated reminders of basic actions;
+- text that merely narrates what just happened;
+- decorative or poetic flavor popups attached to ordinary interactions or collectibles;
+- labels that restate information the world already communicates.
+
+For example, collecting an important item can usually be communicated through animation, sound, effects, and a visible state change rather than a flavor text popup on the screen. Likewise, a mechanic such as rolling or dashing should preferably be taught through play rather than a popup explaining how the player can roll.
+
+If explicit instruction is genuinely needed, keep it **brief, contextual, and integrated into the experience**. Showing `Shift — Roll` beside the first obstacle that requires rolling is very different from repeatedly explaining the mechanic in the HUD.
+
+### Design Hierarchy
+
+When deciding how to communicate something to the player, prefer roughly this order:
+
+1. **Game and level design** — let the player learn by doing.
+2. **Environmental/diegetic communication** — world design, NPCs, signs, objects, animation, audio, and feedback.
+3. **Minimal contextual UI** — only when the first two approaches would be unclear or impractical.
+4. **Persistent explanatory UI** — use only when the game genuinely requires it.
+
+Do not add text simply to make the game completely self-explanatory. Some uncertainty, experimentation, and discovery are part of good gameplay.
+
+The UI that does exist should also feel like part of the game's **visual identity**. Typography, shapes, iconography, spacing, motion, and materials should fit the game's art direction and tone rather than feeling like a generic overlay.
+
+These are principles, not rigid rules. Different games communicate differently. The goal is to make the **game itself do as much of the teaching and guiding as possible**, with UI supporting the experience rather than explaining it.
 
 # Plan the asset list - REQUIRED first step when BUILDING a game
 **"Required" means required on the build path.** If the user asked you to publish a folder
