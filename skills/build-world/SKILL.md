@@ -242,48 +242,49 @@ everything more difficult. However, frequently launch subagents as harsh critic 
 your work. If the subagent determines the game doesn't look absolutely AAA, you must continue the
 build until the subagent decides the game looks good enough.
 
-### Game Design and Player Experience
+## Player Guidance and UI Design
 
-Design the game so the player can understand and navigate it primarily through **play, level design,
-visual language, and feedback—not explanatory UI text**.
+Teach and guide the player primarily through the **game itself**, not through HUD explanations.
 
-Do not assume every mechanic, objective, or interaction must be explicitly explained while the player
-is playing. Discovering how the game works can be part of the experience. Prefer teaching through
-carefully designed situations: introduce mechanics progressively, give players safe opportunities to
-experiment, and make cause and effect easy to observe.
+The first question should not be “what UI should explain this?” but **“how can the game design communicate this?”** Use level layout, encounters, environmental cues, animation, sound, object behavior, NPC dialogue, diegetic signs/displays, pacing, and player experimentation to convey mechanics and objectives whenever practical.
 
-Use environmental and visual guidance where appropriate: composition, sightlines, lighting, landmarks,
-contrast, animation, spatial layout, recurring colors or materials, and other forms of signposting can
-direct attention or suggest affordances without words. Clear feedback from the world—movement, sound,
-particles, object reactions, state changes, etc.—should help the player form an accurate mental model
-of the game.
+A mechanic can be introduced by creating a safe situation where the player naturally discovers it. A required action can be taught by designing an obstacle that makes that action necessary. A control can appear on a sign, device, NPC prompt, or other element that belongs in the world. Sightlines, lighting, landmarks, contrast, recurring colors/materials, and spatial composition can guide attention without explicitly telling the player where to go.
 
-Treat HUD space as scarce. Persistent UI should normally be limited to information the player needs
-**continuously or urgently** to make gameplay decisions, such as health, resources, score, time, or
-a current objective when those are genuinely relevant. Avoid filling the screen with instructions,
-mechanic descriptions, control explanations, flavor text, or redundant labels.
+The player does **not** need to understand everything immediately. It is often better to let them experiment, notice patterns, and build an understanding through play. Introduce complexity progressively and make cause and effect clear enough that the player can learn from what happens.
 
-The UI is also part of the game's **visual identity**. It should feel intentionally designed for the
-specific game rather than like a generic overlay placed on top of it. Typography, shapes, spacing,
-iconography, materials, motion, and other interface treatments should complement the game's art direction,
-tone, and world while remaining clear and functional.
+### Use Non-Diegetic UI Sparingly
 
-When textual guidance is necessary, prefer **progressive and contextual disclosure** over permanent
-explanation. A short prompt shown when a mechanic first becomes relevant is usually better than leaving
-its instructions onscreen indefinitely. Information that is useful only occasionally should appear only
-when needed, or be placed in a secondary/help surface if the scope of the game justifies one.
+HUD space and player attention are scarce. Treat **all onscreen text—persistent or temporary—as something that must justify interrupting the game**.
 
-Before adding explanatory UI, ask:
+Persistent UI should primarily show information the player genuinely needs during play, such as health, resources, time, score, or other important state. Temporary text should not become a substitute for good teaching or level design.
 
-- Can the player learn this naturally by trying it?
-- Can the level or environment demonstrate it?
-- Can visual, spatial, audio, or interactive feedback communicate it?
-- Does the player need this information right now?
-- Does it need to remain visible after they understand it?
+Generally avoid:
 
-Do not add text merely to ensure that the game is completely self-explanatory at first glance. Optimize for **clarity during play, visual hierarchy, immersion, learnability, and a cohesive visual experience**, not for explaining every system upfront.
+- persistent chapter, area, or scene titles that are not useful during play;
+- prose explaining mechanics or controls;
+- repeated reminders of basic actions;
+- text that merely narrates what just happened;
+- decorative or poetic flavor popups attached to ordinary interactions or collectibles;
+- labels that restate information the world already communicates.
 
-These are design principles, not absolute rules. Some games legitimately depend on text-heavy interfaces, explicit objectives, tutorials, or persistent information. Choose the approach that best serves the specific game, but make each piece of UI earn its place on screen.
+For example, collecting an important item can usually be communicated through animation, sound, effects, and a visible state change rather than a flavor text popup on the screen. Likewise, a mechanic such as rolling or dashing should preferably be taught through play rather than a popup explaining how the player can roll.
+
+If explicit instruction is genuinely needed, keep it **brief, contextual, and integrated into the experience**. Showing `Shift — Roll` beside the first obstacle that requires rolling is very different from repeatedly explaining the mechanic in the HUD.
+
+### Design Hierarchy
+
+When deciding how to communicate something to the player, prefer roughly this order:
+
+1. **Game and level design** — let the player learn by doing.
+2. **Environmental/diegetic communication** — world design, NPCs, signs, objects, animation, audio, and feedback.
+3. **Minimal contextual UI** — only when the first two approaches would be unclear or impractical.
+4. **Persistent explanatory UI** — use only when the game genuinely requires it.
+
+Do not add text simply to make the game completely self-explanatory. Some uncertainty, experimentation, and discovery are part of good gameplay.
+
+The UI that does exist should also feel like part of the game's **visual identity**. Typography, shapes, iconography, spacing, motion, and materials should fit the game's art direction and tone rather than feeling like a generic overlay.
+
+These are principles, not rigid rules. Different games communicate differently. The goal is to make the **game itself do as much of the teaching and guiding as possible**, with UI supporting the experience rather than explaining it.
 
 # Plan the asset list - REQUIRED first step when BUILDING a game
 **"Required" means required on the build path.** If the user asked you to publish a folder
