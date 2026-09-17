@@ -1,6 +1,6 @@
 ---
 name: build-world
-description: Builds polished, fully playable 3D game prototypes in Unity, Roblox, or three.js with high-quality (.glb) meshes from the Thrixel API, and publishes finished games to a public thrixel.world link that anyone can play in a browser. Use when the user wants to make a game, build a playable prototype, or generate 3D assets - and also when they want to publish or host a game folder they already have, share a playable link, or list, rename, update, unpublish or find the link for a game they published earlier.
+description: Builds polished, fully playable 3D game prototypes in three.js, Roblox, Unity, or Unreal Engine, with high-quality (.glb/.fbx) meshes from the Thrixel API, and (for three.js and Unity) publishes finished games to a public thrixel.world link that anyone can play in a browser. Use when the user wants to make a game, build a playable prototype, or generate 3D assets, and also when they want to publish or host a game folder they already have, share a playable link, or list, rename, update, unpublish or find the link for a game they published earlier.
 ---
 
 # The two things you may not decide alone
@@ -201,9 +201,10 @@ them, and do not install a game engine to publish a folder that is already built
 
 Use Thrixel for 3D assets. Use the target engine to orchestrate game logic, UI, effects, and sounds.
 The game MUST be polished and visually stunning. The game should do everything thats
-done in a AAA game, anything from high quality models, to physics, including:
+done in a AAA game, anything from high quality models and environment polish, to physics, including:
 - UI (HUD, health bars, etc.)
 - A mix of Architect and Architect -> Detailer meshes from Thrixel
+- Visually stunning environments (atmosphere, terrain if relevant, set and background dressing, shaders)
 - Rigorously playtested gameplay with intuitive keyboard controls
 - **Playable on a phone**, with touch controls and a HUD that fits a small screen
 - Optimized framerate of at least 30 FPS
@@ -482,6 +483,7 @@ build and it goes through the ordinary route: playcheck, then HARD STOP 2, then 
 - **three.js and Unity WebGL**: serve it and hand them the address with the controls, as
   HARD STOP 2 says. Capture frames to show alongside it.
 - **Roblox**: make sure the place opens and plays in Studio, and say exactly what to press.
+- **Unreal**: make sure Play-in-Editor (PIE) works; start it and say what to press in order to play.
 
 Then say what is there in one line: "here is the course with the clubhouse, four holes and the
 windmill - it runs and you can play it now."
@@ -646,13 +648,14 @@ architect+detailer is a correctness choice, made by the rules below.
 Settle the engine before you generate anything: ask the user, use context clues, or look at
 nearby files. Then read that engine's file **in full**:
 
-- **Unity** → [engines/unity.md](engines/unity.md)
-- **three.js / web** → [engines/threejs/threejs.md](engines/threejs/threejs.md)
-- **Roblox** → [engines/roblox/roblox.md](engines/roblox/roblox.md) - toolchain setup is engine-specific here: use [engines/roblox/setup.md](engines/roblox/setup.md), not SetupAndInstallationFlow.md
+- **three.js / web** → [engines/threejs/threejs.md](engines/threejs/threejs.md), toolchain setup in [engines/threejs/setup.md](engines/threejs/setup.md)
+- **Roblox** → [engines/roblox/roblox.md](engines/roblox/roblox.md), toolchain setup in [engines/roblox/setup.md](engines/roblox/setup.md)
+- **Unity** → [engines/unity/unity.md](engines/unity/unity.md), toolchain setup in [engines/unity/setup.md](engines/unity/setup.md)
+- **Unreal Engine** → [engines/unreal/unreal.md](engines/unreal/unreal.md), toolchain setup in [engines/unreal/setup.md](engines/unreal/setup.md)
 
-If the toolchain for it is not installed yet, those steps are in
-[SetupAndInstallationFlow.md](SetupAndInstallationFlow.md) under "Install the engine toolchain".
-Installing is once per machine; choosing is once per game, which is why the choice lives here.
+If the toolchain for it is not installed yet, follow the respective `setup.md`.
+The toolchain should be installed once per machine. Choice of engine is per game.
+The respective `setup.md` may also have steps that are needed upon every new project for the engine.
 
 # Thrixel asset generation
 

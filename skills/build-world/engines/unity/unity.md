@@ -1,12 +1,12 @@
 # Unity
 
 Engine-specific rules for the Unity path. The shared Thrixel asset pipeline is in
-[../SKILL.md](../SKILL.md); this file covers only what differs for Unity.
+[../../SKILL.md](../../SKILL.md); this file covers only what differs for Unity.
 
 # Rules for Game dev
 When developing in Unity, you MUST set up the follow checklist,
-and verifably and rigorously check each off your list:
-1) you MUST use unity CLI. If unity CLI is not available, you MUST stop and ask the user to enable it.
+and verifiably and rigorously check each off your list:
+1) You MUST use unity CLI. If unity CLI is not available, you MUST stop and ask the user to enable it.
 2) You must FREQUENTLY verify unity scene setup through screenshots. You must check the overall scene in BOTH scene mode and play mode from at least 10 angles.
 3) You must follow EVERY step in the Thrixel asset import inspect loop (described below)
 4) You MUST run the play mode verification loop multiple times (described below)
@@ -31,14 +31,14 @@ the game window screenshot.
 
 ## Play mode verification loop
 Additionally, you MUST run this play mode verification loop. Create at least 1 detailed playtest script to mimic playing the game. Run the script and take at least 5 screenshots throughout. Send each critic to a harsh critic subagent; keep building until it agrees the result looks absolutely AAA quality.
-Tell the subagent to especially critical investivate for places where:
+Tell the subagent to especially critically investigate for places where:
 - The camera is wrong
-- Thrixel assets that are flicking/large parts are missing
+- Thrixel assets that are flickering/large parts are missing
 - Glitching through the ground/colliding into things
 - Visual connectivity issues
-- Issues with LOD/Culling systems. You should not be able to tell where they begins/end, it should be incredibly smooth
+- Issues with LOD/Culling systems. You should not be able to tell where they begin/end, it should be incredibly smooth
 - Any purple meshes where textures didn't load properly.
-- Player hands or character are setup incorrectly or vehicles drive in the wrong direction
+- Player hands or characters are setup incorrectly or vehicles drive in the wrong direction
 
 ## Import format
 
