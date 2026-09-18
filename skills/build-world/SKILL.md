@@ -281,7 +281,7 @@ Generally avoid:
 
 For example, collecting an important item can usually be communicated through animation, sound, effects, and a visible state change rather than a flavor text popup on the screen. Likewise, a mechanic such as rolling or dashing should preferably be taught through play rather than a popup explaining how the player can roll.
 
-If explicit instruction is genuinely needed, keep it **brief, contextual, and integrated into the experience**. Showing `Shift — Roll` beside the first obstacle that requires rolling is very different from repeatedly explaining the mechanic in the HUD.
+If explicit instruction is genuinely needed, keep it **brief, contextual, and integrated into the experience**. Showing `Shift - Roll` beside the first obstacle that requires rolling is very different from repeatedly explaining the mechanic in the HUD.
 
 ### Design Hierarchy
 
