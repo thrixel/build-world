@@ -20,33 +20,65 @@
  *
  * Storyboard, in viewport pixels of a 1280x720 frame:
  *
- *   { "steps": [
+ *   { "setup": [ { "note": "off camera: clear the menu, dress the room" },
+ *                { "click": [640, 420] }, { "wait": 6000 } ],
+ *     "steps": [
  *     { "note": "let the opening view settle" }, { "wait": 3000 },
  *     { "press": "KeyW", "hold": 2500 },        { "move": [700, 270], "ms": 800 },
  *     { "press": "Space" },                      { "click": [480, 270], "hold": 1500 },
  *     { "click": [480, 270], "button": "right" },
  *     { "drag": [480, 300, 640, 300], "ms": 600 },
+ *     { "scroll": [0, -600], "ms": 700 },
  *     { "click": [512, 380] },                   { "type": "go" }
  *   ] }
  *
- * SIZE. 720p by default, because the clip is shown at the size of the thing it
- * is standing in for - full-bleed on the world's own page, and the card's art
- * in a listing - and a 540p frame stretched over a laptop viewport is visibly
- * soft next to the game that replaces it. `--size=1080p` (or WxH, or the
- * storyboard's width/height) buys a sharper clip for roughly twice the bytes;
- * the bitrate follows the pixel count rather than being fixed, so quality
- * holds at every size. The viewport is the same number, so the game renders
- * at the resolution it is filmed at.
+ * SIZE. 1080p by default. The clip is shown at the size of the thing it is
+ * standing in for - full-bleed on the world's own page, and the card's art in
+ * a listing - and on a 2x laptop that page draws it at around 2400 DEVICE
+ * pixels, which a 720p clip reaches only by being upscaled almost twice. The
+ * difference shows on edges: foliage, railings, text on a wall. `--size=720p`
+ * (or WxH, or the storyboard's width/height) goes back.
+ *
+ * The viewport is the same number, so the game renders at the resolution it is
+ * filmed at - which also means a heavier frame for the GPU, and a slower
+ * machine will show it. Check `seconds` against the storyboard's own length.
+ *
+ * COORDINATES DO NOT SURVIVE A SIZE CHANGE, whatever the scaling below
+ * implies. Storyboard positions are scaled by the size ratio on the
+ * assumption that the game's UI scales with its viewport, and a HUD anchored
+ * to the edges of the window does not: a button 180px from the right edge is
+ * 180px from the right edge at every width, and a scaled click lands on empty
+ * floor or on the wrong control. Re-running an old storyboard at a new size
+ * gives a DIFFERENT CLIP, not the same clip larger. Author at the size you
+ * will film at, and look at the frames.
+ *
+ * SETUP. Everything in `steps` is filmed, so anything the game needs before it
+ * is worth looking at used to be filmed too: an empty room filling with
+ * furniture, a title card, a lobby. `setup` takes the same steps and runs them
+ * BEFORE the clip starts, off camera. Use it to get the game into the state a
+ * player reaches after a minute - scene dressed, menu gone, score on the board
+ * - and let the clip open there. It is trimmed off with the boot wait, by the
+ * same cut, so it costs recording time and nothing else. At most 60 s.
  *
  * Optional top-level keys: width, height (default 1280x720), boot (ms to wait
  * for the game to load before the clip starts; default 3000, and it is cut
- * from the recording so the clip opens on the game, not on a black frame).
+ * from the recording so the clip opens on the game, not on a black frame). A
+ * game that streams its assets in needs longer than 3000 - raise `boot`, or
+ * put the wait in `setup` where you can watch for what you are waiting on.
  *
  * It refuses a clip that does not move. A still is sampled every 1.5 s and
  * the file is deleted when fewer than half the intervals changed, when the
  * page threw, or when the first frame is blank - exit 1, fix the storyboard,
  * record again. The samples are kept in a folder named in the report so you
- * can LOOK at what was recorded before anyone else does.
+ * can LOOK at what was recorded before anyone else does; the report names the
+ * first frame INSIDE the clip separately, because that one is the still a
+ * card shows the instant a stranger hovers it.
+ *
+ * Two more things it measures and reports rather than refuses, both about the
+ * opening, because a card's hover is over before the middle of the clip ever
+ * plays: how long it runs before anything moves, and whether its first frame
+ * still looks like the page did the instant it loaded - which is a clip that
+ * opens on a loading screen even when everything after it moves beautifully.
  *
  * Exit codes: 0 clip written, 1 refused, 2 could not record (no browser, bad
  * storyboard). A world without a clip still publishes; a broken clip must not.
@@ -65,6 +97,8 @@ const MIN_SECONDS = 5;
 const SAMPLE_MS = 1500;
 const MOVED_PCT = 0.4;          // playcheck's own "responded" threshold
 const MIN_MOVING_SHARE = 0.5;   // more than half the clip must be going somewhere
+const SETUP_MAX_SECONDS = 60;   // a runway to the good part, not a playthrough
+const QUIET_OPENING_MS = 3000;  // longer than this without motion and the hover is wasted
 
 const BASE_ARGS = ['--ignore-gpu-blocklist', '--hide-scrollbars', '--mute-audio', '--enable-gpu-rasterization'];
 
@@ -149,18 +183,24 @@ const sized = askedSize();
 // Even numbers, which every VP8 encoder wants, and a floor that keeps a typo
 // from filming a postage stamp.
 const even = (n, min) => Math.max(min, Math.round(n / 2) * 2);
-const W = even(sized ? sized[0] : Number(board.width ?? 1280), 320);
-const H = even(sized ? sized[1] : Number(board.height ?? 720), 240);
+const W = even(sized ? sized[0] : Number(board.width ?? 1920), 320);
+const H = even(sized ? sized[1] : Number(board.height ?? 1080), 240);
 
 /** Bits per second for this frame size.
  *
  *  Scaled by pixel count from the 1800k that looked right at 960x540, rather
  *  than fixed: the same bitrate spread over four times the pixels is what
- *  makes a bigger clip look worse than a smaller one. Capped, because VP8
- *  stops buying much past this and the clip is fetched before anybody has
- *  decided they want the game.
+ *  makes a bigger clip look worse than a smaller one.
+ *
+ *  THE CAP IS THE POINT AT 1080p. Left to the formula a 1080p clip asks for
+ *  7200k, which on a 20-second preview is 15 MB - and this file is fetched by
+ *  a card on hover and by a world's page on load, before anybody has decided
+ *  they want the game. Held at 4500k the same clip is 11 MB, and side by side
+ *  at 1080p the two are not tellable apart on interior footage; even 3200k,
+ *  the figure 720p uses today, held up. Resolution is what the eye reads here,
+ *  not bitrate, so spend on resolution and cap the rest.
  */
-const BITRATE_K = Math.min(8000, Math.round(1800 * (W * H) / (960 * 540)));
+const BITRATE_K = Math.min(4500, Math.round(1800 * (W * H) / (960 * 540)));
 
 /** The frame the STORYBOARD's coordinates are written in, and the scale from
  *  it to what we actually film.
@@ -177,24 +217,43 @@ const sx = (n) => Math.round(Number(n) * SX);
 const sy = (n) => Math.round(Number(n) * SY);
 const BOOT_MS = Number(board.boot ?? 3000);
 
-/** How long the scripted part runs - the clip's length, and what the caps
- *  are checked against, so a 4-minute storyboard is refused before the
- *  browser opens rather than after it. */
+/** How long a phase runs - the clip's length, and what the caps are checked
+ *  against, so a 4-minute storyboard is refused before the browser opens
+ *  rather than after it. */
 const stepMs = (s) => (s.wait ?? 0) + (s.hold ?? 0) + ((s.drag || s.move) ? (s.ms ?? 800) : 0)
-  + ((s.press || s.click) && !s.hold ? 80 : 0) + (s.type ? s.type.length * 60 : 0);
-const plannedMs = board.steps.reduce((t, s) => t + stepMs(s), 0);
-for (const [i, s] of board.steps.entries()) {
-  const kinds = ['note', 'wait', 'press', 'down', 'up', 'click', 'move', 'drag', 'type'].filter((k) => k in s);
-  if (kinds.length === 0) fail(2, `step ${i} does nothing: ${JSON.stringify(s)}`);
-  for (const k of ['click', 'move']) if (s[k] && (!Array.isArray(s[k]) || s[k].length !== 2)) fail(2, `step ${i}: "${k}" wants [x, y]`);
-  if (s.drag && (!Array.isArray(s.drag) || s.drag.length !== 4)) fail(2, `step ${i}: "drag" wants [x0, y0, x1, y1]`);
-}
+  + ((s.press || s.click || s.scroll) && !s.hold ? 80 : 0) + (s.type ? s.type.length * 60 : 0);
+const phaseMs = (steps) => steps.reduce((t, s) => t + stepMs(s), 0);
+
+/** The steps that run off camera, to get the game into the state the clip
+ *  should open in. Same grammar as `steps`; see the note at the top. */
+const setup = board.setup ?? [];
+if (!Array.isArray(setup)) fail(2, '"setup" wants a list of steps, the same shape as "steps"');
+
+const check = (steps, what) => {
+  for (const [i, s] of steps.entries()) {
+    const kinds = ['note', 'wait', 'press', 'down', 'up', 'click', 'move', 'drag', 'scroll', 'type'].filter((k) => k in s);
+    if (kinds.length === 0) fail(2, `${what} ${i} does nothing: ${JSON.stringify(s)}`);
+    for (const k of ['click', 'move']) if (s[k] && (!Array.isArray(s[k]) || s[k].length !== 2)) fail(2, `${what} ${i}: "${k}" wants [x, y]`);
+    if (s.scroll && (!Array.isArray(s.scroll) || s.scroll.length !== 2)) fail(2, `${what} ${i}: "scroll" wants [dx, dy]`);
+    if (s.drag && (!Array.isArray(s.drag) || s.drag.length !== 4)) fail(2, `${what} ${i}: "drag" wants [x0, y0, x1, y1]`);
+  }
+};
+check(board.steps, 'step');
+check(setup, 'setup step');
+
+const plannedMs = phaseMs(board.steps);
+const setupMs = phaseMs(setup);
 if (plannedMs > MAX_SECONDS * 1000) {
   fail(2, `the storyboard runs ${(plannedMs / 1000).toFixed(0)} s; a preview is at most ${MAX_SECONDS} s.`,
-       'Cut it to three beats: the opening view, the core verb, one moment only this game has.');
+       'Cut it to three beats: the hook, the core verb, one moment only this game has.',
+       'Anything that is only getting the game ready belongs in "setup", which is not filmed.');
 }
 if (plannedMs < MIN_SECONDS * 1000) {
   fail(2, `the storyboard runs ${(plannedMs / 1000).toFixed(1)} s; a preview needs at least ${MIN_SECONDS} s to show anything.`);
+}
+if (setupMs > SETUP_MAX_SECONDS * 1000) {
+  fail(2, `"setup" runs ${(setupMs / 1000).toFixed(0)} s; it is a runway to the good part, at most ${SETUP_MAX_SECONDS} s.`,
+       'If the game needs longer than that to become worth filming, say so to the user rather than filming it anyway.');
 }
 
 // --- where things go ----------------------------------------------------------
@@ -327,21 +386,11 @@ async function glide(x, y, ms) {
   pointer = { x, y };
 }
 
-/** What drew the frames. "SwiftShader" means software, and a choppy clip. */
-const rendererName = () => page.evaluate(() => {
-  const gl = document.createElement('canvas').getContext('webgl2') || document.createElement('canvas').getContext('webgl');
-  const d = gl?.getExtension('WEBGL_debug_renderer_info');
-  return d ? gl.getParameter(d.UNMASKED_RENDERER_WEBGL) : (gl ? 'unknown' : 'no webgl');
-}).catch(() => 'unknown');
-
-let rawPath = null;
-let renderer = 'unknown';
-try {
-  await page.waitForTimeout(BOOT_MS);
-  renderer = await rendererName();
-  const clipStart = Date.now() - t0;
-
-  for (const s of board.steps) {
+/** Play one phase of the storyboard. The same grammar drives `setup` and
+ *  `steps`; what separates them is only which side of the clip's start marker
+ *  they run on. */
+async function run(steps) {
+  for (const s of steps) {
     if (s.wait) await page.waitForTimeout(s.wait);
     if (s.press) {
       if (s.hold) { await page.keyboard.down(s.press); await page.waitForTimeout(s.hold); await page.keyboard.up(s.press); }
@@ -375,8 +424,39 @@ try {
       await glide(sx(x1), sy(y1), s.ms ?? 800);
       await page.mouse.up();
     }
+    if (s.scroll) {
+      // Zoom, in most games that have one. Delivered in steps over `ms` rather
+      // than as one enormous wheel event, because a camera that snaps from far
+      // to near reads as a cut, and because some controllers clamp per event.
+      const [dx, dy] = s.scroll;
+      const n = Math.max(1, Math.round((s.ms ?? 400) / 60));
+      for (let i = 0; i < n; i++) { await page.mouse.wheel(dx / n, dy / n); await page.waitForTimeout(60); }
+    }
     if (s.type) await page.keyboard.type(s.type, { delay: 60 });
   }
+}
+
+/** What drew the frames. "SwiftShader" means software, and a choppy clip. */
+const rendererName = () => page.evaluate(() => {
+  const gl = document.createElement('canvas').getContext('webgl2') || document.createElement('canvas').getContext('webgl');
+  const d = gl?.getExtension('WEBGL_debug_renderer_info');
+  return d ? gl.getParameter(d.UNMASKED_RENDERER_WEBGL) : (gl ? 'unknown' : 'no webgl');
+}).catch(() => 'unknown');
+
+let rawPath = null;
+let renderer = 'unknown';
+try {
+  await page.waitForTimeout(BOOT_MS);
+  renderer = await rendererName();
+  // The runway, off camera. A game is rarely at its best the instant it
+  // finishes loading - the room is bare, the menu is up, nothing has happened
+  // yet - and filming from there spends the hover on a scene assembling
+  // itself. Everything here is cut with the boot wait, so the clip can open
+  // wherever the game is actually worth looking at.
+  if (setup.length) await run(setup);
+  const clipStart = Date.now() - t0;
+
+  await run(board.steps);
   const clipEnd = Date.now() - t0;
   sampling = false;
   await sampler;
@@ -396,7 +476,9 @@ try {
 // --- the gate ---------------------------------------------------------------------
 
 const software = /swiftshader|llvmpipe|software/i.test(renderer);
-const report = { target, out, frames: framesDir, size: `${W}x${H}`, bitrateK: BITRATE_K, renderer, software, seconds: null, sizeKB: null, movingPct: null, errors: errors.slice(0, 5) };
+const report = { target, out, frames: framesDir, size: `${W}x${H}`, bitrateK: BITRATE_K, renderer, software,
+  seconds: null, setupSeconds: +(setupMs / 1000).toFixed(1), sizeKB: null, movingPct: null,
+  openingStillMs: null, opensBeforeTheGameDoes: null, firstFrame: null, warnings: [], errors: errors.slice(0, 5) };
 const refuse = async (why) => {
   await rm(out, { force: true }).catch(() => undefined);
   report.ok = false;
@@ -411,7 +493,10 @@ if (errors.length) await refuse(`the page reported errors while the clip ran (${
 if (!rawPath || !existsSync(rawPath)) await refuse('the browser produced no recording');
 
 const inClip = samples.filter((s) => s.at >= board.__span[0]);
-if (inClip.length < 2) await refuse('too short to judge - fewer than two frames were sampled after boot');
+if (inClip.length < 2) await refuse('too short to judge - fewer than two frames were sampled after the clip started');
+// The still a card shows the instant somebody hovers it, named on its own
+// because it is the one frame with a job separate from the clip's.
+report.firstFrame = inClip[0].file;
 const first = frameStats(inClip[0].buf);
 if (first.std < 2.5) await refuse(`the first frame is blank (std ${first.std}); the game had not drawn anything when the clip began`);
 let moved = 0;
@@ -423,14 +508,70 @@ if (movingShare < MIN_MOVING_SHARE) {
     + 'it is probably pressing keys this game does not use, or acting before the game is ready for input.');
 }
 
+/**
+ * How long the clip runs before anything moves.
+ *
+ * A clip that passes the gate can still open on a motionless frame, and the
+ * opening is not one beat among several: a card plays the clip on hover and
+ * stops when the pointer leaves, so the first second or two is the whole
+ * audition. Three quiet seconds at the front is a storyboard that started
+ * filming before the game was worth filming.
+ *
+ * Reported, not refused. A game may open on a held shot on purpose, and this
+ * measurement cannot tell that from a loading screen - only looking can. It
+ * gives the author the number instead of a hunch.
+ */
+let openingStillMs = 0;
+for (let i = 1; i < inClip.length; i++) {
+  if (diffPct(inClip[i - 1].buf, inClip[i].buf) > MOVED_PCT) break;
+  openingStillMs = inClip[i].at - inClip[0].at;
+}
+report.openingStillMs = openingStillMs;
+
+/**
+ * Does the clip open on the game, or on the page before the game started?
+ *
+ * The stillness above cannot answer that. A clip that opens on a loading card
+ * and cuts to the game two seconds later measures as 100% moving and 0 ms
+ * still - the cut IS the motion - and it is exactly the clip nobody wants: the
+ * hover spends its whole second on the word "Loading".
+ *
+ * The first frame sampled is the page the instant it loaded, before the boot
+ * wait and before any setup. It is a free, per-game picture of "not started
+ * yet". If the clip's own first frame still looks like it, the storyboard
+ * began filming too early, whatever happens afterwards.
+ *
+ * Reported, not refused: a game that draws its whole scene instantly and then
+ * waits for a move looks the same at both marks and is perfectly fine.
+ */
+const preGame = diffPct(samples[0].buf, inClip[0].buf);
+report.opensBeforeTheGameDoes = preGame <= MOVED_PCT;
+if (report.opensBeforeTheGameDoes) {
+  report.warnings.push('the clip\'s first frame is indistinguishable from the page the instant it loaded, '
+    + `before the boot wait and any setup (${preGame}% of it differs). It is opening on a loading screen, an `
+    + `empty scene or a menu. Look at ${report.firstFrame}, then start the clip later: put the waiting and the `
+    + 'getting-ready into "setup", which is not filmed.');
+}
+if (openingStillMs >= QUIET_OPENING_MS) {
+  report.warnings.push(`the clip opens on ${(openingStillMs / 1000).toFixed(1)} s that do not move. `
+    + `Look at ${report.firstFrame}: if it could be a loading screen, an empty scene or a menu, the clip `
+    + 'starts in the wrong place. Move what gets the game ready into "setup" and open on the action.');
+}
+if (software) {
+  report.warnings.push('a software renderer drew these frames; the game ran at a few frames a second and the clip is choppy for that reason alone.');
+}
+
 // --- cut the boot off and put the file where it goes ------------------------------
 
 /**
  * Playwright ships its own ffmpeg for the screencast, and it can re-encode a
  * webm even though it cannot do much else (no image sequences, no filters). Use
- * it to drop the boot wait, so the clip opens on the game. If it cannot be
- * found the untrimmed clip is kept and the report says so - a clip with three
- * quiet seconds up front beats no clip.
+ * it to drop the boot wait and the setup phase, so the clip opens where the
+ * storyboard says it does. If it cannot be found and there was no setup, the
+ * untrimmed clip is kept and the report says so - a clip with three quiet
+ * seconds up front beats no clip. With a setup phase it is refused instead:
+ * that runway can be a minute long, and a minute of it in front of the clip is
+ * not a rough edge, it is a different video.
  *
  * Playwright does not export where it put the binary, so this looks in the
  * places its own installer uses: PLAYWRIGHT_BROWSERS_PATH if set (the value
@@ -476,6 +617,12 @@ if (ffmpeg) {
   });
   trimmed = code === 0 && existsSync(out);
 }
+if (!trimmed && setup.length) {
+  // Without the cut, "setup" is not off camera at all - it is the first thing
+  // a stranger watches, which is the opposite of what it is for.
+  await refuse('the boot wait and the setup phase could not be cut off the front (no bundled ffmpeg), '
+    + 'and the clip would have opened on the setup. Record without a "setup" phase, or install Playwright\'s ffmpeg.');
+}
 if (!trimmed) await rename(rawPath, out);
 await rm(workDir, { recursive: true, force: true });
 
@@ -489,6 +636,7 @@ report.sizeKB = Math.round((await stat(out)).size / 1024);
 report.samples = (await readdir(framesDir)).filter((f) => f.endsWith('.jpg')).length;
 console.log(JSON.stringify(report, null, 2));
 console.error(`\nrecord: wrote ${out} (${report.seconds}s, ${report.sizeKB} KB, ${report.movingPct}% moving).`);
-if (software) console.error('record: drawn by a SOFTWARE renderer - the game ran at a few frames a second and the clip will look choppy. '
-  + 'A machine with a working GPU records the same storyboard smoothly; say so if you publish this one.');
-console.error(`record: look at the frames in ${framesDir} before you publish - that is the review.`);
+for (const w of report.warnings) console.error(`record WARNING: ${w}`);
+if (software) console.error('record: a machine with a working GPU records the same storyboard smoothly; say so if you publish this one.');
+console.error(`record: look at the frames in ${framesDir} before you publish - that is the review, `
+  + `and ${report.firstFrame} is the frame a card shows on hover.`);

@@ -95,6 +95,13 @@ async function run(label, opts) {
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
   page.on('pageerror', (e) => errors.push(`${e.name}: ${e.message}`));
   page.on('requestfailed', (r) => errors.push(`failed request: ${r.url().split('/').pop()}`));
+  // A 404 is NOT a `requestfailed` - that fires for network-level failures, and
+  // a served error page is a perfectly successful request. Nor does it reliably
+  // reach the console: a loader that fetches its own assets (three.js does) can
+  // swallow the rejection, and then a bundle missing a model file passes every
+  // other check and 404s in front of a player. The response status is the only
+  // place that fact appears.
+  page.on('response', (r) => { if (r.status() >= 400) errors.push(`${r.status()} ${new URL(r.url()).pathname}`); });
 
   await page.goto(base, { waitUntil: 'load', timeout: 60000 });
   // Give the game a moment to boot, load assets and draw a few frames.

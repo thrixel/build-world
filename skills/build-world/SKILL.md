@@ -1222,54 +1222,110 @@ pressed WASD blind produced motionless clips of every game that answered to othe
 keys, and that is why this feature was once removed. You know which key opens the
 door, when the boss appears, and where the camera should be when it does.
 
-1. **Decide the three beats.** What does this game look like at its best? Usually:
-   the opening view (2-4 s, no input, let it breathe), the core verb in action
-   (moving, shooting, plating, building; 10-15 s), and one moment that is
-   particular to THIS game (the centrifuge spinning up, night falling, the combo
-   landing; 5-10 s). 20-30 seconds in total. Never over 45.
-2. **Write it as a storyboard JSON**, in viewport pixels of a 960x540 frame:
+1. **Find the moment the game is worth watching, and start there.** Not when it
+   finishes loading - THAT is the mistake this section exists to prevent. A card
+   plays the clip on hover and stops when the pointer leaves, so the first second
+   or two is the entire audition; a stranger decides there, not at 0:12. Games
+   are almost never at their best at second zero: the room is empty, the assets
+   are still popping in, the menu is up, no score, no enemies, nothing has
+   happened yet.
+
+   The test, before you write a step: **if frame one could be a loading screen,
+   an empty scene, or a menu, the clip starts in the wrong place.** Open on
+   motion, on a scene that is already furnished, already fighting, already
+   mid-build.
+
+   | This kind of game | opens badly on | opens well on |
+   |---|---|---|
+   | builder, decorator, sim | an empty plot, pieces flying in | a dressed room, a piece being dragged into place |
+   | shooter, action | the spawn point, the title | mid-firefight, already moving |
+   | puzzle, strategy | the rules screen, an empty board | a board mid-game, a move landing |
+   | explorer, atmosphere | the loading fade | already moving through the best-looking part of the map |
+
+   Then three beats, 20-30 seconds total, never over 45: **the hook** (the most
+   particular thing this game does, in motion, from the first frame), **the core
+   verb** (10-15 s of the thing a player actually spends their time doing), and
+   **one moment only this game has** (the centrifuge spinning up, night falling,
+   the combo landing; 5-10 s).
+2. **Put everything that is merely getting ready into `setup`.** It runs before
+   the clip starts and is NOT filmed, so it is how you reach the moment you chose
+   in step 1: wait out the asset streaming, dismiss the intro modal, place three
+   pieces of furniture, walk to the good room, let a wave of enemies spawn. Up to
+   60 s of it. Without this everything you do is in the clip, which is why
+   previews used to open on a room assembling itself.
+3. **Write it as a storyboard JSON**, in viewport pixels of the frame you will
+   film at - 1920x1080 by default. Coordinates are scaled if you change
+   `--size` later, but that scaling assumes the game's UI scales with its
+   viewport, and a HUD anchored to the window's edges does not: re-running an
+   old storyboard at a new size gives a different clip, not the same one
+   larger. Author at one size and stay there:
 
    ```json
-   { "steps": [
-     { "note": "opening view, let the scene settle" }, { "wait": 3000 },
-     { "note": "walk into the kitchen, look around" },
-     { "press": "KeyW", "hold": 2500 }, { "move": [700, 270], "ms": 800 },
-     { "note": "plate a dish" }, { "press": "Space" }, { "wait": 1500 },
-     { "drag": [480, 300, 640, 300], "ms": 600 },
-     { "click": [512, 380] }, { "wait": 2000 }
-   ] }
+   { "setup": [
+       { "note": "off camera: wait out the asset load, then dress the room" },
+       { "wait": 6000 }, { "click": [512, 380] },
+       { "drag": [200, 300, 560, 320], "ms": 700 },
+       { "drag": [200, 380, 700, 300], "ms": 700 }, { "wait": 1200 }
+     ],
+     "steps": [
+       { "note": "HOOK: already dragging a piece into a furnished room" },
+       { "drag": [200, 340, 430, 300], "ms": 900 }, { "wait": 600 },
+       { "note": "the verb: place two more, camera follows" },
+       { "click": [512, 380] }, { "move": [700, 270], "ms": 800 },
+       { "drag": [480, 300, 640, 300], "ms": 600 },
+       { "note": "only this game: the lights come on over the finished room" },
+       { "press": "KeyL" }, { "wait": 2500 }
+     ] }
    ```
 
-   Steps: `wait` (ms), `press` a key code (add `hold` in ms to keep it down),
+   `setup` and `steps` take the same steps: `wait` (ms), `press` a key code (add `hold` in ms to keep it down),
    `down` / `up` for a key held across other steps, `click` `[x, y]` (add `hold`
    for hold-to-fire, `"button": "right"` for a right-click ability), `move`
-   `[x, y]` with `ms` for mouselook, `drag` `[x0, y0, x1, y1]` with `ms`, `type`
-   text. Steps run one after another, so "shoot while flying" is `down` Space,
+   `[x, y]` with `ms` for mouselook, `drag` `[x0, y0, x1, y1]` with `ms`,
+   `scroll` `[dx, dy]` with `ms` (zoom, in most games that have one - negative
+   dy zooms in; it is spread over `ms` so the camera moves instead of jumping),
+   `type` text. Steps run one after another, so "shoot while flying" is `down` Space,
    then the moves, then `up` Space. `note` is for you:
    say what the beat shows, so the storyboard reads as a shot list. Key codes are
    DOM codes - `KeyW`, `Space`, `ArrowUp`, `Digit1`, `Equal`. If the game needs a
    click or a key to start, that is the first step.
-3. **Record it:**
+4. **Record it:**
 
    ```
    node <skill>/tools/record.mjs <the bundle directory> --storyboard=<file>
    ```
 
-   It opens the bundle in a real browser, waits for it to boot, runs your steps,
-   and writes `preview.webm` into the bundle root. It also saves a still every
-   1.5 seconds to a folder it names in its report. **Look at those frames.** That
-   is the review: is the camera where you meant, is anything black, does the clip
-   show the game or a menu? The report also names the `renderer`: if it says
-   `software: true`, this machine has no usable GPU for headless Chromium, the
-   game ran at a few frames a second, and the clip is choppy for that reason
-   alone. Tell the user; a re-record on a machine with a GPU fixes it, nothing
-   in the storyboard will.
-4. **It refuses a clip that does not move.** Fewer than half the sampled intervals
+   It opens the bundle in a real browser, waits for it to boot, runs `setup` off
+   camera, then films `steps` into `preview.webm` at the bundle root. It also
+   saves a still every 1.5 seconds to a folder it names in its report.
+5. **Read the report, then look at the frames.** Four fields decide whether the
+   take is a keeper, and `warnings` collects the ones that went wrong:
+   - `firstFrame` - the still a card shows the instant somebody hovers it. **Open
+     this one.** Apply the step 1 test to it: loading screen, empty scene or menu
+     means record again from a later moment, not publish.
+   - `opensBeforeTheGameDoes: true` - the clip's first frame still looks like the
+     page did the instant it loaded. This is the one that catches the mistake the
+     other checks cannot: a clip that opens on a loading card and cuts to the game
+     a second later measures as 100% moving, because the cut IS the motion, and it
+     spends the whole hover on the word "Loading". Start the clip later.
+   - `openingStillMs` - how long the clip runs before anything moves. Anything at
+     or over 3000 raises a warning, and the warning is right: you filmed the
+     runway. Move those seconds into `setup`.
+   - `software: true` - this machine has no usable GPU for headless Chromium, the
+     game ran at a few frames a second, and the clip is choppy for that reason
+     alone. Tell the user; a re-record on a machine with a GPU fixes it, nothing
+     in the storyboard will.
+
+   Then look at the frames themselves: is the camera where you meant, is anything
+   black, does the clip show the game or a menu? A clip parked on a title screen
+   passes every automatic check ever written, because a blurred animated
+   background behind a modal moves plenty. Only looking catches that.
+6. **It refuses a clip that does not move.** Fewer than half the sampled intervals
    changing, a page error, or a blank first frame all exit 1 and delete the file.
    That is the gate that was missing the first time. Fix the storyboard (wrong key?
    too early? the game wanted a click to start?) and record again. Two or three
    takes is normal; the first is rarely the keeper.
-5. **Offer the user a say.** "Want the clip to open on the boss instead?" is one
+7. **Offer the user a say.** "Want the clip to open on the boss instead?" is one
    sentence, and a re-record is thirty seconds. Anyone who asks for a change to the
    clip gets it: the storyboard is theirs to direct.
 
