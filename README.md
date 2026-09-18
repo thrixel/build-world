@@ -10,7 +10,7 @@ Build World currently supports **Three.js**, **Roblox**, **Unity**, and **Unreal
 
 ## Thrixel inside the Gauntlet Loop
 
-Build World uses a Gauntlet-style iterative workflow for creating interactive 3D worlds. The agent calls Thrixel to generate and refine 3D assets inside the loop. The agent continuously builds, evaluates, and improves the world itself, including its gameplay, interactions, and assets. With Build World, you can vibe out a game or other interactive 3D experience from a single prompt, then keep refining it with follow-up prompts.
+Build World uses a [gauntlet loop](https://thrixel.com/learn/gauntlet-loop)-like iterative workflow for creating interactive 3D worlds. The agent calls Thrixel to generate and refine 3D assets inside the loop. The agent continuously builds, evaluates, and improves the world itself, including its gameplay, interactions, and assets. With Build World, you can [vibe out a game](https://thrixel.com/learn/vibe-gaming) or other interactive 3D experience from a single prompt, then keep refining it with follow-up prompts.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/ThatCharlieK/READMEAssets/main/Thrixel-1prompt-to-game-readme.gif" width="600"/>
