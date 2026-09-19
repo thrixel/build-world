@@ -111,6 +111,19 @@ make every group share one numeric level. Test the packaged build as well as PIE
 - When ticking distant actors less frequently, integrate movement and timers with elapsed
   time. Check transitions near the distance threshold and interactions with nearby actors.
 
+### "[VSM] Non-Nanite Marking Job Queue overflow"
+
+The on-screen warning (also `LogRenderer: Warning: [VSM] Non-Nanite Marking Job Queue overflow`
+in the log) means non-Nanite shadow casters are touching too many Virtual Shadow Map pages.
+Audit instead of guessing. In editor Python, walk every `StaticMeshComponent` and record
+`static_mesh.nanite_settings.enabled`, `cast_shadow`, instance count and actor bounds; list the
+entries that are non-Nanite **and** casting. In the tested level that left three kinds of mesh,
+and the offender was the template's `SM_SkySphere`: shadow casting on, with bounds that cover
+every page of every clipmap level. Set `castShadow` and `bCastDynamicShadow` false on sky domes,
+water planes and glass. Non-Nanite grass that already has shadow casting off does not
+contribute. The warning is intermittent (it tends to fire on frames that invalidate the shadow
+cache), so compare log counts across a long PIE run before and after the change.
+
 ## Static procedural surfaces
 
 For a mostly static ground pattern, baking tileable noise to a small texture and sampling it at

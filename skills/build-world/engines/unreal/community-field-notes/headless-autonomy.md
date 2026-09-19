@@ -105,15 +105,51 @@ seconds apart, `cmp` the two PNGs.
   the origin, underground. Pass the PlayerStart location (or wherever you want to test from).
   This is also how you "walk" the player to a spot for a screenshot: restart PIE with a
   different `startTransform`.
-- Keyboard input cannot be injected into the game from the toolset (`SlateInspector.PressKey`
-  goes to the focused Slate widget, not the game). To exercise input-driven logic
-  autonomously, add a temporary hook (`BeginPlay -> Delay -> the function the key calls`)
-  with a `PrintString ... :bPrintToLog true` marker, run PIE, grep the log for the marker, then
-  rebuild the graph without the hook. Leave the actual key binding to the human to enjoy.
+- **Key presses do reach the game once the PIE window has focus.** `SlateInspector.PressKey`
+  goes to the focused Slate widget, so straight after `StartPIE` it is lost, and
+  `Windows {"action":"select"}` is not enough. `Snapshot` the floating Preview window, `Click`
+  any widget inside the viewport (a HUD text block works), then `PressKey {"key":"E"}`. Held
+  movement and mouse look still cannot be driven this way. Two traps: when several actors have
+  enabled input for the same key, only the last one enabled receives it, so test from a start
+  point outside the radius of other interactables; and a click also captures the mouse, which
+  is harmless for a test. When focus cannot be obtained, fall back to a temporary hook
+  (`BeginPlay -> timer -> the function the key calls`) with a `PrintString ... :bPrintToLog true`
+  marker, grep the log, and rebuild the graph without the hook.
 - Verify game logic from the **log file on disk**, not `LogsToolset.GetLogEntries`: that tool
   returns the *oldest* matches up to `maxEntries`, so new lines are invisible once a pattern
   has matched before. `grep -a LogBlueprintUserMessages <Project>/Saved/Logs/<Project>.log | tail`
   is reliable and instant.
+
+## 5b. Measuring what you cannot watch
+
+An agent sees stills roughly 0.4 s apart, so flicker, jitter and physics blow-ups are invisible
+unless you measure them.
+
+- **Frame-burst difference.** Fixed `startTransform`, capture 6-8 frames back to back, compute
+  the mean absolute pixel difference between frames over a crop that excludes HUD and window
+  chrome. A pure-Python PNG decoder (zlib plus the five scanline filters) is enough; do not
+  assume PIL or numpy exist.
+- **Controls make the number mean something.** Run the same burst with the effect's amplitude
+  at exactly 0 (noise floor from lighting and anti-aliasing) and with the animation speed scaled
+  to near zero (anything left above the floor is per-frame instability, not motion). Change one
+  thing per run. Console variables set through the Cmd box before `StartPIE` carry into the
+  session, so anti-aliasing method or pre-pass mode can be A/B tested; restore them afterwards.
+- **Alternating states.** Compare frame *i* with *i+1* and with *i+2*. Smooth motion gives
+  `d(i,i+1) < d(i,i+2)`. If `d(i,i+1) > d(i,i+2)` the image is flipping between two states. An
+  amplified difference image and a magnified side-by-side crop of two consecutive frames show
+  what is flipping.
+- **Encode hidden values as pixels.** A debug material whose emissive is `frac(Time * k)`, or a
+  cube whose World Position Offset is the value under test, turns shader inputs into something
+  a screenshot can read. Remove the debug actors afterwards.
+- **Physics without input.** To check how props react to the character, spawn the pawn directly
+  on top of them with `startTransform` and look at where they end up: nudged is fine, gone is not.
+  `LogCharacterMovement: ... is stuck and failed to move` in the log means the pawn climbed onto
+  a small prop.
+- **Direction of travel.** Two frames a second apart from above: the displacement of a creature
+  must point the same way as its head.
+- Warnings that appear on screen during play are usually also in the log
+  (`LogRenderer: Warning: [VSM] ...`). Count occurrences before and after a long PIE run rather
+  than waiting to see one.
 
 ## 6. Building a whole level from scripts
 
@@ -149,6 +185,9 @@ Rules learned the hard way:
   the C++ short form (`BLEND_Translucent`, `TLM_SurfacePerPixelLighting`, `Hidden`). Object
   references are `{"refPath": ...}`. `list_properties` returns the JSON schema - use it when a
   struct shape is unclear (`layoutData` on a canvas slot, `settings` on a PostProcessVolume).
+- **Read structs back.** On components of placed Blueprint actors only the first member of a
+  vector or rotator is written, and nested `bodyInstance` fields are ignored (gotchas file,
+  ObjectTools). Use actor-level transforms, or editor Python for component offsets and collision.
 - Spawned actors get generated names; use the returned `refPath`, then `set_label`. Component
   paths are `<actor refPath>.<ComponentName>` (`.StaticMeshComponent0`, `.Mesh`, `.Orbit`).
   Light actors do not follow the pattern you expect: DirectionalLight's component is
@@ -175,6 +214,13 @@ in is the status-bar Cmd textbox via `SlateInspectorToolset.Type`, wrapped in
 other submit. Once it works you have all of `unreal.*`: `py unreal.EditorLoadingAndSavingUtils.
 save_dirty_packages(True, True)` was how the World Partition actors finally got saved.
 
+The helper wraps `py <source>` as Python source, so run a file with
+`py exec(open('/abs/script.py').read())`, not `py "/abs/script.py"`. A pattern that scales: keep
+one small editor-Python file per job that reads a JSON spec written by the shell (component
+transforms, collision settings, light properties), log a unique marker at the end, and retry the
+helper until the marker count in the log increases. Some settings classes are not exposed to
+Python (`unreal.LevelEditorPlaySettings`); use `ConfigSettingsToolset` for those.
+
 ## 8. Level hygiene for an agent-made level
 
 - Delete template geometry by class, keeping the sky sphere:
@@ -199,6 +245,8 @@ normal checkout-and-save path even when the files are writable. Use the direct P
 and dirty-package checks in [setup.md](../setup.md#interactive-editing-and-saving) before
 restarting without that flag. Treat this separately from property edits that never marked
 an actor dirty, World Partition external packages, and changes made only in Play/Simulate.
+Running without the flag also means import popups are no longer suppressed; see the same
+setup section for closing the Message Log window that steals focus from the console helper.
 
 ## 8b. The editor can die under you
 

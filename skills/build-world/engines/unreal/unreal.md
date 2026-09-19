@@ -44,6 +44,9 @@ Additionally, you must run this PIE verification loop. Create at least 1 detaile
 Run the script and take at least 5 screenshots throughout. Harshly critique them (with a subagent, if you want); keep building
 until the critique agrees the result looks absolutely AAA quality.
 
+Stills cannot show flicker, jitter or physics blow-ups; measure those with the frame-burst
+techniques in `community-field-notes/headless-autonomy.md` §5b.
+
 During critique, especially critically investigate for places where:
 - Objects are floating, or glitching through the ground/phasing into things
 - The camera faces the wrong way
@@ -129,7 +132,8 @@ That changes nothing about how you work: `CaptureEditorImage` shows you the same
 Pixel Streaming exists, and do not require it.
 
 If the user shares a Pixel Streaming player URL, a Playwright session against it is a possible second route
-for keyboard/mouse input into the game; the toolset alone cannot inject game input.
+for keyboard/mouse input into the game. The toolset alone can deliver single key presses to a
+focused PIE window (`community-field-notes/headless-autonomy.md` §5) but not held movement or mouse look.
 
 ### If the box is headless
 

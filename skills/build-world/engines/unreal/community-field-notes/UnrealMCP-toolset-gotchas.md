@@ -166,6 +166,11 @@ the absence is louder than most bugs on this page.
 `Type {ref, text, submit: true}`. Find the ref with `Observe("")` then `Snapshot` on the status
 bar menu - it is the textbox next to "Cmd". It works while PIE is running, too.
 
+Console variables set this way outside PIE persist into the next PIE session, which makes
+A/B tests of renderer settings possible (`r.AntiAliasingMethod`, `r.EarlyZPass`); read the value
+back with `SearchCVars` and restore it afterwards. `WorldSettings.timeDilation` cannot be
+written through `set_properties`.
+
 ### Every `ProfileGPU` leaves a GPU Visualizer window open, and the next profile pays for it
 
 **Kind:** defect · **Hit on:** 5.8.0 · **Workaround:** yes
@@ -231,6 +236,40 @@ Swapping the mesh of a `StaticMeshComponent` through `set_properties` resets `ov
 to empty, so the actor shows the mesh's own slot materials (for an OBJ import that is the grey
 default). Set `staticMesh` and `overrideMaterials` together, or reapply the override after the swap
 - and look at it: a terrain that turns grey after a mesh reimport is this.
+
+### On a Blueprint actor's component, only the FIRST member of a vector or rotator is written
+
+**Kind:** defect · **Hit on:** 5.8.2 · **Workaround:** yes
+
+`set_properties` on a component of a placed Blueprint actor with
+`{"relativeScale3D": {"x": 0.9, "y": 0.9, "z": 0.9}}` reads back `(0.9, <old>, <old>)`.
+`relativeLocation` keeps only `x`, `relativeRotation` keeps only `pitch`. No error, and the
+returned value looks plausible unless you compare all three members. One member per call does
+not help either. The visible results were uniform scales that stretched meshes along one axis,
+and facing yaws that silently stayed at the class default. `StaticMeshActor` components, and
+actor-level transforms, were not affected.
+
+**Workaround.** Put the transform on the actor (`ActorTools.set_actor_transform`) whenever the
+design allows. For a component offset that has to exist, use editor Python:
+`comp.set_relative_location(...)`, `set_relative_rotation(...)`, `set_relative_scale3d(...)`
+(see headless-autonomy.md §7b). **Read every struct back after writing it** and compare all members.
+
+### A collision profile name does not change collision; nested `bodyInstance` fields are ignored
+
+**Kind:** defect · **Hit on:** 5.8.2 · **Workaround:** yes
+
+`{"bodyInstance": {"collisionProfileName": "NoCollision"}}` stores the name and nothing else:
+`collisionEnabled` still reads `QueryAndPhysics`, traces still hit the mesh and pawns still
+collide with it. Other nested fields (`collisionEnabled`, `bSimulatePhysics`, damping) are not
+applied at all. A surface meant to be walked through stays solid, and "physics" props never move.
+
+**Workaround.** Editor Python on the placed component:
+`comp.set_collision_profile_name("NoCollision")` and
+`comp.set_collision_enabled(unreal.CollisionEnabled.NO_COLLISION)`. For Blueprint classes set it
+at runtime in BeginPlay (`Collision|SetActorEnableCollision`, `Collision|SetCollisionProfileName`,
+`Physics|SetSimulatePhysics`). For imported meshes that must never block,
+`StaticMeshTools.remove_collisions` on the asset removes the auto-generated shape. Verify with
+`SceneTools.trace_world` through the object.
 
 ### `set_properties` never fires `PostEditChangeProperty`
 
@@ -351,6 +390,18 @@ raises `TypeError: does not support a default value`. The defensive pattern ever
 reflex is the one that breaks - and it breaks the whole script, undoing everything before it.
 
 **Workaround.** `if key in d: d[key]`. Never `.get`.
+
+### `open()` inside a script is read-only, and the mode argument is mandatory
+
+**Kind:** limitation · **Hit on:** 5.8.2 · **Workaround:** yes
+
+`open(path)` raises `missing 1 required positional argument: 'mode'`, and `open(path, "w")`
+raises `Mode 'w' is not permitted. Allowed modes: ['r', 'rb', 'rt']`. `exec` is not defined.
+Reading large inputs (instance lists, placement tables) with `open(path, "r")` works and keeps
+the script small.
+
+**Workaround.** Return data in the result dict and write files from the shell that called the
+tool.
 
 ### `get_properties` with a property the node's class does not have kills the entire script
 
@@ -738,6 +789,15 @@ via editor Python: `py unreal.EditorAssetLibrary.delete_directory("/Game/<Folder
 Cmd box (`tools/ue_console.sh`). Assets that had been saved once (the terrain mesh) deleted
 through the tool without trouble, so treat the tool as "works on saved assets".
 
+### `AssetTools.get_asset_class` returns short class names
+
+**Kind:** note · **Hit on:** 5.8.2
+
+The return value is `Material`, `Texture2D`, `StaticMesh`, `MaterialInstanceConstant` - not a
+`/Script/Engine.Material` path. A filter written as `cls.endswith(".Material")` never matches
+and skips its branch without any error; here it silently skipped a two-sided pass over several
+hundred imported materials. Compare `cls.split(".")[-1]` so either form works.
+
 ### `StaticMeshTools` has no `get_mesh_info`
 
 **Kind:** note · **Hit on:** 5.8.0 · **Workaround:** yes
@@ -819,6 +879,43 @@ graphs are the exception - rewriting a `(fn ...)` graph replaced its body cleanl
 node makes the following `write_graph_dsl` fail with `Could not find a function named "FeedNow"`
 (the write compiles) and the whole script rolls back. Clear the event graph (delete its nodes)
 and compile BEFORE removing functions, then rebuild.
+
+### Replacing the body of an existing function graph
+
+**Kind:** note · **Hit on:** 5.8.2
+
+Because `write_graph_dsl` appends, and a removed function cannot be re-added under the same name
+while something still calls it, rewrite in place: `find_nodes(graph, "")`, `delete_node` each
+(wrap in `try` - the entry node refuses or is recreated), then `write_graph_dsl` with the same
+`(fn Name (Params) ...)` header and compile. Check `find_nodes(..., entry_points_only=true)`
+returns one node and `read_graph_dsl` shows a single `(fn`.
+
+### A `bind` of a pure expression is re-evaluated at every use
+
+**Kind:** note · **Hit on:** 5.8.2 · **Workaround:** yes
+
+`(bind n (not (Variables|Default|GetIsOpen)))` followed by `(Variables|Default|SetIsOpen n)` and
+then `(select n ...)` reads the flipped value the second time: pure Blueprint nodes have no
+cached output, so each consumer re-runs the expression against the variable you just changed.
+The symptom was a toggle that worked while its prompt text always showed the wrong state.
+
+**Workaround.** Branch on the variable and set literals in each branch
+(`(if (GetIsOpen) (SetIsOpen false) ... (else (SetIsOpen true) ...))`), or derive later values
+from the variable after it has been written.
+
+### Reading another instance's variable: not from inside the same class
+
+**Kind:** limitation · **Hit on:** 5.8.2 · **Workaround:** yes
+
+From another Blueprint, `Class|BPOther|GetScore :self other` exists. Inside `BP_Other`'s own
+graph the only getter is `Variables|Default|GetScore`, which has no target pin, so an instance
+cannot read a sibling instance's variable through the DSL.
+
+**Workaround.** Add a one-line function with an output parameter
+(`add_function_param(..., input_param=false)`, body `(return (Variables|Default|GetScore))`).
+Inside the class it is `CallFunction|ReadScore :self other :Unused false`; from other classes
+`Class|BPOther|ReadScore :self other :Unused false`. Keep a dummy input parameter, as for any
+function you need to call by node.
 
 ### Latent nodes inside functions are rejected; use timers by name
 
@@ -929,6 +1026,19 @@ Two separate problems with array properties (seen on `perInstanceSMData`):
 **Workaround.** `set([])` -> `set(list)` -> `set(list)` again, then read back and assert no
 element is still default. Same-length rewrites alone are reliable.
 
+### Large per-instance arrays: one write can block the editor for minutes
+
+**Kind:** note · **Hit on:** 5.8.2 · **Workaround:** yes
+
+Writing `perInstanceSMCustomData` for a few thousand instances took several minutes per
+`set_properties` call with the editor at 100% CPU and unresponsive. The HTTP client timed out
+while the script kept running and completed correctly. `perInstanceSMData` of the same size
+was much faster.
+
+**Workaround.** Do not retry on the timeout. Poll a cheap read-only call until the server
+answers again, then read the result back. Write each array once per component (twice only for
+the resize defect above), and prefer fewer, larger components.
+
 ### The status-bar Cmd box: first character duplicated, submit lands every other time
 
 **Kind:** defect · **Hit on:** 5.8.2 · **Workaround:** yes
@@ -949,6 +1059,13 @@ versions could submit a slow script twice. Missing acknowledgements or connectio
 require log/state inspection before retrying; use idempotent scripts where possible. Find the
 textbox ref with `Snapshot("sp1")` - it is the
 `textbox` next to the `"Cmd"` combobox at the bottom of the main window.
+
+When the editor runs **without `-Unattended`** (the recommended way for interactive sessions,
+see [setup.md](../setup.md#interactive-editing-and-saving)), popups are no longer suppressed: every FBX/OBJ import opens a **Message Log** window that
+takes keyboard focus, the helper reports `No completion acknowledgement`, and
+`CaptureEditorImage` can fail with `Failed to capture any editor windows`. List windows with
+`SlateInspectorToolset.Windows {}` and close it with `Windows {"action":"close","index":N}`
+after each import batch.
 
 ---
 
@@ -972,6 +1089,27 @@ Passing a zero transform spawns the player at the origin - usually colliding
 PlayerStart location. Useful side effect: `startTransform` is how you position the player for a
 screenshot. Prefer `PlayMode_InEditorFloating`: the in-viewport mode's world freezes on a
 headless editor when no input arrives (see headless-autonomy.md §4).
+
+A start point that overlaps geometry by even a few centimetres has the same outcome (a capsule
+of radius ~34 and half-height ~96 clipping the edge of a raised deck was enough). It reads as
+"fell through the world": the view is from the origin under the terrain, and every
+proximity-based prompt shows at once because `GetPlayerPawn` is null and distances evaluate
+to 0. Check the capsule against nearby tops before suspecting collision.
+
+### The floating PIE window can shrink on every run
+
+**Kind:** defect · **Hit on:** 5.8.2 · **Workaround:** yes
+
+Most likely a bug with the built-in windowing system that is used with -RenderOffscreen
+visible through editor captures and Pixel Streaming.
+
+With `PlayMode_InEditorFloating`, `NewWindowHeight` drifted down a few dozen pixels per session
+(378 -> 252 over a test series), which also changes the vertical field of view of every
+screenshot. `unreal.LevelEditorPlaySettings` is not exposed to Python.
+
+**Workaround.** `ConfigSettingsToolset.SetSectionProperties` with container `Editor`, category
+`LevelEditor`, section `PlayIn`: `{"NewWindowWidth":1280,"NewWindowHeight":720,"CenterNewWindow":true}`.
+With the window centred the size held.
 
 ### `LogsToolset.GetLogEntries` returns the OLDEST matches
 

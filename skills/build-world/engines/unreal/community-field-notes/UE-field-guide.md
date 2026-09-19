@@ -436,6 +436,12 @@ source). This bites any generated OBJ - terrain, water planes, collision proxies
 Thrixel assets, which normally arrive as FBX and are converted there instead (glTF Y-up -> UE
 Z-up, glTF Z -> UE Y).
 
+The same importer also **flips the V texture coordinate** (`vt u v` arrives as `(u, 1 - v)`).
+That is invisible with an ordinary texture and wrong for any generated mesh that stores data in
+UVs: a root-to-tip ramp used as a wind mask comes in upside down, so roots sway while tips stay
+pinned, and a base-to-tip colour gradient inverts. Write `1 - v` in the exporter or put a
+`OneMinus` after the V mask in the material, and confirm with a close-up.
+
 ### 4.3 Widget paths vs widget Blueprint paths
 
 UMG-related tools usually take one of two parameters with similar names:
@@ -727,6 +733,49 @@ diverges from the in-memory state — camera cuts, sub-sequence bindings,
 shot tracks, etc. Saving the level alone (`FEditorFileUtils::SaveCurrentLevel`)
 does not cover this; `/Game/...` sequence assets live in their own
 packages.
+
+
+### 5.18 Character push launches light physics props
+
+`CharacterMovementComponent` defaults are tuned for crates: `PushForceFactor = 750000` with
+`bPushForceScaledToMass = false`. A 0.1-0.4 kg prop touched by the player receives that full
+force, leaves the room in one frame and can tunnel through the floor - it reads as "the toy
+disappeared when I touched it". On the character class defaults (`<CDO>.CharMoveComp`, flat
+properties that `set_properties` does write):
+
+| Property | Default | Light-prop value that worked |
+|---|---|---|
+| `bPushForceScaledToMass` | false | true |
+| `pushForceFactor` | 750000 | ~1800 |
+| `initialPushForceFactor` | 500 | ~160 |
+| `maxTouchForce` | 250 | ~60 |
+| `repulsionForce` | 2.5 | ~0.6 |
+
+On the prop: simple convex collision (`StaticMeshTools.generate_convex_collisions`), and in
+BeginPlay `SetCollisionProfileName "PhysicsActor"`, `SetMassOverrideInKg`, some linear and angular
+damping, `SetUseCCD true`, then `SetSimulatePhysics true` (nested body settings cannot be set
+through MCP properties). Set `canCharacterStepUpOn = ECB_No` on the prop's mesh component,
+otherwise the pawn climbs onto small props and logs
+`LogCharacterMovement: ... is stuck and failed to move`.
+
+### 5.19 Look-at interaction when several targets are in range
+
+Per-actor "player is near, show a prompt, enable input" breaks down as soon as two interactables
+overlap: prompts draw on top of each other, and because key events consume input only the actor
+that enabled input last receives the key. A pattern that holds up without a central manager:
+
+- Each interactable computes a **focus score** every tick: inside its radius, take the dot of the
+  camera forward vector with the direction to the part's bounds centre
+  (`GetComponentBounds`), compare against a **per-instance** threshold, and normalise
+  (`(dot - threshold) / (1 - threshold)`, or -1 when it does not qualify). Thresholds that worked:
+  ~0.985 for stacked drawers 20 cm apart, ~0.95 for doors, ~0.93 for tall cupboards. One fixed
+  cone either catches three drawers at once or misses low furniture from standing height.
+- It publishes the score through a small function and yields if any other interactable scores
+  higher (`GetAllActorsOfClass`, a dozen actors is cheap). Only the winner shows its prompt and
+  calls `EnableInput`; everyone else hides and calls `DisableInput`.
+- Proximity-only prompts (no aiming) yield whenever any aimed interactable qualifies at all.
+- Keep class references one-way (A reads B's score, B never reads A's) to avoid circular
+  Blueprint dependencies; let the less specific target do the yielding.
 
 ---
 

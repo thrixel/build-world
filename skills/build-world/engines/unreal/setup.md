@@ -62,6 +62,21 @@ Use `-RenderOffscreen` for a headless interactive editor, including MCP and Pixe
 sessions. **Omit `-Unattended` from these launches.** Keep it for automated commandlets or
 tests that handle saving and exit explicitly.
 
+### What changes for the agent when `-Unattended` is absent
+
+`-Unattended` suppresses editor popups. Without it the user can save their own edits, and the
+agent has to handle the dialogs that now appear:
+
+- Every FBX/OBJ import opens a **Message Log** window (import warnings such as missing smoothing
+  groups). It takes keyboard focus, so `tools/ue_console.sh` reports
+  `No completion acknowledgement` and `CaptureEditorImage` can fail with
+  `Failed to capture any editor windows`. After each import batch, list windows with
+  `SlateInspectorToolset.Windows {}` and close it with `Windows {"action":"close","index":N}`.
+- Treat a console helper that stops acknowledging as a focus problem first: look for an extra
+  window before assuming the command failed, and do not blindly resend a mutating script.
+- A popup drawn over the floating PIE window ends up in screenshots; close it before judging a
+  capture.
+
 ### Why Save All can silently fail
 
 Verified in the installed UE 5.8.2 source, `Engine/Source/Editor/UnrealEd/Private/FileHelpers.cpp`:

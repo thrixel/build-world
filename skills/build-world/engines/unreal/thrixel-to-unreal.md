@@ -29,11 +29,27 @@ ground plane / base", resting on Y=0 facing +Z, texture size. Prompts inherit it
   150k-triangle sculpted tree at ~14k reads the same past a few metres and can be instanced in
   the hundreds. Keep the full-resolution original for close-up placements.
 - For multipart models, reduce **before** `thrixel_group_parts` when the original ungrouped
-  source is available. Inspect triangle counts after reduction and grouping; an unchanged count
-  is not a successful optimization. Some textured multipart reductions failed while their
-  original ungrouped sources worked. This is an observed workaround, not proof of a backend cause.
+  source is available. Inspect triangle counts after reduction and grouping to make sure it worked.
 - Group static parts before downloading; retain only parts that must move separately. Material
   slots survive grouping, so one grouped mesh is not necessarily one draw call.
+- **Order of operations for multipart models: Texture and Edit on the ungrouped parent, group
+  last.** `thrixel_retexture_model` on an already-grouped result splits it again (a one-mesh
+  grouped prop came back as 36 parts) and needs a second grouping; run on the parent, the named
+  groups survive and `thrixel_group_parts` works once at the end.
+- Architect doesn't paint detailed pictures: framed art arrives with blank canvases, book covers and
+  small props can come back in one flat colour, and wood can arrive without grain. Look at the
+  thumbnail and budget a Texture pass for artwork and for anything that will be a focal point.
+  On furniture with open interiors a Texture pass can project interior shelf lines onto outer
+  panels; check the outside faces, and if they are marked, keep the untextured model and assign
+  an existing grained material to its named slots instead (see Materials below).
+- A Sculptor prompt for a flat-lying subject (a curled animal, a rug) can return a flat card
+  with a picture on it. Say "fully three-dimensional", give dimensions, add "no picture frame, no
+  base", and check the bounds: a depth of a few millimetres is the giveaway.
+- Scope `thrixel_edit_model` with `focus_on_node_names` (exact names from
+  `thrixel_inspect_model`) rather than describing the target parts only in prose.
+- `thrixel_inspect_model` pages long models heaviest-first and lists **groups last**; page with
+  `offset` to find names such as `Left_Door_Group`, which work directly as `aliases` in
+  `keep_groups`.
 - `thrixel_download` on a job that has not completed errors out; poll status first.
 
 ## Download the right format
@@ -75,6 +91,21 @@ StaticMeshTools.import_file(folder_path="/Game/<Game>/<Category>/<Asset>", asset
      - pivots come in at the part centres, but node scale is not applied either (meshes arrive in
      raw file units), so you then rebuild the hierarchy with the node transforms yourself. Route 1
      is less work for a handful of moving parts.
+- **Hinges, lids and drawers with route 1.** `thrixel_group_parts` pivots are part centers, good for
+  wheels and rotors, but not doors which should pivot on an edge. After a `combine_meshes=false`
+  import every part mesh is in model space, so read the part's own `get_bounds` and pick the
+  hinge line from it (for a door whose front is +Y: the outer vertical edge, `x = min or max`,
+  `y =` the carcass front). Then, for a cabinet placed at `P` with yaw `θ` and scale `s`:
+  spawn one movable actor per part at `P + Rz(θ)·(hinge·s)` with the same yaw and scale, give it
+  the part mesh, and offset the mesh component by `-hinge` (unscaled local units) so the part
+  sits exactly where it did in the closed model. Rotate or slide the *actor*:
+  - door: yaw about Z, opposite signs for left and right leaves;
+  - lid hinged along the model's X axis: yaw the actor `θ+90`, counter-rotate the mesh component
+    by `-90` and offset it by `(-hinge.y, hinge.x, -hinge.z)`, then drive pitch;
+  - drawer: no offset, slide along the model's front axis rotated into world space.
+  The component offset must be written through editor Python, not `set_properties` (only the
+  first member of a vector lands on a Blueprint actor's component - gotchas file, ObjectTools).
+  Turn collision off on the moving part and leave it on the body.
 - **One folder per asset.** Atlas exports often reuse `Image_0` and `Material_0`; multipart
   exports can instead contain many named materials and PNGs. A dedicated folder avoids name
   collisions between unrelated assets.
@@ -86,6 +117,10 @@ StaticMeshTools.import_file(folder_path="/Game/<Game>/<Category>/<Asset>", asset
 - **Facing.** Derive it, do not guess. Thrixel thumbnails are rendered from the (+X, +Y up, +Z)
   octant: screen-left is glTF +Z, screen-right is glTF +X. A front that appears lower-left is at
   glTF +Z = UE +Y after import. Then confirm once in a floating PIE window from close range.
+  For creatures, settle it from geometry instead of a thumbnail. Verify with two frames a second apart:
+  displacement must point the same way as the head. If a facing offset lives on a Blueprint component's
+  `relativeRotation`, remember only `pitch` is written by `set_properties`; a yaw that "did not take"
+  leaves the mesh sideways to its motion.
 - **Check back faces.** Thin parts or surfaces visible from inside may need two-sided
   materials. Keep closed opaque surfaces single-sided unless inspection shows a need; blanket
   two-sided shading adds work. Recompile/save changed materials.
@@ -163,10 +198,10 @@ Wiring notes for scripts:
   mesh-UV panning at one scale reads as a static tiled pattern. For a surface that visibly
   rolls, give the mesh vertices (a subdivided plane) and add a few directional sines of world XY
   and `Time` to World Position Offset. Opacity below ~0.35 disappears against a bright background.
-- **Vertex motion for static meshes** (World Position Offset): dot `LocalPosition` with an axis
-  parameter for the phase, `Time` for speed, a saturated ramp along the length so one end moves
-  more, `Transform` (local -> world) on the offset. Parameters for axis/length/amplitude make one
-  master material serve every variant.
+- **Reusing a material on a new mesh.** Multipart imports keep named material slots
+  (`Oak | natural clear oil`, `Pulls | matte black steel`). `StaticMeshTools.get_material_slots`
+  then `set_material(mesh, slot_name, material)` assigns a project material, or one from an
+  earlier import, per slot - useful when a regenerated or edited model lost its surface detail.
 
 ## Terrain and other large meshes: build them, do not generate them
 
@@ -210,6 +245,16 @@ go in as one call. Three rules from the gotchas file:
 - `set_properties` does not dirty the actor; write its transform back unchanged before saving or
   the instances are lost on reload.
 - Give the component collision only if the instances need it (trees yes, grass no).
+- **Per-instance data for shaders:** set `numCustomDataFloats`, then `perInstanceSMCustomData` as a
+  flat float list in instance order (`count x numCustomDataFloats`), read in the material with a
+  `PerInstanceCustomData` node (`dataIndex`). Expect the write to block the editor for minutes
+  at a few thousand instances; poll until the server answers rather than retrying.
+- **Dense thin geometry (grass blades, reeds, hair cards) stays off Nanite.** Thousands of tiny
+  disconnected triangles are decimated even in the fallback mesh (1700 -> ~1250 triangles per
+  tile) and thin out further with distance. Use a plain mesh with instance cull distances, and
+  turn off everything it does not need: `castShadow`, `bCastDynamicShadow`,
+  `bCastContactShadow`, `bAffectDistanceFieldLighting`, `bAffectDynamicIndirectLighting`.
+- Procedural meshes that carry data in UVs: the OBJ importer flips V (`UE-field-guide.md` §4.4).
 
 ## Motion without animation
 
@@ -232,3 +277,8 @@ creatures.
 - Placing from a height function and never checking against the mesh: sample the mesh exactly,
   sink bases a little, and look from a low camera after every change.
 - Assuming a real-world or fixed normalized import size: measure bounds for each export.
+- Trusting a written transform: a uniform scale or a facing yaw written to a Blueprint actor's
+  component through `set_properties` lands on one axis only. Stretched or sideways meshes that
+  "look a bit off" for days are this; read the struct back.
+- Filtering assets by class with a full path: `get_asset_class` returns short names, so the
+  filter silently matches nothing and the pass you thought you ran never happened.
