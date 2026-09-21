@@ -1369,19 +1369,32 @@ thrixel_publish_game(
     directory="<the assembled bundle>",
     title="Order Up!",
     prompt="a restaurant game where I plate dishes before the timer runs out",
+    tokens=184000,
     controls="Arrow keys to move, Space to plate, Esc to pause",
     controls_touch="Drag a dish onto a plate, tap the bell to serve",
     description="A restaurant kitchen where the orders never stop and the timer always wins.",
     engine="threejs",
+    genre="Simulation",
+    tags="Cooking, Fast, Arcade",
 )
 ```
 
-**Pass the last three every time. Nothing can recover them later.**
+**Pass every one of these. Nothing can recover them later.**
 
 - **`prompt`** - what they asked for, in THEIR words, not your summary of what you
   built. First publish: the request the game came from. Republish: the change they
   asked for this time. It exists only in this conversation; once the session ends it
   is gone, and the game page has a blank where the reason should be.
+- **`tokens`** - how many tokens YOU spent on this build, shown next to the prompt
+  above so they can see what each round of work cost. This build only, not the
+  session total: on a republish that is the follow-up alone.
+
+  **Only if your harness actually reports your usage. If you would have to guess,
+  leave it out.** It appears as a figure you reported, and a guess displayed as a
+  measurement is worse than the blank most games here have.
+
+  This is not what the assets cost. Thrixel bills those in cubes and already knows
+  the number - the page shows it on its own, from our side of the ledger.
 - **`controls`** and **`controls_touch`** - one line each, and both must be what
   you actually WIRED UP rather than what you meant to. `playcheck` already drove
   real keys AND a real touch drag to pass this bundle, so you have tested both:
@@ -1402,6 +1415,29 @@ thrixel_publish_game(
   stop" - not "I built a restaurant game with a timer".
 - **`engine`** - `threejs`, `unity` or `roblox`. You settled this before generating
   anything; pass that answer.
+- **`genre`** - ONE word, and it is the shelf the gallery files the game under:
+  `Action`, `Shooter`, `Platformer`, `Puzzle`, `Racing`, `Strategy`, `Simulation`,
+  `Adventure`, `Sandbox`, `Board`, `Tool`. Pick the closest one rather than the
+  most flattering one. Anything outside the list is dropped, so inventing
+  `Roguelike-lite` files the game nowhere.
+- **`tags`** - up to four, comma-separated, describing what the game is LIKE:
+  `Cozy`, `Relaxing`, `Fast`, `Atmospheric`, `Colorful`, `Retro`, `Neon`,
+  `Sci-fi`, `Fantasy`, `Space`, `Steampunk`, `Underwater`, `Post-apocalyptic`,
+  `Arcade`, `Story`, `Short`, `Endless`, `Creative`, `Turn-based`, `Realistic`,
+  `Physics`, `Roguelike`, `Idle`, `Exploration`, `Collectathon`, `Builder`,
+  `Tower defense`, `Stunts`, `Cooking`, `Time trial`, `Party`, `Two players`,
+  `Multiplayer`, `Sandbox-y`, `Data`, `Experimental`.
+
+  Describe the GAME, not the technology. `3d`, `browser` and `singleplayer` are
+  true of almost everything published here and are ignored. Common synonyms fold
+  in (`scifi` and `science fiction` both become `Sci-fi`), but a word the
+  vocabulary does not know is **not stored** - it comes back in the response, and
+  resending it will not make it work. Pick the nearest listed word instead.
+
+  **You are the only one who can supply these two.** Nothing downstream can look
+  at a zip of compiled JavaScript and work out that it is a cozy platformer. A
+  game published without them sits on no shelf in the gallery and can be found
+  only by scrolling past everything else.
 
 The project is attached for you - the MCP server knows which one the assets came
 out of, so there is nothing to look up and nothing to pass.
@@ -1473,7 +1509,7 @@ published - the user's own record of their links is better than a guess.
 | "take X out of the gallery" | Only if it is actually in it. `thrixel_update_game(game_id=..., listed=false)` ASKS to be taken off; staff answer, and it stays listed until they do. On a game that was never listed this is a 409, so check `thrixel_list_games()` first. The link is unaffected either way. |
 | "get X featured" / "put X in the gallery" | `thrixel_update_game(game_id=..., listed=true)`. Tell them staff review it, and that the link keeps working regardless. Do not promise a timescale. |
 | "rename X" | `thrixel_update_game(game_id=..., title="...")` |
-| "update X with my changes" | Assemble the bundle again (rebuild it if it is a source tree), then `thrixel_publish_game(directory=..., game_id=..., prompt="<what they asked for this time>")`. Same URL, and the live version keeps serving until the new one is ready. Pass `controls` and `description` again only if they changed. |
+| "update X with my changes" | Assemble the bundle again (rebuild it if it is a source tree), then `thrixel_publish_game(directory=..., game_id=..., prompt="<what they asked for this time>")`. Same URL, and the live version keeps serving until the new one is ready. Pass `tokens` for this round of work alone, and `controls` and `description` again only if they changed. |
 
 Two rules for this whole set:
 
