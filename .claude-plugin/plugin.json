@@ -2,7 +2,7 @@
   "name": "thrixel",
   "displayName": "Thrixel",
   "version": "1.1.1",
-  "description": "Build playable 3D games with AI-generated assets. Bundles the build-world skill and the Thrixel connector: generate, refine and texture game-ready .glb models, then build the game around them in Three.js, Unity, Unreal or Roblox.",
+  "description": "Build playable 3D games with AI-generated assets. The build-world skill carries you from an idea to a finished, playable game in Three.js, Unity, Unreal or Roblox, and sets up the Thrixel connector that generates, refines and textures the game-ready .glb models.",
   "author": {
     "name": "Thrixel",
     "email": "support@thrixel.com",
@@ -13,5 +13,23 @@
   "license": "Apache-2.0",
   "keywords": ["3d", "game", "assets", "glb", "unity", "threejs", "unreal", "roblox", "thrixel"],
   "skills": "./skills/",
-  "mcpServers": "./.mcp.json"
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Thrixel",
+    "shortDescription": "Turn an idea into a playable 3D game. Generates, refines and textures game-ready .glb assets, then builds the game around them in Three.js, Unity, Unreal or Roblox.",
+    "longDescription": "Build World takes a one-line game idea to something you can actually play. It settles what you are making, generates the 3D assets with Thrixel, then writes the game around them: scene, controls, UI, mobile input, and a build it plays through and checks before handing back. Three.js, Unity, Unreal and Roblox are supported. The first run sets up a Thrixel account and the connector that generates the assets; models come back as .glb you own and can keep using anywhere.",
+    "developerName": "Thrixel Inc.",
+    "category": "Developer Tools",
+    "websiteURL": "https://thrixel.com",
+    "privacyPolicyURL": "https://thrixel.com/privacy-policy",
+    "termsOfServiceURL": "https://thrixel.com/terms-of-service",
+    "defaultPrompt": [
+      "Build a submarine exploration game in three.js set in a bright, vibrant tropical sea with coral and fish.",
+      "Build a fantasy RPG in three.js set in a misty mountain village with timber houses, a shrine and villagers to talk to.",
+      "Build an explorable 3D solar system in three.js you can fly through, with labelled planets, moons and orbits to scale."
+    ],
+    "brandColor": "#1e4a86",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/logo.png"
+  }
 }
