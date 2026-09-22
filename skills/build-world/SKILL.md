@@ -209,6 +209,16 @@ done in a AAA game, anything from high quality models and environment polish, to
 - **Playable on a phone**, with touch controls and a HUD that fits a small screen
 - Optimized framerate of at least 30 FPS
 
+Pay special attention to mesh quality, realism, character quality, and UI to ensure it looks AAA.
+Work alone, do NOT launch subagents to do work - subagents will interfere with each other and make
+everything more difficult. However, frequently launch subagents as harsh critic agents to inspect
+your work. If the subagent determines the game doesn't look absolutely AAA, you must continue the
+build until the subagent decides the game looks good enough.
+
+## Use real references as the quality bar
+
+Before building, search for specific, shipped examples that are strong references for what the user asked for. For a game, find 2–4 published games in the same genre, style, perspective, or interaction model and inspect actual screenshots and gameplay footage; for a non-game experience, find equivalent high-quality interactive experiences, simulations, virtual tours, visualizers, or other relevant products. Pick references deliberately and record what each is useful for—environment density, composition, lighting, materials, character quality, animation, camera, UI, interaction, or overall polish. These are benchmarks, not templates: do not clone their levels, assets, characters, branding, or identity. Use them to establish the quality bar. Every critic pass should compare current screenshots or footage against the chosen references side by side, identify the most obvious gaps, and keep iterating until the build holds up to that comparison. Do not decide that something “looks AAA” from the phrase alone when real examples are available to judge it against.
+
 ## Mobile is a requirement, not a port
 
 **Build every game to be playable on a phone from the start.** The finished game
@@ -247,12 +257,6 @@ first frame produces exactly the same terminal output as one that works. Run
 `tools/playcheck.mjs` (see Publishing) and say what it returned. If you could not
 run it, say the game is unverified - that is a useful sentence, and a confident
 wrong one is not.
-
-Pay special attention to mesh quality, realism, character quality, and UI to ensure it looks AAA.
-Work alone, do NOT launch subagents to do work - subagents will interfere with each other and make
-everything more difficult. However, frequently launch subagents as harsh critic agents to inspect
-your work. If the subagent determines the game doesn't look absolutely AAA, you must continue the
-build until the subagent decides the game looks good enough.
 
 ## Player Guidance and UI Design
 
