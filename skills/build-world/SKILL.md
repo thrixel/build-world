@@ -376,7 +376,7 @@ item is something it will tell you, at no cost, more accurately than an estimate
 
 Two kinds of operation, gated differently, so "no" arrives in two shapes:
 
-- **Create, Edit and Autofix are priced after the run**, so the only question is whether
+- **Create and Edit are priced after the run**, so the only question is whether
   anything is left. Any positive balance buys one more, and a single overrun past zero is
   absorbed rather than refused mid-job. Worth attempting even when what remains looks small
   for it.
