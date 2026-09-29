@@ -3,6 +3,53 @@ name: build-world
 description: Builds polished, fully playable 3D game prototypes in three.js, Roblox, Unity, or Unreal Engine, with high-quality (.glb/.fbx) meshes from the Thrixel API, and (for three.js and Unity) publishes finished games to a public thrixel.world link that anyone can play in a browser. Use when the user wants to make a game, build a playable prototype, or generate 3D assets, and also when they want to publish or host a game folder they already have, share a playable link, or list, rename, update, unpublish or find the link for a game they published earlier.
 ---
 
+# This is the ChatGPT build - read this section first
+
+This copy of the skill runs in ChatGPT, not on the user's computer. The Thrixel connector
+is Thrixel's hosted server, and there is no local machine, terminal, GPU or browser for you
+to use. **Where anything below conflicts with this section, this section wins.**
+
+- **three.js only.** Unity, Unreal and Roblox need an engine installed on a computer. If the
+  user asks for one of them, say this build makes three.js games and offer that, or point
+  them to the Claude Code or Codex version of Thrixel on their own machine.
+- **No setup, no updates, no install.** Skip "Before anything else - update this skill" and
+  "First time setup". Sign-in happened when the connector was added.
+- **Static files, no build step.** Write plain HTML and ES modules. Load three.js from a CDN
+  with an import map, for example:
+  `<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>`.
+  No Vite, no npm, no `dist/`.
+- **Models stay on Thrixel.** Generation tools return a download link and a `submission_id`
+  instead of saving a file. Do not paste model data into your files. In the game, load each
+  model from a path of your choosing (`models/boat.glb`), and remember which `submission_id`
+  belongs to each path: publishing packs them in for you.
+- **Never hand out a localhost address.** Nothing is served locally, so a `localhost` link
+  leads nowhere. The user's link is the one publishing returns.
+- **Skip playcheck and the preview clip.** `tools/playcheck.mjs` and `tools/record.mjs` need a
+  local browser and a GPU. Do not run them, do not ask for a preview video, and leave
+  `cold_open` off. Check the game by reading your own code carefully instead: every model
+  path you load appears in `assets`, every control you describe is wired up.
+- **Publish automatically when the game plays end to end.** This replaces the serve-and-ask
+  steps of HARD STOP 2. Call:
+
+  ```
+  thrixel_publish_game(
+      files={"index.html": "...", "js/main.js": "...", "css/style.css": "..."},
+      assets={"models/boat.glb": "<submission_id>", "models/dock.glb": "<submission_id>"},
+      title="...", prompt="<their words>", controls="...", controls_touch="...",
+      description="...", engine="threejs", genre="...", tags="...",
+  )
+  ```
+
+  `files` holds every file except the models (text; a data URI for a binary such as
+  `cover.png`), with `index.html` at the root. Everything in "Publish" about `prompt`,
+  `tokens`, `controls`, `description`, `genre` and `tags` still applies. Wherever this skill
+  shows `thrixel_publish_game(directory=...)`, use `files` and `assets` instead.
+- **Then give the user the link, and ask the one question.** A first publish is private:
+  only the owner can play it, signed in, at the link the result gives. Hand them that link
+  in your closing message, and ask whether they want it public. If yes, call
+  `thrixel_submit_game(game_id)`. To change the game later, publish again with the same
+  `game_id`: the link stays the same.
+
 # The two things you may not decide alone
 
 Everything else in this file is guidance you apply with judgement. A gate is a question you ask
