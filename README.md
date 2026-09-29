@@ -1,5 +1,8 @@
 # Build World
 
+> **This is the ChatGPT build.** Its connector is Thrixel's hosted server (`https://api.thrixel.com/mcp`), so nothing runs on your computer and you sign in with your Thrixel account when ChatGPT connects. Models come back as download links. For Claude Code or Codex on your own machine, use the `main` branch instead: it can save models into your project and publish games from it.
+
+
 Build interactive 3D worlds with high-quality assets from [Thrixel](https://thrixel.com/) and your AI agent of choice.
 
 Claude Code (or your preferred agent) handles the logic, interactions, and scene setup. Thrixel generates, organizes, and manages the 3D assets. Save your coding agent tokens and time by using Thrixel to generate 3D assets faster and at higher quality than Claude Code.
