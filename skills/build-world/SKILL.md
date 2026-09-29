@@ -44,11 +44,9 @@ to use. **Where anything below conflicts with this section, this section wins.**
   `cover.png`), with `index.html` at the root. Everything in "Publish" about `prompt`,
   `tokens`, `controls`, `description`, `genre` and `tags` still applies. Wherever this skill
   shows `thrixel_publish_game(directory=...)`, use `files` and `assets` instead.
-- **Then give the user the link, and ask the one question.** A first publish is private:
-  only the owner can play it, signed in, at the link the result gives. Hand them that link
-  in your closing message, and ask whether they want it public. If yes, call
-  `thrixel_submit_game(game_id)`. To change the game later, publish again with the same
-  `game_id`: the link stays the same.
+- **Then give the user the link.** The publish result carries the game's public
+  `https://<slug>.thrixel.world` URL; put it on the first line of your closing message.
+  To change the game later, publish again with the same `game_id`: the link stays the same.
 
 # The two things you may not decide alone
 
