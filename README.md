@@ -219,8 +219,8 @@ still fails, run `export PATH="$HOME/.local/bin:$PATH"` (PowerShell:
 **Claude says you need to sign in** - re-run `uvx thrixel-mcp@latest login` and click Approve. No
 restart needed, just tell Claude to continue.
 
-**"Out of cubes"** - cubes are Thrixel's generation credits. Claude shows you what is built, marks
-missing assets as labelled blocks, and asks how you want to continue.
+**"Out of cubes"** - cubes are Thrixel's generation credits. The agent finishes the game with
+what is built and marks missing assets as labelled blocks.
 
 </details>
 
@@ -247,10 +247,10 @@ Every asset generated through the Thrixel API is saved to your Thrixel workspace
 
 **Engine Agnostic**: Because your assets are managed in Thrixel rather than tied to one codebase, you can also reuse them across projects and engines. For example, you can prototype in Three.js and later ask your agent to rebuild the game in Unity or Roblox using the same asset library.
 
-**Parallel Processing**: Thrixel can manage and process jobs in parallel. Your coding agent can farm out parallel jobs to Thrixel while building out the logic of the game. Each [plan](https://thrixel.com/create/#upgrade) has a different concurrency limit.
+**Parallel Processing**: Thrixel can manage and process jobs in parallel. Your coding agent can farm out parallel jobs to Thrixel while building out the logic of the game.
 
 ## Usage and credits
-You can test this workflow using the free Thrixel Cubes included with your Starter account. However, building a full-scale game generally requires a wider variety of assets and rapid iteration that usually exceeds Starter limits. Upgrading to a [Paid Plan](https://thrixel.com/create/#upgrade) unlocks higher parallel job processing capacity and higher generation limits, allowing you to bring your most ambitious ideas to life. You can keep track of your remaining Cubes anytime in [Account Settings](https://thrixel.com/create/#settings/billing).
+Generating models uses the Cubes on your Thrixel account. You can see your balance anytime in your Thrixel account settings.
 
 ## About Thrixel
 Learn more about Thrixel at [thrixel.com](https://thrixel.com/).

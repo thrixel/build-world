@@ -1,7 +1,7 @@
 {
   "name": "thrixel",
   "displayName": "Thrixel",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Build playable 3D browser games with AI-generated assets, right in ChatGPT. The build-world skill takes an idea to a finished three.js game: Thrixel generates, refines and textures the game-ready .glb models, and the game is published to a public thrixel.world link anyone can play.",
   "author": {
     "name": "Thrixel",
@@ -25,7 +25,7 @@
   "interface": {
     "displayName": "Thrixel",
     "shortDescription": "Your 3D creation engine",
-    "longDescription": "Build World turns a one-line game idea into a 3D game you can play in the browser. It settles what you are making, generates the 3D models with Thrixel (game-ready .glb files you own), writes the three.js game around them (scene, controls, UI and touch input), and publishes it to a public thrixel.world link you can share. Everything runs on Thrixel's servers, so there is nothing to install: connect your Thrixel account once and ask for a game. Generating models spends Cubes from your Thrixel plan; publishing is free.",
+    "longDescription": "Build World turns a one-line game idea into a 3D game you can play in the browser. It settles what you are making, generates the 3D models with Thrixel (game-ready .glb files you own), writes the three.js game around them (scene, controls, UI and touch input), and publishes it to a public thrixel.world link you can share. Everything runs on Thrixel's servers, so there is nothing to install: connect your Thrixel account once and ask for a game.",
     "developerName": "Thrixel Inc.",
     "category": "Developer Tools",
     "websiteURL": "https://thrixel.com",
