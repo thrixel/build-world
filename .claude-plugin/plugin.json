@@ -1,7 +1,7 @@
 {
   "name": "thrixel",
   "displayName": "Thrixel",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Build playable 3D browser games with AI-generated assets, right in ChatGPT. The build-world skill takes an idea to a finished three.js game: Thrixel generates, refines and textures the game-ready .glb models, and the game is published to a public thrixel.world link anyone can play.",
   "author": {
     "name": "Thrixel",

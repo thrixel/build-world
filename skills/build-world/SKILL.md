@@ -12,38 +12,35 @@ to use. **Where anything below conflicts with this section, this section wins.**
 - **three.js only.** Unity, Unreal and Roblox need an engine installed on a computer. If the
   user asks for one of them, say this build makes three.js games and offer that, or point
   them to the Claude Code or Codex version of Thrixel on their own machine.
-- **No setup, no updates, no install.** Skip "Before anything else - update this skill" and
-  "First time setup". Sign-in happened when the connector was added.
+- **Nothing to set up.** Sign-in happened when the connector was added.
 - **Static files, no build step.** Write plain HTML and ES modules. Load three.js from a CDN
   with an import map, for example:
   `<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>`.
-  No Vite, no npm, no `dist/`.
+  No bundler and no build step.
 - **Models stay on Thrixel.** Generation tools return a download link and a `submission_id`
   instead of saving a file. Do not paste model data into your files. In the game, load each
   model from a path of your choosing (`models/boat.glb`), and remember which `submission_id`
   belongs to each path: publishing packs them in for you.
 - **Never hand out a localhost address.** Nothing is served locally, so a `localhost` link
   leads nowhere. The user's link is the one publishing returns.
-- **Skip playcheck and the preview clip.** `tools/playcheck.mjs` and `tools/record.mjs` need a
-  local browser and a GPU. Do not run them, do not ask for a preview video, and leave
-  `cold_open` off. Check the game by reading your own code carefully instead: every model
+- **You cannot run the game here.** There is no browser or GPU, so there is no preview
+  video either: leave `cold_open` off. Check the game by reading your own code carefully instead: every model
   path you load appears in `assets`, every control you describe is wired up.
 - **Publish automatically when the game plays end to end.** This replaces the serve-and-ask
-  steps of HARD STOP 2. Call:
+  step of asking first. Call:
 
   ```
   thrixel_publish_game(
       files={"index.html": "...", "js/main.js": "...", "css/style.css": "..."},
       assets={"models/boat.glb": "<submission_id>", "models/dock.glb": "<submission_id>"},
-      title="...", prompt="<their words>", controls="...", controls_touch="...",
+      title="...", controls="...", controls_touch="...",
       description="...", engine="threejs", genre="...", tags="...",
   )
   ```
 
   `files` holds every file except the models (text; a data URI for a binary such as
-  `cover.png`), with `index.html` at the root. Everything in "Publish" about `prompt`,
-  `tokens`, `controls`, `description`, `genre` and `tags` still applies. Wherever this skill
-  shows `thrixel_publish_game(directory=...)`, use `files` and `assets` instead.
+  `cover.png`), with `index.html` at the root. Everything in "Publish" about `controls`,
+  `description`, `genre` and `tags` applies.
 - **Then give the user the link.** The publish result carries the game's public
   `https://<slug>.thrixel.world` URL; put it on the first line of your closing message.
   To change the game later, publish again with the same `game_id`: the link stays the same.
@@ -63,96 +60,6 @@ money beyond that:
   generated once the account has Cubes again. Their Cubes and plan are managed in their
   Thrixel account at https://thrixel.com, which is the only place to point them.
 
-# Before anything else - update this skill
-
-You are reading a copy that was installed at some point in the past, and it does not update
-itself. The Thrixel MCP server does: its config pins `thrixel-mcp@latest`, so it re-resolves
-every session. A stale copy of this file will eventually tell you to call the server in a way it
-no longer supports.
-
-Do this at the START of every session, before you read further. It is one command.
-
-**1. Is this a plugin install?** If any segment of this file's path is `plugins` - for example
-`.claude/plugins/cache/...` or `.codex/plugins/cache/...` - stop here and do not run git at all.
-A plugin snapshot belongs to the plugin system, and some of them ARE git clones, so the check
-below would happily pull into one and leave the installed copy disagreeing with what the plugin
-system believes it installed.
-
-For a plugin install, check staleness without touching git. If one segment of the path is a
-12-character hex string, that is the commit this copy was built from; compare it against the
-tip of `main`:
-
-```sh
-curl -sL --max-time 5 https://api.github.com/repos/thrixel/build-world/commits/main
-```
-
-The returned `sha` starts with that hex segment -> this copy IS current. Continue, and do not
-describe it as possibly out of date. Anything else -> tell the user once that a newer version is
-available and how to get it (Claude Code: `/plugin update thrixel@thrixel`; Codex:
-`codex plugin marketplace upgrade thrixel`), then continue with the copy you have. No hex
-segment in the path, or curl fails -> continue silently; do not retry, do not mention it.
-Either way, **skip steps 3 and 4**.
-
-**2. Otherwise, confirm this file sits where its own repository puts it, and not inside the
-user's repo.** Skills are often installed under a project's `.claude/skills/`, and that project
-is usually a git repo of its own. Git searches upward, so pulling without this check can pull
-the USER'S OWN repository. Never skip it.
-
-```sh
-git -C <the directory this file is in> rev-parse --show-prefix
-```
-
-- Output is exactly `skills/build-world/` (or `skills/goal-to-game/` in an older clone) -> this
-  is its own clone, safe, go to step 3.
-- Any other path -> git walked up into the user's project. **Stop. Do not pull anything.**
-  Continue with the copy you have.
-- `not a git repository` -> this copy was downloaded rather than cloned, so it cannot update.
-  Say so once ("my copy of the Thrixel skill cannot self-update, so it may be out of date"),
-  then continue. Skip steps 3 and 4: there is nothing to pull and no remote to read.
-
-**3. Pull.**
-
-```sh
-git -C <the same directory> pull --ff-only
-```
-
-- `Already up to date.` -> continue.
-- Files changed -> **re-read this file, and any other file from this skill you have already
-  read.** You are holding the old text in context and it is now wrong. This is the whole point
-  of the step; skipping it wastes the update.
-- Anything else (local edits, diverged history, no network) -> do not fight it. Say what
-  happened in one line and continue with the copy you have.
-
-This step must never block the build. One command, read the result, move on.
-
-**4. If the remote still names the old repository, retarget it once.** Only when step 3 actually
-ran and succeeded:
-
-```sh
-git -C <the same directory> remote get-url origin
-```
-
-Contains `goal-to-game` -> this clone was made from the repository's name before it was renamed.
-GitHub still redirects that name, which is why everything above worked and why nothing here is
-broken. But the old name stays baked into the folder and into every `git remote -v` the user
-runs, so point it at the current URL once and say a single line about it:
-
-```sh
-git -C <the same directory> remote set-url origin https://github.com/thrixel/build-world
-```
-
-Anything else -> silent. No output, no comment, no second look.
-
-This is cosmetic. It must never block the build, and it must never feed back into step 2.
-
-The check is on the path inside the repository, not on the repository's name or remote. Matching a
-name looks equivalent and is not: a copy whose origin does not match would read its own remote,
-fail, and conclude it had walked into the user's project - so it would stop updating itself
-silently, and be sure it was right to. Asking git where this file sits relative to the repo root
-answers the question actually being asked, survives the folder being renamed, and gives the same
-answer whether the clone is at `~/.claude/skills/thrixel` or anywhere else. Step 4 reads the remote,
-but only to relabel it, and only after step 3 has already decided this copy was safe to pull.
-
 # What is being asked for - route before you read further
 
 This skill covers three jobs, and only one of them is a build. Decide which one
@@ -163,64 +70,18 @@ asked to publish a folder that starts planning an asset list and calling
 **1. Build a game** ("make me a game", "build a X prototype"). The default, and
 the rest of this file. Continue below.
 
-> The gates from the top of this file apply to route 1, and only to route 1.
-> Routes 2 and 3 spend nothing and publish nothing new, so none of them fires there.
-
-**2. Publish a game that already exists** ("publish the game in ~/mygame", "put
-this online", "I have a game folder, can you host it"). **Skip everything between
-here and "Publishing to thrixel.world"** - the settings check, the asset list, the
-plan offer, the engine choice, every generation step. None of it applies: no
-assets are being generated, so nothing is being spent, so there is nothing to ask
-about. Go straight to **Publishing to thrixel.world**, and specifically to
-"Publishing a game you did not just build".
+**2. Publish a game the user pastes or uploads here.** Collect its files into `files`
+(index.html at the root) and publish, as in **Publishing to thrixel.world**. No assets are
+generated, so skip the asset list and every generation step.
 
 **3. Manage what is already published** ("what have I published?", "what was the
 link for my racing game?", "take the golf one down", "rename it", "hide it from
 the directory"). One or two tool calls and an answer. Go straight to **Managing
 published games**. Do not read the rest of this file.
 
-**4. Run it, or record it** ("run my game", "let me play it", "make a preview video
-for it"). Running: serve the assembled bundle with `tools/serve.mjs` and hand over
-the address, exactly as HARD STOP 2 describes, without the publish question if the
-game is already published. A preview: go to **Record the preview** and hand over the
-file and its frames; that is the whole job. Publishing is a separate decision, and
-the clip only reaches the card if they choose to republish (same `game_id`) - say so
-in one line and do not do it unasked. A published game can be recorded from its
-address too (`record.mjs https://<slug>.thrixel.world`), no folder needed. Neither
-job touches anything else in this file.
-
-Jobs 2 to 4 need no Thrixel plan, no cubes and no account balance - publishing is
+Jobs 2 and 3 need no Thrixel plan, no cubes and no account balance - publishing is
 free. The only requirement is a signed-in account, which the MCP server handles;
 if it is not signed in, the tool says so.
-
-# Check your own settings first
-
-**Every question you ask costs the user something, so ask as few as possible.** Across the whole
-setup you are allowed to ask for exactly three things: the sign-in, the plan choice on the free
-tier, and decisions about the game itself. Everything else you work out yourself or stay quiet
-about. A setup that interrogates the user is the failure mode here, not a thorough one.
-
-That applies to this check. If you can see that you are on a weak model or low reasoning effort,
-say so once, because it changes the result more than anything else on this page:
-
-"
-One thing before we start: I'm on <model> at <effort> effort. Building a whole game in one pass is
-a long-horizon planning job, and on a lower setting I lay out noticeably flatter, more generic
-scenes. If your plan allows it, switch to the most capable model at the highest reasoning effort
-(in Claude Code that is /model), then tell me to continue.
-"
-
-**If you cannot determine your own settings, say nothing and continue.** Do not announce that you
-could not check, and do not ask the user to go and look. It is a question they usually cannot
-answer better than you, it delays the build, and it makes setup feel like a form. If you can see
-your model but not your effort level, that is not worth a message either.
-
-# First time setup - go through setup and installation flow.
-IMPORTANT! MUST DO! If you are reading this, and the user has just asked you to install the skill into the project, then read [SetupAndInstallationFlow.md](SetupAndInstallationFlow.md) and you MUST follow the instructions there. Do this before anything else.
-
-(This is about INSTALLING the skill. A user who asked you to publish an existing folder, or
-asked what they have published, has not asked for an install - do not run the setup flow at
-them, and do not install a game engine to publish a folder that is already built.)
 
 # Overview
 
@@ -255,23 +116,13 @@ are deciding the controls, not afterwards:
   for several times the pixels of a laptop. Cap it.
 
 The three.js kit does most of this for you: `lib/input.js` feeds touch into the
-same input snapshot the keyboard feeds (so gameplay code needs no touch branch),
-`lib/touchui.js` draws the on-screen controls, and `tools/mobilecheck.mjs` is the
-gate - it emulates a phone with no keyboard and asserts a thumb can actually move
-the player. Read the Mobile section of
-[engines/threejs/threejs.md](engines/threejs/threejs.md). For Unity, the
-equivalent notes are in [engines/unity.md](engines/unity.md) under Publishing.
+same input snapshot the keyboard feeds (so gameplay code needs no touch branch), and
+`lib/touchui.js` draws the on-screen controls. Read the Mobile section of
+[engines/threejs/threejs.md](engines/threejs/threejs.md).
 
-**Verify it, do not assume it.** `node tools/mobilecheck.mjs` before you call a
-game done, and look at the screenshot it writes - a HUD designed on a big monitor
-fails in ways no assertion catches.
-
-**And never report a property you did not measure.** "Works perfectly on desktop
-and mobile, 60 FPS" is a claim, and a game that throws a ReferenceError on its
-first frame produces exactly the same terminal output as one that works. Run
-`tools/playcheck.mjs` (see Publishing) and say what it returned. If you could not
-run it, say the game is unverified - that is a useful sentence, and a confident
-wrong one is not.
+**Never report a property you did not measure.** You cannot run the game in this build,
+so do not say it "works perfectly" or runs at 60 FPS. Say what you built and checked in the
+code, and that the user can try it at the link.
 
 Pay special attention to mesh quality, realism, character quality, and UI to ensure it looks AAA.
 Work alone, do NOT launch subagents to do work - subagents will interfere with each other and make
@@ -330,9 +181,7 @@ no assets are being generated, so there is nothing to plan or to spend. Go to Pu
 Managing published games.
 
 Otherwise, once the user has asked for a game, do this FIRST. It applies to every game, whether
-or not you walked them through [SetupAndInstallationFlow.md](SetupAndInstallationFlow.md) this
-session: most games are built by someone who installed the skill weeks ago and never sees that
-file again.
+this is the user's first game or their tenth.
 
 **Size the asset list to the game, never to the balance.** Write out every 3D asset the game
 needs in order to be good, then rank that list by how much the player will notice each item.
@@ -462,17 +311,9 @@ architect+detailer is a correctness choice, made by the rules below.
 
 # Target engine
 
-Settle the engine before you generate anything: ask the user, use context clues, or look at
-nearby files. Then read that engine's file **in full**:
-
-- **three.js / web** → [engines/threejs/threejs.md](engines/threejs/threejs.md), toolchain setup in [engines/threejs/setup.md](engines/threejs/setup.md)
-- **Roblox** → [engines/roblox/roblox.md](engines/roblox/roblox.md), toolchain setup in [engines/roblox/setup.md](engines/roblox/setup.md)
-- **Unity** → [engines/unity/unity.md](engines/unity/unity.md), toolchain setup in [engines/unity/setup.md](engines/unity/setup.md)
-- **Unreal Engine** → [engines/unreal/unreal.md](engines/unreal/unreal.md), toolchain setup in [engines/unreal/setup.md](engines/unreal/setup.md)
-
-If the toolchain for it is not installed yet, follow the respective `setup.md`.
-The toolchain should be installed once per machine. Choice of engine is per game.
-The respective `setup.md` may also have steps that are needed upon every new project for the engine.
+three.js, always, in this build. Read [engines/threejs/threejs.md](engines/threejs/threejs.md)
+**in full** before writing the game; its kit in `engines/threejs/lib/` is plain browser modules
+you can copy into `files`.
 
 # Thrixel asset generation
 
@@ -596,8 +437,8 @@ but the vast majority of thrixel information is contained within this skill and 
 ## API Workflow
 
 Use the **Thrixel MCP tools** for every generation step. Each one submits the job, waits for it,
-saves the GLB to disk, and hands back the file path plus a rendered thumbnail - the whole round
-trip, handled. Do not write your own polling loop and do not shell out to curl: across a build
+returns a download link plus a rendered thumbnail - the whole round trip, handled. Do not
+write your own polling loop or call the API any other way: across a build
 with thirty assets, a hand-rolled loop is one dropped result away from a missing model that
 nobody notices until the scene is assembled.
 
@@ -714,8 +555,7 @@ Thrixel returns a *named part hierarchy*: one mesh node per part. That naming is
 point of the Architect path, but the node count is high (ie dozens or hundreds). In engine,
 this gives each object its own draw call and kills fps.
 
-**`thrixel_group_parts` fixes this, and it is FREE.** It runs on Thrixel's servers, so you
-do not need Blender installed. Run it on every model before importing into the engine.
+**`thrixel_group_parts` fixes this, and it is FREE.** It runs on Thrixel's servers. Run it on every model before importing into the engine.
 
 - **Everything that does not move becomes one mesh** (default name `Body`). Material slots
   survive the join, so the semantic slots (`Paint`, `Glass`, `Chrome`, `Rubber`, `Rim`, ...)
@@ -770,149 +610,31 @@ UVs, which are stored per-corner, so each island keeps its own coordinates.
 Better still, do not decimate by hand at all - `thrixel_reduce_triangles` is free and already
 correct.
 
-# Publishing to thrixel.world - the first playable build is a hard stop
+# Publishing to thrixel.world
 
-This applies to Unity and three.js games. Roblox games cannot be published to thrixel.world.
-
-Every Unity and three.js game can go live on the public internet at
-`<slug>.thrixel.world` - a real URL the user can text to a friend, who plays it in a browser
-with nothing to install. Publishing is free and does not consume cubes.
-
-**The timing rules immediately below apply when YOU built the game in this session.** If the
-user asked you to publish a folder they already have, they have already decided; skip to
-"Publishing a game you did not just build".
-
-**HARD STOP 2: the first build that is playable end to end, put it in front of them, then
-ask.** Not a later "finish line" the user has to declare, and not after one more round of
-polish. The first time the assembled bundle passes playcheck, that is the moment.
-
-**Get it running before you ask anything.** Nobody can answer "want this published?" about a
-game they have not touched, and a message that ends in that question with no address in it
-reads as "I built something, trust me". So, in this order:
-
-1. Serve the assembled bundle, in the background so your session carries on:
-
-   ```
-   node <skill>/tools/serve.mjs <the bundle directory> --lan
-   ```
-
-   It prints two addresses: one for this machine, one a phone on the same Wi-Fi can open.
-   **The assembled bundle, not the dev server.** `npm run dev` is for iterating; it resolves
-   bare imports and forgives a missing asset folder, and a static host does neither. What
-   they play through serve.mjs is byte for byte what gets published, so "worked locally,
-   black screen once published" cannot open up between the two - and serve.mjs prints every
-   404 as it happens, which is that black screen caught early.
-2. Hand it over with the controls in the same breath - the line you will pass as `controls`
-   at publish time, so say what you actually wired up.
-3. Then the publish question, in that same message, once:
-
-> It's running: http://127.0.0.1:5590/ - on your phone, same Wi-Fi: http://192.168.1.20:5590/.
-> WASD to move, Space to plate, Esc to pause. Have a go.
->
-> When you're happy with it, say publish: you get a link anyone you send it to can open in a
-> browser, phone included, and it stays the same link every time I update it. Free, no cubes.
-
-- **Yes** -> record the preview clip (next section: thirty seconds, into the same bundle),
-  then publish that bundle and give them the public URL as the first line of your reply.
-  Every later change republishes to the same link.
-- **Changes first** -> keep the server up. A rebuild is picked up on their next refresh, so
-  every iteration is "rebuilt, refresh and try it" and never a new address. Take it through
-  playcheck again before the publish that follows.
-- **No** -> the game is already in front of them; say the offer stands whenever they want it,
-  and do not raise it again this session unless they bring it up.
-
-The local address dies with your session and never reaches anybody else, which is exactly
-why it is the test bench and the published link is the address they keep. If it stops
-answering, "run it again" is one command; say so if they ask.
-
-If they ask what publishing means before answering, lead with the two facts that matter:
-the game becomes playable by anyone who has the link, at a random `name.thrixel.world`
-address, and they can unpublish or update it at any time. It is not in any public gallery
-unless they later ask for that separately.
-
-## Publishing a game you did not just build
-
-The user points at a folder and asks for it to go online. This is a complete job on
-its own: **no asset planning, no plan or balance talk, no engine choice, nothing is
-spent.** Publishing is free.
-
-**Look at the directory before you do anything with it.** `ls` it, read its
-`package.json` if it has one, open its `index.html`. You are about to put its
-contents on the public internet under the user's account, and you cannot judge any
-of what follows without having seen what is in there. Then work out which of these
-you have:
-
-| what you find | what to do |
-|---|---|
-| `index.html` at the top, next to `.js` / `.css` / asset folders | Ready. Go to "Check it before it is public". |
-| `package.json`, `src/`, `vite.config.*`, maybe `dist/` | A source tree. **Build it first** - see "Assemble the bundle". Raw source serves a black screen. |
-| `index.html` + `Build/` + `TemplateData/` | A Unity WebGL build. Ready as-is; see [engines/unity.md](engines/unity.md) for the size and memory caveats worth mentioning. |
-| A folder whose game is one level down (`game/`, `dist/`, `build/`) | Publish THAT folder, not its parent. |
-| No `index.html` anywhere | Not a web game. Say so plainly and ask what they meant - a Unity/Unreal project folder, a `.exe`, or a Python game cannot be published; thrixel.world serves static web files only. |
-
-Then go through the checks below, publish, and give them the URL. The whole job is
-usually under two minutes.
+Publishing puts the game at a public `https://<name>.thrixel.world` address that anyone with
+the link can play in a browser, phone included. It is free, and every later publish with the
+same `game_id` updates the same address. In this build it is automatic: publish as soon as the
+game plays end to end, as described at the top of this file.
 
 ## Assemble the bundle
 
-**Skip this section if the folder is already a built bundle** - `index.html` at the
-top next to its assets - and go straight to "Check it before it is public".
-
-`thrixel_publish_game` wants a directory of static files with `index.html` at its
-ROOT. For a Vite project - which is what the three.js kit produces - assemble the
-shippable form first:
-
-1. **Build.** `npx vite build` -> `dist/`. Source form does not work on a static
-   host: the dev server resolves `import 'three'`; nothing on a CDN will. If
-   `node_modules/` came from a different machine (a zip from a Mac, say), delete it
-   and `npm ci` first, or the build fails on the wrong platform binaries.
-2. **Runtime assets.** Anything the game fetches at runtime (`/assets/*.glb`,
-   `manifest.json`, audio) is NOT bundled by Vite unless it sits in `public/`. Copy
-   those directories into the bundle next to `dist/index.html`, preserving their
-   paths.
-3. **Cover.** Put a representative screenshot at the bundle root as `cover.png` - it
-   becomes the game's card art. If you built the game, you already have shots from
-   the capture harness; pick the best one. If the folder came from the user, take
-   one - open the game and screenshot it, or ask them for a picture they like. A
-   game without a cover gets a plain placeholder, which is the difference between a
-   card someone clicks and one they scroll past. If you leave the slot empty,
-   `playcheck` fills it: it screenshots the running game partway through its own
-   checks, and only when those checks passed. Anything you put there wins over that,
-   so drop in a better frame whenever you have one.
-4. **Preview clip.** `preview.webm` at the bundle root: 20-30 seconds of the game
-   being played, which the card plays on hover and the world's page shows in front
-   of the game until the visitor presses Play. You record it from a storyboard you
-   write - see "Record the preview" below. It comes AFTER playcheck, because a clip
-   of a broken game advertises a broken game.
-5. **Serve the assembled bundle locally** and confirm the game loads from THOSE
-   files: `node <skill>/tools/serve.mjs <bundle>`, which also lists every 404. This catches a missing asset directory in
-   seconds, and it is the difference between publishing a game and publishing a
-   black screen.
+The bundle is what `files` and `assets` describe: `index.html` at the root, the JavaScript and
+CSS it loads, and the models by path. There is no build step, so what you write is what ships.
+Include only what the game loads; leave out notes, drafts and anything else that is not part
+of the game.
 
 ## Check it before it is public
 
-The server already refuses the things a server can judge: path traversal, symlinks,
-zip bombs, absolute paths. It skips what is merely junk - dotfiles, `node_modules/`,
-lockfiles, stray scripts, unknown file types - silently and non-fatally, so you do
-not need to prune those by hand.
+The server refuses unsafe paths and skips junk files on its own, and it scans the bundle
+for API keys and refuses to publish one it finds.
 
 What the server cannot judge is what the files MEAN, and that is your job, because
 you are the only one who has read them. Four things, quickly:
 
-1. **Secrets.** This is the one that actually happens, and it is silent. A `.env`
-   file is skipped by the server, but **Vite inlines every `VITE_*` variable into
-   the built bundle**, and hand-written keys live in source too. Grep the assembled
-   bundle - not the source tree - before it ships:
-
-   ```sh
-   grep -rIEn "sk-[A-Za-z0-9]{16}|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{20}|ghp_[A-Za-z0-9]{20}|xox[baprs]-|-----BEGIN [A-Z ]*PRIVATE KEY" <bundle> | head
-   ```
-
-   Anything that matches: **stop, tell the user which file and which key**, and do
-   not publish until it is out. A key on a public CDN is a key that is gone. Note
-   that a game calling an API from the browser needs the key in the browser, so
-   "just move it to a variable" does not fix it - the fix is a key that is safe to
-   be public, or a server the game talks to instead.
+1. **Secrets.** Never put an API key, password or token in `files`. A game that calls
+   an API from the browser needs the key in the browser, where anyone can read it, so
+   the fix is a key that is safe to be public, or no such feature.
 2. **Private files that came along for the ride.** Notes, screenshots of other
    things, documents, exports - a game folder often accumulates them. Name anything
    that does not look like part of the game and let the user decide.
@@ -931,199 +653,15 @@ exists: **a server component will be dead.** A multiplayer relay, an LLM proxy, 
 score backend - only static files ship. Say which feature stops working, and make
 sure the game degrades gracefully rather than hanging on a failed fetch.
 
-## Prove it runs - the last gate before a human gets the link
-
-**Run this on the assembled bundle, every publish, no exceptions:**
-
-```
-node <skill>/tools/playcheck.mjs <the bundle directory>
-```
-
-It opens the bundle in a real browser at a desktop viewport and again on a phone,
-and checks that it loads with no errors, draws something, and **responds to
-input** - keys on desktop, a real touch drag on the phone. Exit 0 publish, exit 1
-do not.
-
-**Do not skip this because the build succeeded.** A build succeeding means the
-code bundled, not that it runs. The case this exists for: a game shipped with
-`window.loadOrbModel = loadOrbModel` left behind after the function it named had
-been refactored away. Vite does not care - a ReferenceError happens at runtime -
-so the build passed, the publish succeeded, and the summary said "fully playable,
-60 FPS". The page was black on the first frame. Nobody had opened it.
-
-Note which check caught that: the page still *drew* something, because the HUD
-overlay rendered fine. It was **responds to input** that failed, at 0% of the
-frame changing. So a screenshot is not proof either - only input is.
-
-If it exits **2**, there is no browser installed and the bundle was NOT checked.
-Either install one (`npm i -D playwright && npx playwright install chromium`) or
-open the bundle yourself with a static server and look. Never describe a game as
-working on the strength of a check that did not run - say plainly that it is
-unverified and let the user decide.
-
-For a three.js kit game, `tools/mobilecheck.mjs` goes deeper on the phone side
-(it drives the kit's own input layer and reports the frame rate); run both.
-
-## Record the preview - the clip a stranger watches before they press Play
-
-**After playcheck passes and before you publish: every first publish, and every
-republish that changed how the game looks or plays.** It is the most watched thing
-about the world - the card plays it on hover, and the world's page shows it in
-front of the game until the visitor presses Play.
-
-You write the storyboard, because you are the only one who can. A script that
-pressed WASD blind produced motionless clips of every game that answered to other
-keys, and that is why this feature was once removed. You know which key opens the
-door, when the boss appears, and where the camera should be when it does.
-
-1. **Find the moment the game is worth watching, and start there.** Not when it
-   finishes loading - THAT is the mistake this section exists to prevent. A card
-   plays the clip on hover and stops when the pointer leaves, so the first second
-   or two is the entire audition; a stranger decides there, not at 0:12. Games
-   are almost never at their best at second zero: the room is empty, the assets
-   are still popping in, the menu is up, no score, no enemies, nothing has
-   happened yet.
-
-   The test, before you write a step: **if frame one could be a loading screen,
-   an empty scene, or a menu, the clip starts in the wrong place.** Open on
-   motion, on a scene that is already furnished, already fighting, already
-   mid-build.
-
-   | This kind of game | opens badly on | opens well on |
-   |---|---|---|
-   | builder, decorator, sim | an empty plot, pieces flying in | a dressed room, a piece being dragged into place |
-   | shooter, action | the spawn point, the title | mid-firefight, already moving |
-   | puzzle, strategy | the rules screen, an empty board | a board mid-game, a move landing |
-   | explorer, atmosphere | the loading fade | already moving through the best-looking part of the map |
-
-   Then three beats, 20-30 seconds total, never over 45: **the hook** (the most
-   particular thing this game does, in motion, from the first frame), **the core
-   verb** (10-15 s of the thing a player actually spends their time doing), and
-   **one moment only this game has** (the centrifuge spinning up, night falling,
-   the combo landing; 5-10 s).
-2. **Put everything that is merely getting ready into `setup`.** It runs before
-   the clip starts and is NOT filmed, so it is how you reach the moment you chose
-   in step 1: wait out the asset streaming, dismiss the intro modal, place three
-   pieces of furniture, walk to the good room, let a wave of enemies spawn. Up to
-   60 s of it. Without this everything you do is in the clip, which is why
-   previews used to open on a room assembling itself.
-3. **Write it as a storyboard JSON**, in viewport pixels of the frame you will
-   film at - 1920x1080 by default. Coordinates are scaled if you change
-   `--size` later, but that scaling assumes the game's UI scales with its
-   viewport, and a HUD anchored to the window's edges does not: re-running an
-   old storyboard at a new size gives a different clip, not the same one
-   larger. Author at one size and stay there:
-
-   ```json
-   { "setup": [
-       { "note": "off camera: wait out the asset load, then dress the room" },
-       { "wait": 6000 }, { "click": [512, 380] },
-       { "drag": [200, 300, 560, 320], "ms": 700 },
-       { "drag": [200, 380, 700, 300], "ms": 700 }, { "wait": 1200 }
-     ],
-     "steps": [
-       { "note": "HOOK: already dragging a piece into a furnished room" },
-       { "drag": [200, 340, 430, 300], "ms": 900 }, { "wait": 600 },
-       { "note": "the verb: place two more, camera follows" },
-       { "click": [512, 380] }, { "move": [700, 270], "ms": 800 },
-       { "drag": [480, 300, 640, 300], "ms": 600 },
-       { "note": "only this game: the lights come on over the finished room" },
-       { "press": "KeyL" }, { "wait": 2500 }
-     ] }
-   ```
-
-   `setup` and `steps` take the same steps: `wait` (ms), `press` a key code (add `hold` in ms to keep it down),
-   `down` / `up` for a key held across other steps, `click` `[x, y]` (add `hold`
-   for hold-to-fire, `"button": "right"` for a right-click ability), `move`
-   `[x, y]` with `ms` for mouselook, `drag` `[x0, y0, x1, y1]` with `ms`,
-   `scroll` `[dx, dy]` with `ms` (zoom, in most games that have one - negative
-   dy zooms in; it is spread over `ms` so the camera moves instead of jumping),
-   `type` text. Steps run one after another, so "shoot while flying" is `down` Space,
-   then the moves, then `up` Space. `note` is for you:
-   say what the beat shows, so the storyboard reads as a shot list. Key codes are
-   DOM codes - `KeyW`, `Space`, `ArrowUp`, `Digit1`, `Equal`. If the game needs a
-   click or a key to start, that is the first step.
-4. **Record it:**
-
-   ```
-   node <skill>/tools/record.mjs <the bundle directory> --storyboard=<file>
-   ```
-
-   It opens the bundle in a real browser, waits for it to boot, runs `setup` off
-   camera, then films `steps` into `preview.webm` at the bundle root. It also
-   saves a still every 1.5 seconds to a folder it names in its report.
-5. **Read the report, then look at the frames.** Four fields decide whether the
-   take is a keeper, and `warnings` collects the ones that went wrong:
-   - `firstFrame` - the still a card shows the instant somebody hovers it. **Open
-     this one.** Apply the step 1 test to it: loading screen, empty scene or menu
-     means record again from a later moment, not publish.
-   - `opensBeforeTheGameDoes: true` - the clip's first frame still looks like the
-     page did the instant it loaded. This is the one that catches the mistake the
-     other checks cannot: a clip that opens on a loading card and cuts to the game
-     a second later measures as 100% moving, because the cut IS the motion, and it
-     spends the whole hover on the word "Loading". Start the clip later.
-   - `openingStillMs` - how long the clip runs before anything moves. Anything at
-     or over 3000 raises a warning, and the warning is right: you filmed the
-     runway. Move those seconds into `setup`.
-   - `software: true` - this machine has no usable GPU for headless Chromium, the
-     game ran at a few frames a second, and the clip is choppy for that reason
-     alone. Tell the user; a re-record on a machine with a GPU fixes it, nothing
-     in the storyboard will.
-
-   Then look at the frames themselves: is the camera where you meant, is anything
-   black, does the clip show the game or a menu? A clip parked on a title screen
-   passes every automatic check ever written, because a blurred animated
-   background behind a modal moves plenty. Only looking catches that.
-6. **It refuses a clip that does not move.** Fewer than half the sampled intervals
-   changing, a page error, or a blank first frame all exit 1 and delete the file.
-   That is the gate that was missing the first time. Fix the storyboard (wrong key?
-   too early? the game wanted a click to start?) and record again. Two or three
-   takes is normal; the first is rarely the keeper.
-7. **Offer the user a say.** "Want the clip to open on the boss instead?" is one
-   sentence, and a re-record is thirty seconds. Anyone who asks for a change to the
-   clip gets it: the storyboard is theirs to direct.
-
-For a folder you did not build, read its controls first - the HUD, the README, or
-ask - before you write a step. A storyboard of guesses is the blind script again.
-
-If it exits **2**, it could not record: no browser, or the storyboard is invalid.
-Publish anyway and say the world has no preview yet - a clip is worth having and
-never worth blocking a publish over. Never publish a clip that was refused.
-
-### Put the clip in front of the game too
-
-`thrixel_publish_game(..., cold_open=True)` shows the clip and the control line OVER
-the game when somebody opens its link, with a Play button that clears them. The game
-loads underneath while the clip runs, so Play is instant. It is the same question the
-clip answers on a card - what is this, and how do I play it - asked at the moment a
-stranger actually arrives.
-
-**Check it before you turn it on, every time.** It puts an overlay on the page, and a
-game that grabs the pointer or the keyboard on load can fight it. Serve the bundle,
-open it, watch the clip play, press Play, confirm the game is there and responds:
-
-```
-node <skill>/tools/serve.mjs <bundle>
-```
-
-Turn it on when you have a clip and that check passed. Leave it off otherwise - a
-game nobody can start is worse than one nobody was introduced to. `cold_open=False`
-takes it back off on the next publish. It shows on every load, a refresh included,
-because it is the game's title screen; `?play=1` on the URL skips it outright, which
-is the link to send when you mean "play this" rather than "look at this".
-
 ## Publish
 
-Use `thrixel_publish_game` if your Thrixel MCP server has it. **If the tool is not in your
-tool list, publishing has not reached your server version yet: say the feature is rolling
-out and offer the localhost URL instead. Do not attempt the REST API by hand.**
+Use `thrixel_publish_game`.
 
 ```
 thrixel_publish_game(
-    directory="<the assembled bundle>",
+    files={"index.html": "...", "js/main.js": "..."},
+    assets={"models/pan.glb": "<submission_id>"},
     title="Order Up!",
-    prompt="a restaurant game where I plate dishes before the timer runs out",
-    tokens=184000,
     controls="Arrow keys to move, Space to plate, Esc to pause",
     controls_touch="Drag a dish onto a plate, tap the bell to serve",
     description="A restaurant kitchen where the orders never stop and the timer always wins.",
@@ -1135,24 +673,9 @@ thrixel_publish_game(
 
 **Pass every one of these. Nothing can recover them later.**
 
-- **`prompt`** - what they asked for, in THEIR words, not your summary of what you
-  built. First publish: the request the game came from. Republish: the change they
-  asked for this time. It exists only in this conversation; once the session ends it
-  is gone, and the game page has a blank where the reason should be.
-- **`tokens`** - how many tokens YOU spent on this build, shown next to the prompt
-  above so they can see what each round of work cost. This build only, not the
-  session total: on a republish that is the follow-up alone.
-
-  **Only if your harness actually reports your usage. If you would have to guess,
-  leave it out.** It appears as a figure you reported, and a guess displayed as a
-  measurement is worse than the blank most games here have.
-
-  This is not what the assets cost. Thrixel bills those in cubes and already knows
-  the number - the page shows it on its own, from our side of the ledger.
 - **`controls`** and **`controls_touch`** - one line each, and both must be what
-  you actually WIRED UP rather than what you meant to. `playcheck` already drove
-  real keys AND a real touch drag to pass this bundle, so you have tested both:
-  say those. A stranger who opens this from the gallery and presses the wrong
+  you actually WIRED UP rather than what you meant to: read them off your own input
+  code, keyboard and touch both. A stranger who opens this from the gallery and presses the wrong
   thing concludes the game is broken, which makes a wrong answer here worse than
   none.
 
@@ -1162,13 +685,10 @@ thrixel_publish_game(
   back to `controls`, so leaving it out says "no difference" rather than "no
   phone support".
 - **`description`** - one sentence about the GAME, for somebody who has never seen
-  it. This is not the prompt reworded. The prompt is what they asked YOU for and it
-  stays on their own page; this is the blurb a stranger reads in the public gallery,
-  so it goes on the card there and nowhere near their request. Describe what the
+  it. This is the blurb a stranger reads on the game's card. Describe what the
   game IS, not what you built or how. "A restaurant kitchen where the orders never
   stop" - not "I built a restaurant game with a timer".
-- **`engine`** - `threejs`, `unity` or `roblox`. You settled this before generating
-  anything; pass that answer.
+- **`engine`** - `threejs`.
 - **`genre`** - ONE word, and it is the shelf the gallery files the game under:
   `Action`, `Shooter`, `Platformer`, `Puzzle`, `Racing`, `Strategy`, `Simulation`,
   `Adventure`, `Sandbox`, `Board`, `Tool`. Pick the closest one rather than the
@@ -1246,7 +766,7 @@ published - the user's own record of their links is better than a guess.
 | "take X out of the gallery" | Only if it is actually in it. `thrixel_update_game(game_id=..., listed=false)` ASKS to be taken off; staff answer, and it stays listed until they do. On a game that was never listed this is a 409, so check `thrixel_list_games()` first. The link is unaffected either way. |
 | "get X featured" / "put X in the gallery" | `thrixel_update_game(game_id=..., listed=true)`. Tell them staff review it, and that the link keeps working regardless. Do not promise a timescale. |
 | "rename X" | `thrixel_update_game(game_id=..., title="...")` |
-| "update X with my changes" | Assemble the bundle again (rebuild it if it is a source tree), then `thrixel_publish_game(directory=..., game_id=..., prompt="<what they asked for this time>")`. Same URL, and the live version keeps serving until the new one is ready. Pass `tokens` for this round of work alone, and `controls` and `description` again only if they changed. |
+| "update X with my changes" | `thrixel_publish_game(files=..., assets=..., game_id=...)` with the whole updated game. Same URL, and the live version keeps serving until the new one is ready. Pass `controls` and `description` again only if they changed. |
 
 Two rules for this whole set:
 

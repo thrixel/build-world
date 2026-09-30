@@ -18,7 +18,7 @@ according to the guidelines in root SKILL.md. Sounds must be generated procedura
    images/audio/models except those made with Thrixel. Any assets made with Thrixel
    should be downloaded. The game must run fully offline, self-contained.
 4. **No `Math.random()` in gameplay or visuals.** Use `ctx.rng` or a
-   `ctx.rng.fork()` you keep. Capture reproducibility depends on it.
+   `ctx.rng.fork()` you keep. Reproducible behaviour depends on it.
 5. **No wall-clock time.** Animate off `ctx.time` (`elapsed`, `dt`, `frame`), never
    `performance.now()`, `Date.now()`, or a CSS animation. Instrumentation that only
    logs a duration is fine.
@@ -27,9 +27,8 @@ according to the guidelines in root SKILL.md. Sounds must be generated procedura
 7. **Dispose what you create.** Geometries, materials, textures and render targets
    are freed in `dispose()`.
 8. **Respect the budgets in `ctx.config.q`.** Never exceed one; report rejections.
-9. `npm run build` must pass, `node tools/smoke.mjs` must pass, and
-   `node tools/capture.mjs` must produce a frame after your change. If you break
-   the boot, nobody else can work.
+9. The game must still boot after your change. If you break the boot, nothing
+   else can be checked.
 
 ## Subsystem interface
 
@@ -68,7 +67,7 @@ export class MySystem {
 | `<...>` | `src/<...>/` | <...> |
 
 Shared, owned by the lead (do not edit): `src/core/`, `src/main.js`, `src/dev/`,
-`tools/`, build config.
+build config.
 
 ## Cross-subsystem events
 
@@ -101,7 +100,7 @@ const r = ctx.get('render');
 r.renderer            // do not change its state outside a frame
 r.screenSize          // { width, height } of the internal target
 r.setTimeOfDay(hour)  // if the project has one
-r.resetTemporal()     // drop temporal history — used by the capture harness
+r.resetTemporal()     // drop temporal history
 // r.registerPass(pass) / r.addLight(light) / r.depthTexture / ... as applicable
 ```
 
@@ -133,10 +132,10 @@ Every visual subsystem is reviewed against <reference>. Non-negotiables:
 - **Every action has weight.** Recoil/impulse, camera shake, an audio transient, and
   a visual FX on every impact.
 
-## Debug hooks (the capture harness depends on these)
+## Debug hooks
 
-Each subsystem exposes a hook the shot list can drive, so any state can be
-captured on demand and cleared afterwards:
+Each subsystem exposes a hook that puts it into a given state and clears it
+afterwards, which makes any state easy to reach while debugging:
 
 | system | hook | kinds |
 |---|---|---|
@@ -145,6 +144,5 @@ captured on demand and cleared afterwards:
 | `ui` | `debugState(mode)` | `'clean'` must reset |
 | `<...>` | `<...>` | |
 
-`opts.grabFrame` is how many frames the harness will pump before the shutter — use
-it to land a transient's peak on the captured frame. Re-seed your RNG inside the
-hook so a staged effect is identical regardless of what ran before it.
+Re-seed your RNG inside the hook so a staged effect is identical regardless of
+what ran before it.

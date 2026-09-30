@@ -1,6 +1,0 @@
-node_modules/
-dist/
-
-# Capture output — regenerate with tools/capture.mjs / tools/baseline.mjs.
-shots/
-*.diff.png

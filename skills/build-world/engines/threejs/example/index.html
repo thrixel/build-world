@@ -39,6 +39,8 @@
   <body>
     <canvas id="game"></canvas>
     <div id="ui"></div>
+    <!-- No build step: the bare 'three' import in lib/ and the systems resolves here. -->
+    <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
     <script type="module" src="./main.js"></script>
   </body>
 </html>

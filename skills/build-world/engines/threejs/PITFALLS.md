@@ -6,67 +6,6 @@ cause → fix. Numbers are measured.
 
 ---
 
-## A. Determinism — why "it looks the same" is unprovable
-
-### A1. The frame index at the shutter drifts run to run
-**Symptom:** two identical capture runs differ on 10 of 11 shots. Adding an
-expensive boot step "changes the visuals". Nothing in the diff corresponds to any
-change you made.
-**Cause:** the engine's own rAF loop keeps stepping while the driver does round
-trips (waiting for readiness, applying the shot, the screenshot RPC). How many
-frames fit inside those round trips is wall-clock dependent, so `time.frame` at the
-shutter drifts 10-20 frames. Everything phase-locked to the absolute frame index —
-TAA jitter, AO/reflection noise rotation (`frame % 64`), exposure adaptation,
-scripted transients — resolves differently.
-**Fix:** lockstep capture. The engine schedules no frames; `__PUMP__(n)` advances
-exactly n. `lib/shots.js`, and `tools/baseline.mjs` uses it.
-
-### A2. Frame 1's delta depends on the boot path
-**Symptom:** a one-frame difference that lives forever in every accumulator.
-**Cause:** `_last` is stamped with a real clock by `start()` and again by prewarm,
-so frame 1's `dt` is 0 in one path and 1/60 in another.
-**Fix:** in capture mode, force `_last` to a synthetic value before every step so
-`dt` is exactly 1/60 on every frame *including the first*. `lib/shots.js`.
-
-### A3. Wall-clock animation
-**Symptom:** the pixel gate reports 78-88% of pixels changed when you add a 1.4 s
-boot step. Mean channel delta up to 3.9 on transient-heavy shots.
-**Cause:** subsystems animating off `performance.now()` / `Date.now()` /
-`setTimeout` cadence / CSS transitions instead of `ctx.time`.
-**Fix:** route every visual or simulation time read through `ctx.time`. Leave pure
-instrumentation alone. A/B an expensive boot step to prove you got them all.
-
-### A4. `will-change: transform` on an animated HUD element
-**Symptom:** a DOM overlay differs between runs for no reason.
-**Cause:** it promotes the element to a composited layer whose raster is taken at a
-wall-clock-dependent moment.
-**Fix:** don't use it on anything animated.
-
-### A5. A shared page leaks state between shots
-**Symptom:** shot 1 is reproducible, shots 2-11 are not.
-**Cause:** particle ages, decal ring buffers, animation phase and auto-exposure
-carry forward.
-**Fix:** one fresh page per shot (`tools/baseline.mjs`). Keep the shared-page tool
-(`capture.mjs`) for fast review only, and never diff its output.
-
-### A6. Looping debug state survives into the next shot
-**Symptom:** phantom regressions — a burst of gunfire in the HUD shot, decals
-behind the UI.
-**Cause:** shot N's scripted transient is still running during shot N+1.
-**Fix:** `clearState(engine)` before every shot's own `apply()`. Re-seed the RNG in
-the debug hook so a staged burst is identical regardless of what ran before it.
-
-### A7. Your own debug overlay defeats your gate
-**Symptom:** every shot reports changed; the diff bounding box is a 7x9 px box in
-the corner.
-**Cause:** the HUD prints the live WebGL program count / fps / timings, and your
-change altered that number. (This happened in this kit's own `example/`.)
-**Fix:** volatile diagnostics only when `!config.deterministic`. The captured HUD
-shows game state, which is deterministic. And read the bbox — it identifies the
-culprit in one look.
-
----
-
 ## B. Shader programs — the invisible frame-rate killer
 
 ### B1. Programs compile during play
@@ -75,9 +14,7 @@ looks fine.
 **Cause:** three compiles a program the first time a permutation is actually drawn.
 Measured: 86-146 programs compiled during play, up to 30 on one frame.
 **Fix:** `prewarmMaterials()` on every subsystem, run before the first frame
-(`lib/prewarm.js`). Verify with `tools/profile.mjs`: `programs.compiledDuringPlay`
-must be 0, and check `--warmup=0` too, since a cold-cache compile lands in exactly
-the frames the default view discards.
+(`lib/prewarm.js`).
 
 ### B2. The visible point-light count is a permutation key
 **Symptom:** +33 to +36 programs and 640-900 ms on a single frame, five times in
@@ -190,79 +127,12 @@ openings have reveals and light does not leak at edges.
 
 ---
 
-## D. Harness and environment
-
-### D1. Copying ANGLE flags between platforms loses the context
-**Symptom (measured in this repo):** every `MeshDepthMaterial` fails
-`VALIDATE_STATUS`, the WebGL context is lost during boot, and the harness writes a
-**pure white 1920x1080 PNG with `ok: true`**. A reviewer then critiques a blank
-frame.
-**Cause:** `--use-angle=metal` is macOS-only, `--use-angle=d3d11` Windows-only;
-forcing a backend the platform cannot honour does not degrade gracefully. The
-specific killer here was `--use-angle=gl --use-gl=angle --enable-unsafe-swiftshader`
-on Linux.
-**Fix:** platform-aware flags, and **check every capture for a blank frame and a
-lost context** (`tools/lib/harness.mjs screenshotChecked` / `contextLost`). Print
-the GPU string on failure.
-
-### D2. HMR reloads the page mid-capture
-**Symptom:** `Execution context was destroyed` — looks like a harness bug.
-**Cause:** a file saved by a concurrently-working agent triggers a hot reload.
-**Fix:** disable HMR when the harness owns the server (`KIT_NO_HMR=1`).
-
-### D3. `localhost` vs `127.0.0.1`
-**Cause:** vite's default `localhost` binds ::1 only on some platforms.
-**Fix:** bind 127.0.0.1 explicitly in the vite config and connect to it.
-
-### D4. Attaching to someone else's dev server
-**Symptom:** a readiness timeout that looks like a game bug; a screenshot of
-another project.
-**Fix:** a project-specific port, and a warning when the port was already open.
-
-### D5. Concurrent agents collide on `strictPort`
-**Fix:** assign each agent its own port (`5300 + n`) in its brief.
-
-### D6. Readiness by timeout instead of by frame count
-**Symptom:** flaky captures; output that changes when boot time changes.
-**Fix:** raise `__READY__` after exactly N *frames* (`signalReady`), so the shot is
-always applied at the same engine frame no matter how long boot took.
-
-### D7. `down.add(code)` does not create a press edge
-**Symptom:** a bot/profiler drives the game and reports zero events, for a game
-that works fine by hand.
-**Cause:** writing straight into the held set skips the pending→edge promotion, so
-anything gated on `pressed()` never fires.
-**Fix:** `input.inject(code, isDown)` (`lib/input.js`), which lands where a DOM
-event would. Drive the real input layer, not a canned camera path: only then do the
-state machines, animation and AI reactions in the recording match the game.
-
-### D8. Screenshot vs canvas readback
-Use `page.screenshot()` when any UI is DOM — it composites both. Canvas readback
-gets you WebGL only, and `readPixels` on the default framebuffer after presentation
-returns nothing useful.
-
-### D9. `--force-device-scale-factor=1` overrides an emulated phone DPR
-**Symptom:** a phone-viewport check reports comfortable numbers and a real phone
-stutters.
-**Cause:** the flag that makes two captures pixel-comparable also beats
-playwright's per-context `deviceScaleFactor`, so "a phone at DPR 3" measures as a
-phone-shaped desktop at DPR 1 — the half of the problem that was never hard.
-**Fix:** `launchBrowser({ pinDeviceScale: false })` for that tool only, and keep
-the pin everywhere the pixel gate runs. Also pass `hasTouch: true`, or the context
-dispatches no touch pointers, `(pointer: coarse)` is false, and a game with a
-perfectly good touch layer measures as unplayable.
-
----
-
 ## D-mobile. Phones
 
-### DM1. The game is keyboard-only and every other gate passes
-**Symptom:** builds, captures, contact sheets and `smoke.mjs` are all green; the
-published link is dead on a phone.
-**Cause:** every tool in this kit drives the game with key codes. Nothing in the
-desktop loop ever asks whether a thumb could play it.
-**Fix:** `tools/mobilecheck.mjs`, whose central assertion is that a real swipe on
-the left of the screen moves the player. Read actions (`axis2()`, `held()`), never
+### DM1. The game is keyboard-only
+**Symptom:** it plays on a laptop; the published link is dead on a phone.
+**Cause:** gameplay reads key codes, so nothing a thumb does reaches it.
+**Fix:** read actions (`axis2()`, `held()`), never
 key codes, in gameplay code and the touch layer feeds them for free.
 
 ### DM2. An uncapped `devicePixelRatio` on a phone
@@ -271,7 +141,7 @@ key codes, in gameplay code and the touch layer feeds them for free.
 phone GPU for ~3.5x the pixels of a 1080p desktop. Resolution, not geometry — the
 same lesson as the desktop profiler, one device further along.
 **Fix:** `Math.min(devicePixelRatio, ctx.config.q.maxPixelRatio)`, a budget in
-every preset. `mobilecheck.mjs` fails on a drawing buffer over 2.6 MP.
+every preset. Keep the drawing buffer under about 2.6 MP on a phone.
 
 ### DM3. Touch works, and nobody can find it
 **Symptom:** the input layer is correct, testers report "it does nothing".
@@ -300,50 +170,11 @@ opacity.
 
 ---
 
-## E. Review process
-
-### E1. A median frame time hides the actual problem
-A static-camera benchmark said 94 fps while the game was unplayable: real gameplay
-at Retina DPR (3.34 MP internal, not 2.07) ran 12-17 fps with 728-1236 ms stalls.
-**Fix:** profile real gameplay at real DPR, report p50/p95/p99/max, list every
-hitch with its per-frame program/geometry/texture delta, and run it 3+ times.
-
-### E2. Critics report the symptom, not the cause
-Every critic for three rounds said the weapon was "untextured". It was
-specular-dominated: diffuse measured L=26 against a shipped L=67. Rounds of
-albedo-crushing (to fight "too bright") had caused it. The fix was the opposite of
-the brief.
-**Fix:** measure the frame (`tools/pixelstats.mjs`, `tools/crop.mjs`) before acting
-on a critique, and brief agents to contradict the brief when the numbers say so.
-
-### E3. A review shot pointed at nothing
-The impact shot was aimed down an open street for three rounds, so the burst it
-existed to show was staged 20+ m away and never legible. Every critique of that
-shot was about something else.
-**Fix:** aim each shot at deliberately placed geometry and state what it is for.
-
-### E4. Reviewing at 1:1 hides close-range defects
-**Fix:** `tools/crop.mjs <shot> <out> 0.3 0.35 0.25 0.3 --scale=3`. Texel density,
-normal detail and blocky silhouettes only show up magnified. `edge` in the tool's
-output quantifies "is this surface actually flat".
-
-### E5. Parallel visual agents fight each other
-See threejs.md — 3x6 parallel agents moved the score +0.46 and made frame-ruining
-defects *worse* (60 → 66); one sequential pass moved it +1.00 and cut them to 26.
-**Fix:** one owner per coupled concern, sequentially.
-
-### E6. Silent scope reduction
-A pass that samples, takes top-N, or skips retries and does not say so reads as
-full coverage.
-**Fix:** log what was dropped.
-
----
-
 ## F. Gameplay correctness no screenshot can show
 
-These are the failures that pass a clean build, a full shot set and a smoke test.
-Each needs a **bench**: drive the real input layer, then assert on a *relationship*
-between two runtime quantities. `example/feeltest.mjs` is the worked example.
+These are the failures a still frame cannot show. Check each by tracing the code:
+follow a real input through to the *relationship* it should produce between two
+runtime quantities (press forward, the player moves where the camera faces).
 
 ### F1. The movement basis is rotated the wrong way
 **Symptom:** WASD "seems to move in absolute compass directions and ignore where
@@ -362,9 +193,8 @@ was 1.000 at yaw 0 and yaw pi, -1.000 at +-pi/2, and `cos(2 * yaw)` everywhere e
 A mirrored basis is *correct at two headings*, which is exactly why it survives
 manual spot-checks.
 
-**Why every other gate passed:** the build was clean; all shots captured (a
-still frame has no controls); and the smoke test reported "movement 4.40 m holding
-KeyW" because it checked the DISTANCE travelled, never the DIRECTION.
+**Why it slips through:** checking that the player moved checks the DISTANCE
+travelled, never the DIRECTION.
 
 **Fix:** state the convention once, then derive from it and never hand-roll:
 
