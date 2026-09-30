@@ -1,6 +1,6 @@
 ---
 name: build-world
-description: Builds polished, fully playable 3D game prototypes in three.js, Roblox, Unity, or Unreal Engine, with high-quality (.glb/.fbx) meshes from the Thrixel API, and (for three.js and Unity) publishes finished games to a public thrixel.world link that anyone can play in a browser. Use when the user wants to make a game, build a playable prototype, or generate 3D assets, and also when they want to publish or host a game folder they already have, share a playable link, or list, rename, update, unpublish or find the link for a game they published earlier.
+description: Builds polished, fully playable 3D browser games in three.js, with high-quality .glb models from the Thrixel API, and publishes each finished game to a public thrixel.world link that anyone can play. Use when the user wants to make a game, build a playable prototype, or generate 3D assets, and also when they want to publish or host a game folder they already have, share a playable link, or list, rename, update, unpublish or find the link for a game they published earlier.
 ---
 
 # This is the ChatGPT build - read this section first
