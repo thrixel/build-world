@@ -447,6 +447,15 @@ at once.
   `thrixel_group_parts` looks Z-up, that is Thrixel's internal working space, not the file -
   a real project once wrote "these assets came back Z-up" into a source comment on the strength
   of that listing and carried the wrong belief for its whole life.)
+- **Use the full-detail model; treat `quality="lite"` as a placeholder only.** A finished
+  model first exists as a lightweight build with simplified surface colours, and its
+  full-detail build follows a little later. Every job tool and `thrixel_download` wait for the
+  full build by default, so the defaults are already right. Only pull `quality="lite"` to lay
+  out a scene while the full build finishes, then re-download with the default and replace
+  the file wholesale. Never change a lite file's geometry locally: the full build cannot be
+  laid over your edits, and they are lost or must be redone. Make shape changes on the server
+  instead (`thrixel_edit_model`, `thrixel_transform_model`, `thrixel_reduce_triangles`):
+  each result gets its own full-detail build.
 
 If necessary, read thrixel api docs here: https://thrixel.com/docs/,
 but the vast majority of thrixel information is contained within this skill and the mcp.
