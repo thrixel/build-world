@@ -267,7 +267,7 @@ descriptions. The shape is what matters here, and it is stable even when the num
   to generate the image the run works from, and that is billed on its own - roughly a third
   again on top. Passing an image, or reusing one with `reference_image_id`, skips it. Budget
   the prompt-only case or your arithmetic is short on every one of them.
-- **Reduce triangles, rebake: free.** Always use `thrixel_reduce_triangles` to hit a triangle
+- **Reduce triangles, smaller textures: free.** Smaller textures come from `thrixel_download(texture_size=512 | 1024 | 2048)`. Always use `thrixel_reduce_triangles` to hit a triangle
   budget; never re-run the detailer at a lower target to make something lighter.
 - **Architect: metered on real usage and charged after the run**, so it varies by what the
   object is. Props are the cheap end, vehicles a little more, buildings more again, and
@@ -445,6 +445,15 @@ at once.
   `thrixel_group_parts` looks Z-up, that is Thrixel's internal working space, not the file -
   a real project once wrote "these assets came back Z-up" into a source comment on the strength
   of that listing and carried the wrong belief for its whole life.)
+- **Use the full-detail model; treat `quality="lite"` as a placeholder only.** A finished
+  model first exists as a lightweight build with simplified surface colours, and its
+  full-detail build follows a little later. Every job tool and `thrixel_download` wait for the
+  full build by default, so the defaults are already right. Only pull `quality="lite"` to lay
+  out a scene while the full build finishes, then re-download with the default and replace
+  the file wholesale. Never change a lite file's geometry locally: the full build cannot be
+  laid over your edits, and they are lost or must be redone. Make shape changes on the server
+  instead (`thrixel_edit_model`, `thrixel_transform_model`, `thrixel_reduce_triangles`):
+  each result gets its own full-detail build.
 
 If necessary, read thrixel api docs here: https://thrixel.com/docs/,
 but the vast majority of thrixel information is contained within this skill and the mcp.
@@ -741,6 +750,11 @@ theirs permanently.
 - **Updates:** republish with the same `game_id` - the link never changes, and the old
   version keeps serving until the new one is fully deployed, so a failed republish never
   takes a live game down. Offer this when the user makes further changes to a published game.
+- **One game, one link, across sessions.** Before a first publish, check
+  `thrixel_list_games()`: a game the user already published under this name gets its
+  `game_id`, not a second link. The tool holds back a publish whose title or project
+  matches an existing game and names it; pass that `game_id`, or `new_game=true` only when
+  the user wants a separate game at a new link.
 - **Unpublish** takes the game offline immediately; the address stays theirs and
   republishing revives it.
 - **Sharing is by link, and that is already the default.** The game's address is
