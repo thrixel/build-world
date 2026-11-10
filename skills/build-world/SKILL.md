@@ -23,18 +23,17 @@ to use. **Where anything below conflicts with this section, this section wins.**
   belongs to each path: publishing packs them in for you.
 - **Never hand out a localhost address.** Nothing is served locally, so a `localhost` link
   leads nowhere. The user's link is the one publishing returns.
-- **You cannot run the game here.** There is no browser or GPU, so there is no preview
-  video either: leave `cold_open` off. Check the game by reading your own code carefully instead: every model
-  path you load appears in `assets`, every control you describe is wired up, and every
-  moving part the models have (propellers, wheels, doors) moves in the game.
-- **Every object the player sees is a Thrixel model.** Generate the asset list, wait for
-  each job to finish (`thrixel_job_status`), and load the finished model. Do not stand in
-  boxes, spheres or cylinders built in code for a model that exists or is still generating:
-  a game drawn from primitives is what looks unfinished, and it is not what the user asked
-  for. Code-built geometry is for the ground, water, sky and effects. The publish tool holds
-  back a game that leaves this project's models out of `assets`, or loads a model path
-  nothing provides.
-- **Publish automatically when the game plays end to end.** This replaces the serve-and-ask
+- **Play it before you publish: `thrixel_playtest_game`.** There is no browser here, so
+  the game runs on Thrixel's side instead: pass the same `files` and `assets` you will
+  publish, and it presses start, moves, turns, acts, drags on a phone screen, and returns
+  a screenshot of each step with every error the page raised. Look at each screenshot as
+  someone seeing the game for the first time: every model on screen at a believable size
+  and facing the right way, each control doing what the controls line says, everything
+  that moves in real life moving, nothing blank, black, covered or stuck on a loading
+  message, and a playable phone layout. Fix what you find and playtest again, as many
+  rounds as it takes; time spent here is time the user does not spend finding the same
+  bugs. Leave `cold_open` off (there is no preview video in this build).
+- **Publish automatically once the playtest is clean.** This replaces the serve-and-ask
   step of asking first. Call:
 
   ```
