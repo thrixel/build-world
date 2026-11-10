@@ -1245,6 +1245,33 @@ unverified and let the user decide.
 For a three.js kit game, `tools/mobilecheck.mjs` goes deeper on the phone side
 (it drives the kit's own input layer and reports the frame rate); run both.
 
+## Play it like a player - look at it before anyone else does
+
+playcheck says whether the game runs. It cannot say whether the game is **right**:
+a scene with the hero model missing, a part that should move standing still, the camera
+inside a wall, a menu that never closes, text over the play area. Those pass every
+automatic check and are obvious in one look. So after playcheck passes, play it:
+
+```
+node <skill>/tools/playtest.mjs <the bundle directory> --out=<a scratch folder>
+```
+
+It presses start, then moves, turns, uses the action key, drags on a phone screen and
+waits idle, saving a screenshot after each step, and prints the errors it saw. Add the
+game's own controls with `--inputs='[{"name":"jump","keys":["Space"],"ms":400}]'`.
+**Open every screenshot and look at it as someone seeing the game for the first time:**
+
+- every model the game loads is on screen, at a believable size, facing the right way;
+- each control does what the controls line says, and the frames show it;
+- everything that moves in real life moves (rotors, wheels, doors, creatures, water);
+- nothing covers the play area, nothing is black, blank or stuck on a loading message;
+- the phone frames show a playable layout with the touch controls visible.
+
+Fix what you find and play it again. Take as many rounds as it needs: time spent here is
+time the user does not spend finding the same bugs. Only when the screenshots show the
+game you are about to describe, with no errors, does it go on to the preview and the
+publish. Say in your summary what you checked and what you fixed.
+
 ## Record the preview - the clip a stranger watches before they press Play
 
 **After playcheck passes and before you publish: every first publish, and every
