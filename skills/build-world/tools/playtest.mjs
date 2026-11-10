@@ -71,7 +71,9 @@ const base = isUrl ? target : `http://127.0.0.1:${port}/`;
 const browser = await chromium.launch({
   headless: true,
   args: ['--ignore-gpu-blocklist', '--hide-scrollbars', '--mute-audio',
-         '--use-angle=swiftshader', '--enable-unsafe-swiftshader'],
+         '--use-angle=swiftshader', '--enable-unsafe-swiftshader',
+         // Containers (Fargate) cannot size /dev/shm; without this Chromium crashes there.
+         '--disable-dev-shm-usage'],
 });
 
 const report = { target, ok: true, errors: [], warnings: [], phases: [], phone: null };
