@@ -160,7 +160,7 @@ the browser claiming an un-declared gesture as a scroll so `pointermove` simply
 stops arriving.
 **Fix:** `overscroll-behavior: none`, `height: 100dvh`, `touch-action: none` on
 the canvas (`Input` sets it programmatically too, since a project's own CSS may
-not). All three are in `example/index.html` with comments.
+not). All three are in `example/index.html` in [example.md](example.md), with comments.
 
 ### DM5. An invisible on-screen button still swallows clicks
 **Symptom:** a dead zone in the bottom-right corner on desktop.

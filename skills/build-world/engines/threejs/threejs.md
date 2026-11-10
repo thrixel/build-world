@@ -22,7 +22,9 @@ code that is right the first time and saying honestly what you checked.
 
 ## What the kit gives you
 
-`lib/` is plain browser modules (import from `lib/index.js`). Copy the ones you use into `files`.
+`lib/` is plain browser modules (import from `lib/index.js`). Their source is in
+[lib.md](lib.md), one section per file: write the ones you use into `files` at the path in
+each heading.
 
 | file | what it is for |
 |---|---|
@@ -37,8 +39,8 @@ code that is right the first time and saying honestly what you checked.
 | `pool.js` | `scratch()`, `Pool`, `InstanceRing`, `ParticleStore`: no per-frame allocation |
 | `dispose.js` | `disposeTree`, `Owned`: GPU resources are not garbage collected |
 
-`example/` is a small working game built on all of it; `example/index.html` has the mobile
-viewport setup with the reasons in comments.
+[example.md](example.md) is a small working game built on all of it; its `example/index.html`
+has the mobile viewport setup with the reasons in comments.
 
 ## Performance
 

@@ -1,3 +1,10 @@
+# Subsystem template (`templates/subsystem.js`)
+
+The starting shape of one subsystem. Copy it into your game as a new file under `systems/`.
+
+## `templates/subsystem.js`
+
+```js
 import * as THREE from 'three';
 import { scratch, Owned, disposeTree, compileMeshes, Pool } from '../lib/index.js';
 
@@ -103,3 +110,4 @@ export class TemplateSystem {
     this.own.disposeAll();
   }
 }
+```

@@ -323,8 +323,8 @@ architect+detailer is a correctness choice, made by the rules below.
 # Target engine
 
 three.js, always, in this build. Read [engines/threejs/threejs.md](engines/threejs/threejs.md)
-**in full** before writing the game; its kit in `engines/threejs/lib/` is plain browser modules
-you can copy into `files`.
+**in full** before writing the game; its kit, in [engines/threejs/lib.md](engines/threejs/lib.md),
+is plain browser modules you can copy into `files`.
 
 # Thrixel asset generation
 
