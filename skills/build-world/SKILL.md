@@ -26,6 +26,13 @@ to use. **Where anything below conflicts with this section, this section wins.**
 - **You cannot run the game here.** There is no browser or GPU, so there is no preview
   video either: leave `cold_open` off. Check the game by reading your own code carefully instead: every model
   path you load appears in `assets`, every control you describe is wired up.
+- **Every object the player sees is a Thrixel model.** Generate the asset list, wait for
+  each job to finish (`thrixel_job_status`), and load the finished model. Do not stand in
+  boxes, spheres or cylinders built in code for a model that exists or is still generating:
+  a game drawn from primitives is what looks unfinished, and it is not what the user asked
+  for. Code-built geometry is for the ground, water, sky and effects. The publish tool holds
+  back a game that leaves this project's models out of `assets`, or loads a model path
+  nothing provides.
 - **Publish automatically when the game plays end to end.** This replaces the serve-and-ask
   step of asking first. Call:
 
@@ -55,10 +62,12 @@ money beyond that:
 - **Before generating,** call `thrixel_account_status`, and say in one line where the balance
   runs out in the ranked asset list (see "Draw the line through the list"). Then carry on
   without waiting.
-- **If the Cubes run out,** finish the game with what exists (unbuilt assets stay as simple
-  blocks), publish it, and say plainly which assets are still blocks and that they can be
-  generated once the account has Cubes again. Their Cubes and plan are managed in their
-  Thrixel account at https://thrixel.com, which is the only place to point them.
+- **If the Cubes run out** with assets on the list still unbuilt, finish the game with what
+  exists, putting each missing asset in as a labelled block at its real size and place, and
+  **stop before publishing**. Tell the user which assets are still blocks and ask whether to
+  publish now with the blocks, or wait until the account has Cubes again and finish them
+  first. Publish only on their answer. Their Cubes and plan are managed in their Thrixel
+  account at https://thrixel.com, which is the only place to point them.
 
 # What is being asked for - route before you read further
 
