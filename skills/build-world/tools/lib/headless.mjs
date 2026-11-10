@@ -13,6 +13,7 @@ import { extname, join, resolve, sep } from 'node:path';
 import { homedir } from 'node:os';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { inflateSync } from 'node:zlib';
 
 export const TYPES = {
   '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript',
@@ -138,4 +139,50 @@ export function diffPct(a, b) {
   let n = 0, t = 0;
   for (let i = 0; i < a.length && i < b.length; i += 512) { t++; if (Math.abs(a[i] - b[i]) > 8) n++; }
   return +(100 * n / t).toFixed(2);
+}
+
+/** Luminance on a coarse grid (default 32x18) from a PNG screenshot.
+ *  Decodes the PNG itself (8-bit RGB/RGBA, no interlace: what Chromium writes),
+ *  so two frames compare by what is ON SCREEN rather than by encoded bytes:
+ *  any change to a compressed file shifts every byte after it. */
+export function gridLuma(png, gw = 32, gh = 18) {
+  const w = png.readUInt32BE(16), h = png.readUInt32BE(20);
+  const depth = png[24], type = png[25];
+  const bpp = type === 6 ? 4 : type === 2 ? 3 : 0;
+  if (depth !== 8 || !bpp) return null;
+  const parts = [];
+  for (let o = 8; o < png.length;) {
+    const len = png.readUInt32BE(o), kind = png.toString('ascii', o + 4, o + 8);
+    if (kind === 'IDAT') parts.push(png.subarray(o + 8, o + 8 + len));
+    o += 12 + len;
+  }
+  const raw = inflateSync(Buffer.concat(parts));
+  const stride = w * bpp, row = Buffer.alloc(stride), prev = Buffer.alloc(stride);
+  const sums = new Float64Array(gw * gh), counts = new Uint32Array(gw * gh);
+  for (let y = 0, p = 0; y < h; y++) {
+    const f = raw[p++];
+    for (let x = 0; x < stride; x++) {
+      const a = x >= bpp ? row[x - bpp] : 0, b = prev[x], c = x >= bpp ? prev[x - bpp] : 0;
+      let v = raw[p++];
+      if (f === 1) v += a; else if (f === 2) v += b; else if (f === 3) v += (a + b) >> 1;
+      else if (f === 4) { const pa = Math.abs(b - c), pb = Math.abs(a - c), pc = Math.abs(a + b - 2 * c);
+        v += pa <= pb && pa <= pc ? a : pb <= pc ? b : c; }
+      row[x] = v & 255;
+    }
+    const gy = Math.min(gh - 1, Math.floor(y * gh / h));
+    for (let x = 0; x < w; x++) {
+      const i = x * bpp, g = gy * gw + Math.min(gw - 1, Math.floor(x * gw / w));
+      sums[g] += 0.299 * row[i] + 0.587 * row[i + 1] + 0.114 * row[i + 2]; counts[g]++;
+    }
+    row.copy(prev);
+  }
+  return Array.from(sums, (s, i) => s / (counts[i] || 1));
+}
+
+/** Mean absolute luminance change between two grids, 0-255. */
+export function gridDiff(a, b) {
+  if (!a || !b) return null;
+  let t = 0;
+  for (let i = 0; i < a.length; i++) t += Math.abs(a[i] - b[i]);
+  return +(t / a.length).toFixed(2);
 }
