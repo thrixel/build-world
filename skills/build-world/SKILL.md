@@ -25,7 +25,8 @@ to use. **Where anything below conflicts with this section, this section wins.**
   leads nowhere. The user's link is the one publishing returns.
 - **You cannot run the game here.** There is no browser or GPU, so there is no preview
   video either: leave `cold_open` off. Check the game by reading your own code carefully instead: every model
-  path you load appears in `assets`, every control you describe is wired up.
+  path you load appears in `assets`, every control you describe is wired up, and every
+  moving part the models have (propellers, wheels, doors) moves in the game.
 - **Every object the player sees is a Thrixel model.** Generate the asset list, wait for
   each job to finish (`thrixel_job_status`), and load the finished model. Do not stand in
   boxes, spheres or cylinders built in code for a model that exists or is still generating:

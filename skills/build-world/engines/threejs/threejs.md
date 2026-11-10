@@ -40,7 +40,37 @@ code that is right the first time and saying honestly what you checked.
 `example/` is a small working game built on all of it; `example/index.html` has the mobile
 viewport setup with the reasons in comments.
 
-## Performance
+## Moving parts: animate them
+
+An Architect model arrives with named parts, and `thrixel_group_parts` keeps the ones that
+move as separate nodes, each with its pivot at its own centre. **Every part that moves in real
+life moves in the game**: a propeller or rotor spins with the throttle, wheels roll with the
+speed and the front pair steers, a turret tracks its target, a door or lid opens when used, a
+flag or sail sways. A vehicle whose propeller sits still reads as a toy that is switched off,
+and the parts were the reason to pay for Architect. The job result lists them ("Moving
+parts: ..."); `thrixel_inspect_model` lists every part.
+
+Take each part by its node name, once, after the model loads, and keep the reference:
+
+```js
+const prop = gltf.scene.getObjectByName('Propeller');   // the node, not a mesh
+if (!prop) console.warn('no Propeller in submarine.glb');  // say so; never fail silently
+// every frame:
+prop.rotation.z += speed * dt * 12;   // spin about the part's own origin
+```
+
+Two traps, both silent:
+
+- **A part with several materials loads as a Group.** Its child meshes carry the MESH's name
+  (`Cylinder023_1`), not the part's, so `traverse(o => o.isMesh && o.name.includes('propeller'))`
+  finds nothing and the propeller never turns. Use `getObjectByName` and rotate what it
+  returns.
+- **three.js rewrites node names**: spaces become `_` and `[ ] . : /` are dropped, so
+  `Prop.002` is `Prop002` in the scene. Use the name the job result prints.
+
+The pivot is the part's geometric centre: right for wheels, propellers and rotors. For a
+turret, a lid or a door, the axis is the hinge or mount: parent the part under a `THREE.Group`
+placed there and rotate the group.## Performance
 
 The three things that actually cost frames in three.js, in the order they bite:
 
