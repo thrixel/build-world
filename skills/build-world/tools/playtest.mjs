@@ -42,12 +42,12 @@ if (!target) {
 
 // What most games bind, in the order a new player tries them. A game that uses
 // none of these still gets a click and a drag. --inputs adds the game's own.
+// Every step costs a rendered frame, and software WebGL renders slowly, so
+// the list is short: one step per kind of input.
 const DEFAULT_PHASES = [
   { name: 'forward', keys: ['KeyW', 'ArrowUp'], ms: 1500 },
-  { name: 'turn-left', keys: ['KeyA', 'ArrowLeft'], ms: 900 },
-  { name: 'turn-right', keys: ['KeyD', 'ArrowRight'], ms: 900 },
+  { name: 'turn', keys: ['KeyA', 'ArrowLeft'], ms: 900, then: ['KeyD', 'ArrowRight'] },
   { name: 'action', keys: ['Space'], ms: 300, repeat: 3 },
-  { name: 'back', keys: ['KeyS', 'ArrowDown'], ms: 900 },
   { name: 'mouse', mouse: true, ms: 800 },
 ];
 
@@ -140,10 +140,12 @@ for (const ph of phases) {
     await page.mouse.move(vp.width * 0.65, vp.height * 0.45, { steps: 16 });
     await page.mouse.up();
   } else {
-    for (let r = 0; r < (ph.repeat || 1); r++) {
-      for (const k of ph.keys || []) await page.keyboard.down(k);
-      await page.waitForTimeout(ph.ms || 600);
-      for (const k of ph.keys || []) await page.keyboard.up(k);
+    for (const keys of [ph.keys || [], ...(ph.then ? [ph.then] : [])]) {
+      for (let r = 0; r < (ph.repeat || 1); r++) {
+        for (const k of keys) await page.keyboard.down(k);
+        await page.waitForTimeout(ph.ms || 600);
+        for (const k of keys) await page.keyboard.up(k);
+      }
     }
   }
   await page.waitForTimeout(500);
@@ -168,13 +170,22 @@ report.motion = { idleDrift, strongestInputChange: best };
 const responded = best > Math.max(1.5, idleDrift * 1.5);
 
 // ---- phone session ---------------------------------------------------------
-// Best effort: a phone pass that cannot run is reported, never fatal.
+// Best effort: a phone pass that cannot run is reported, never fatal, and it
+// gets a fixed budget so a slow renderer cannot hold the whole test hostage.
+const PHONE_BUDGET_MS = 150_000;
 try {
+  await Promise.race([phonePass(), new Promise((_, no) => setTimeout(
+    () => no(new Error(`the phone pass took over ${PHONE_BUDGET_MS / 1000}s`)), PHONE_BUDGET_MS))]);
+} catch (e) {
+  report.phone = { error: String(e.message || e).split('\n')[0].slice(0, 200) };
+}
+
+async function phonePass() {
   const phone = await browser.newPage({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true,
                                          deviceScaleFactor: 1 });
   watch(phone);
   phone.on('crash', () => note(report.errors, 'the page crashed on the phone viewport'));
-  phone.setDefaultTimeout(20000);
+  phone.setDefaultTimeout(60000);
   await phone.goto(base, { waitUntil: 'load', timeout: 60000 });
   await phone.waitForTimeout(4000);
   await pressStart(phone).catch(() => null);
@@ -194,8 +205,6 @@ try {
   const p1 = await shoot(phone, 'phone-drag', p0);
   const overflow = await phone.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1);
   report.phone = { files: [p0.file, p1.file], dragChanged: p1.changed, horizontalOverflow: overflow };
-} catch (e) {
-  report.phone = { error: String(e.message || e).split('\n')[0].slice(0, 200) };
 }
 
 await browser.close();
