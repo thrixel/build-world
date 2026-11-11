@@ -31,10 +31,10 @@ to use. **Where anything below conflicts with this section, this section wins.**
   and facing the right way, each control doing what the controls line says, whatever the
   player steers facing the way it travels (not backwards or sideways), everything that
   moves in real life moving, nothing blank, black, covered or stuck on a loading message,
-  and a playable phone layout. If it reports a frame took too long to draw, the scene
-  costs more than it needs (the test has no GPU, but phones feel the same cost): cut
-  shadow resolution and soft shadows, lights and separate materials. A run of a heavy
-  scene can outlast one call; collect it with the `playtest_id` it returns. Fix what you
+  and a playable phone layout. It runs on a server with no GPU: when it says the machine
+  was too slow to judge a check, that is the machine, not the game, so judge that check
+  from the screenshots and do not cut the game's visuals to make the test pass. A run of
+  a heavy scene can outlast one call; collect it with the `playtest_id` it returns. Fix what you
   find and playtest again, as many
   rounds as it takes; time spent here is time the user does not spend finding the same
   bugs. Leave `cold_open` off (there is no preview video in this build).
