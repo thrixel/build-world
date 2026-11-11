@@ -95,10 +95,16 @@ function watch(page) {
   });
 }
 
-async function shoot(page, label, prev) {
-  const png = await page.screenshot({ type: 'png' });
+// A screenshot waits for the next frame. In a software renderer (no GPU) the
+// first one also compiles every shader, so it gets longer; a frame that never
+// comes ends the test with a report instead of a crash.
+const FIRST_FRAME_MS = 120_000;
+const FRAME_MS = 60_000;
+
+async function shoot(page, label, prev, timeout = FRAME_MS) {
+  const png = await page.screenshot({ type: 'png', timeout });
   const file = shotName(label);
-  await writeFile(join(out, file), await page.screenshot({ type: 'jpeg', quality: 72 }));
+  await writeFile(join(out, file), await page.screenshot({ type: 'jpeg', quality: 72, timeout }));
   const grid = gridLuma(png);
   return { file, png, grid, changed: prev ? gridDiff(prev.grid, grid) : null,
            cells: prev ? gridChanged(prev.grid, grid) : null, range: gridRange(grid) };
@@ -122,9 +128,13 @@ async function pressStart(page) {
 // ---- desktop session -------------------------------------------------------
 const page = await browser.newPage({ viewport: { width: 1280, height: 720 }, deviceScaleFactor: 0.5 });
 watch(page);
+let slowFrame = null;
+const inputChanges = [];
+let idleDrift = 0, idleCells = 0;
+try {
 await page.goto(base, { waitUntil: 'load', timeout: 60000 });
 await page.waitForTimeout(4000);
-let last = await shoot(page, 'boot', null);
+let last = await shoot(page, 'boot', null, FIRST_FRAME_MS);
 report.phases.push({ name: 'boot', file: last.file, range: last.range });
 report.startButton = await pressStart(page);
 await page.waitForTimeout(1500);
@@ -132,7 +142,6 @@ let s = await shoot(page, 'after-start', last);
 report.phases.push({ name: 'after-start', file: s.file, changed: s.changed, cells: s.cells, range: s.range });
 last = s;
 
-const inputChanges = [];
 for (const ph of phases) {
   if (ph.mouse) {
     const vp = page.viewportSize();
@@ -165,8 +174,20 @@ const idle1 = s.changed;
 await page.waitForTimeout(1000);
 const s2 = await shoot(page, 'idle-2', s);
 report.phases.push({ name: 'idle', file: s.file, changed: idle1, cells: s.cells, range: s.range });
-const idleDrift = Math.max(idle1 ?? 0, s2.changed ?? 0);
-const idleCells = Math.max(s.cells ?? 0, s2.cells ?? 0);
+idleDrift = Math.max(idle1 ?? 0, s2.changed ?? 0);
+idleCells = Math.max(s.cells ?? 0, s2.cells ?? 0);
+} catch (e) {
+  if (e?.name !== 'TimeoutError') throw e;
+  const step = report.phases.length ? `after "${report.phases.at(-1).name}"` : 'for the first frame';
+  slowFrame = `The test waited over ${(report.phases.length ? FRAME_MS : FIRST_FRAME_MS) / 1000} s ${step} `
+    + 'and no frame came, so the rest of the playtest could not run. This test draws with a software '
+    + 'renderer (no GPU), which is far slower than a player\'s machine, but a frame this slow usually '
+    + 'means the scene costs more than it needs: soft shadows (PCFSoftShadowMap) on large shadow maps, '
+    + 'several lights, post-processing, or many separate meshes and materials. Lighter settings also '
+    + 'help phones. Make the scene cheaper (or playtest a build with shadows and effects off to check '
+    + 'the gameplay), then playtest again.';
+  note(report.warnings, slowFrame);
+}
 const best = Math.max(0, ...inputChanges.map((p) => p.changed ?? 0));
 const bestCells = Math.max(0, ...inputChanges.map((p) => p.cells ?? 0));
 report.motion = { idleDrift, strongestInputChange: best, idleCells, strongestInputCells: bestCells };
@@ -180,7 +201,8 @@ const responded = best > Math.max(1.5, idleDrift * 1.5)
 // Best effort: a phone pass that cannot run is reported, never fatal, and it
 // gets a fixed budget so a slow renderer cannot hold the whole test hostage.
 const PHONE_BUDGET_MS = 150_000;
-try {
+if (slowFrame) report.phone = { error: 'skipped: the desktop pass could not draw a frame in time' };
+else try {
   await Promise.race([phonePass(), new Promise((_, no) => setTimeout(
     () => no(new Error(`the phone pass took over ${PHONE_BUDGET_MS / 1000}s`)), PHONE_BUDGET_MS))]);
 } catch (e) {
@@ -222,6 +244,7 @@ server?.close();
 const blank = (report.phases[1]?.range ?? 0) < 12;
 report.checks = {
   'loads without errors': report.errors.length === 0,
+  ...(slowFrame ? { 'draws a frame in time': false } : {}),
   'draws something': !blank,
   'responds to input': responded,
   'fits a phone screen': !report.phone?.horizontalOverflow,

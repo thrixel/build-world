@@ -1263,9 +1263,15 @@ game's own controls with `--inputs='[{"name":"jump","keys":["Space"],"ms":400}]'
 
 - every model the game loads is on screen, at a believable size, facing the right way;
 - each control does what the controls line says, and the frames show it;
+- whatever the player steers faces the way it travels: walking or driving backwards or
+  sideways means the model's front is not where the code assumes (see "Check FORWARD");
 - everything that moves in real life moves (rotors, wheels, doors, creatures, water);
 - nothing covers the play area, nothing is black, blank or stuck on a loading message;
 - the phone frames show a playable layout with the touch controls visible.
+
+If it reports that a frame took too long to draw, the scene is too heavy for its own good
+(the test has no GPU, but phones feel the same cost): cut shadow resolution and soft
+shadows, lights and separate materials, then play it again.
 
 Fix what you find and play it again. Take as many rounds as it needs: time spent here is
 time the user does not spend finding the same bugs. Only when the screenshots show the
