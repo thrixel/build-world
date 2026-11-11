@@ -1269,9 +1269,9 @@ game's own controls with `--inputs='[{"name":"jump","keys":["Space"],"ms":400}]'
 - nothing covers the play area, nothing is black, blank or stuck on a loading message;
 - the phone frames show a playable layout with the touch controls visible.
 
-If it reports that a frame took too long to draw, the scene is too heavy for its own good
-(the test has no GPU, but phones feel the same cost): cut shadow resolution and soft
-shadows, lights and separate materials, then play it again.
+It may run on a machine with no GPU. When it says the machine was too slow to judge a
+check, that is the machine, not the game: judge that check from the screenshots, and do
+not cut the game's visuals to make the test pass.
 
 Fix what you find and play it again. Take as many rounds as it needs: time spent here is
 time the user does not spend finding the same bugs. Only when the screenshots show the
