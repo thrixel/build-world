@@ -186,3 +186,19 @@ export function gridDiff(a, b) {
   for (let i = 0; i < a.length; i++) t += Math.abs(a[i] - b[i]);
   return +(t / a.length).toFixed(2);
 }
+
+/** Percentage of grid cells whose luminance moved by more than `threshold`.
+ *  A small sprite moving changes a few cells a lot; water shimmer changes many
+ *  cells a little. The mean alone mistakes the first for nothing. */
+export function gridChanged(a, b, threshold = 10) {
+  if (!a || !b) return null;
+  let n = 0;
+  for (let i = 0; i < a.length; i++) if (Math.abs(a[i] - b[i]) > threshold) n++;
+  return +(100 * n / a.length).toFixed(2);
+}
+
+/** Luminance range across the grid: a frame with anything on it has contrast. */
+export function gridRange(g) {
+  if (!g) return 0;
+  return +(Math.max(...g) - Math.min(...g)).toFixed(1);
+}

@@ -27,7 +27,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 
-import { frameStats, gridDiff, gridLuma, loadChromium, serve } from './lib/headless.mjs';
+import { gridChanged, gridDiff, gridLuma, gridRange, loadChromium, serve } from './lib/headless.mjs';
 
 const args = process.argv.slice(2);
 const target = args.find((a) => !a.startsWith('--'));
@@ -100,7 +100,8 @@ async function shoot(page, label, prev) {
   const file = shotName(label);
   await writeFile(join(out, file), await page.screenshot({ type: 'jpeg', quality: 72 }));
   const grid = gridLuma(png);
-  return { file, png, grid, changed: prev ? gridDiff(prev.grid, grid) : null, std: frameStats(png).std };
+  return { file, png, grid, changed: prev ? gridDiff(prev.grid, grid) : null,
+           cells: prev ? gridChanged(prev.grid, grid) : null, range: gridRange(grid) };
 }
 
 // A title screen is the first thing many games show: press what a player would.
@@ -124,11 +125,11 @@ watch(page);
 await page.goto(base, { waitUntil: 'load', timeout: 60000 });
 await page.waitForTimeout(4000);
 let last = await shoot(page, 'boot', null);
-report.phases.push({ name: 'boot', file: last.file, std: last.std });
+report.phases.push({ name: 'boot', file: last.file, range: last.range });
 report.startButton = await pressStart(page);
 await page.waitForTimeout(1500);
 let s = await shoot(page, 'after-start', last);
-report.phases.push({ name: 'after-start', file: s.file, changed: s.changed, std: s.std });
+report.phases.push({ name: 'after-start', file: s.file, changed: s.changed, cells: s.cells, range: s.range });
 last = s;
 
 const inputChanges = [];
@@ -150,8 +151,8 @@ for (const ph of phases) {
   }
   await page.waitForTimeout(500);
   s = await shoot(page, ph.name, last);
-  report.phases.push({ name: ph.name, file: s.file, changed: s.changed, std: s.std });
-  inputChanges.push(s.changed);
+  report.phases.push({ name: ph.name, file: s.file, changed: s.changed, cells: s.cells, range: s.range });
+  inputChanges.push(s);
   last = s;
 }
 // Idle a few seconds: animation, enemies, timers. A frame that changes with no
@@ -163,11 +164,17 @@ s = await shoot(page, 'idle', last);
 const idle1 = s.changed;
 await page.waitForTimeout(1000);
 const s2 = await shoot(page, 'idle-2', s);
-report.phases.push({ name: 'idle', file: s.file, changed: idle1, std: s.std });
+report.phases.push({ name: 'idle', file: s.file, changed: idle1, cells: s.cells, range: s.range });
 const idleDrift = Math.max(idle1 ?? 0, s2.changed ?? 0);
-const best = Math.max(0, ...inputChanges.filter((v) => v !== null));
-report.motion = { idleDrift, strongestInputChange: best };
-const responded = best > Math.max(1.5, idleDrift * 1.5);
+const idleCells = Math.max(s.cells ?? 0, s2.cells ?? 0);
+const best = Math.max(0, ...inputChanges.map((p) => p.changed ?? 0));
+const bestCells = Math.max(0, ...inputChanges.map((p) => p.cells ?? 0));
+report.motion = { idleDrift, strongestInputChange: best, idleCells, strongestInputCells: bestCells };
+// Either the whole picture shifts clearly more than it drifts on its own (a
+// camera that follows the player), or some part of it changes sharply where
+// idling does not (a sprite or a cursor moving across a still background).
+const responded = best > Math.max(1.5, idleDrift * 1.5)
+  || (bestCells >= 0.3 && bestCells > idleCells * 1.5 + 0.2);
 
 // ---- phone session ---------------------------------------------------------
 // Best effort: a phone pass that cannot run is reported, never fatal, and it
@@ -210,7 +217,9 @@ async function phonePass() {
 await browser.close();
 server?.close();
 
-const blank = report.phases[1]?.std !== undefined && report.phases[1].std < 2.5;
+// Contrast, not variance of encoded bytes: a small bright sprite on a dark
+// background is a drawn frame.
+const blank = (report.phases[1]?.range ?? 0) < 12;
 report.checks = {
   'loads without errors': report.errors.length === 0,
   'draws something': !blank,
