@@ -28,9 +28,14 @@ to use. **Where anything below conflicts with this section, this section wins.**
   publish, and it presses start, moves, turns, acts, drags on a phone screen, and returns
   a screenshot of each step with every error the page raised. Look at each screenshot as
   someone seeing the game for the first time: every model on screen at a believable size
-  and facing the right way, each control doing what the controls line says, everything
-  that moves in real life moving, nothing blank, black, covered or stuck on a loading
-  message, and a playable phone layout. Fix what you find and playtest again, as many
+  and facing the right way, each control doing what the controls line says, whatever the
+  player steers facing the way it travels (not backwards or sideways), everything that
+  moves in real life moving, nothing blank, black, covered or stuck on a loading message,
+  and a playable phone layout. If it reports a frame took too long to draw, the scene
+  costs more than it needs (the test has no GPU, but phones feel the same cost): cut
+  shadow resolution and soft shadows, lights and separate materials. A run of a heavy
+  scene can outlast one call; collect it with the `playtest_id` it returns. Fix what you
+  find and playtest again, as many
   rounds as it takes; time spent here is time the user does not spend finding the same
   bugs. Leave `cold_open` off (there is no preview video in this build).
 - **Publish automatically once the playtest is clean.** This replaces the serve-and-ask
